@@ -1,3 +1,4 @@
+cat > /mnt/user-data/outputs/fingram/app.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="sk">
 <head>
@@ -6,71 +7,48 @@
   <title>FinGram – Učiť sa</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* ── SRDCIA ── */
-    .hearts { display:flex; gap:4px; align-items:center; }
-    .heart { font-size:18px; transition: transform 0.2s; }
-    .heart.empty { filter: grayscale(1); opacity:0.3; }
-    .heart-lost { animation: heartPop 0.3s ease; }
-    @keyframes heartPop { 0%{transform:scale(1.4)} 100%{transform:scale(1)} }
- 
-    /* ── REAL LIFE SCREEN ── */
-    .rl-wrap { max-width:580px; margin:0 auto; }
-    .rl-badge {
-      display:inline-flex; align-items:center; gap:8px;
-      background:#fff3cd; border:2px solid #ffc107; border-radius:12px;
-      padding:8px 16px; font-size:13px; font-weight:800; color:#856404;
-      margin-bottom:24px;
-    }
-    .rl-situation {
-      background: linear-gradient(135deg, #f6fff0, #e8f5e9);
-      border: 2px solid #a5d6a7;
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 28px;
-    }
-    .rl-situation-label { font-size:11px; font-weight:800; color:#2e7d32; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:10px; }
-    .rl-situation-text { font-size:17px; font-weight:700; color:#1c1c1c; line-height:1.5; }
-    .rl-situation-amount { font-size:28px; font-weight:800; color:#2e7d32; margin-top:8px; }
-    .rl-reward { background:#d7ffb2; border:2px solid #58cc02; border-radius:12px; padding:16px 20px; margin:4px 0 20px; font-size:14px; font-weight:700; color:#2a6e00; display:none; }
-    .rl-reward-bad { background:#ffd5d5; border:2px solid #ff4b4b; color:#8b0000; }
-    .rl-done-today {
-      text-align:center; padding:48px 24px;
-    }
-    .rl-done-icon { font-size:56px; margin-bottom:16px; }
-    .rl-done-title { font-size:22px; font-weight:800; color:#1c1c1c; margin-bottom:8px; }
-    .rl-done-sub { font-size:14px; color:#aaa; font-weight:600; }
-    .rl-streak-info { background:#fffbea; border:2px solid #ffd900; border-radius:12px; padding:14px 18px; margin-top:20px; font-size:14px; font-weight:700; color:#856404; }
- 
-    /* ── STREAK HIGHLIGHT ── */
-    .streak-big { text-align:center; padding:20px; background: linear-gradient(135deg,#fffbea,#fff3cd); border:2px solid #ffd900; border-radius:16px; margin-bottom:20px; }
-    .streak-big-num { font-size:48px; font-weight:800; color:#ff9600; }
-    .streak-big-label { font-size:14px; font-weight:700; color:#856404; margin-top:4px; }
-    .streak-big-msg { font-size:13px; color:#aaa; margin-top:6px; }
+    .hearts{display:flex;gap:4px;align-items:center;}
+    .heart{font-size:18px;transition:transform 0.2s;}
+    .heart.empty{filter:grayscale(1);opacity:0.3;}
+    .rl-wrap{max-width:580px;margin:0 auto;}
+    .rl-badge{display:inline-flex;align-items:center;gap:8px;background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:800;color:#856404;margin-bottom:24px;}
+    .rl-situation{background:linear-gradient(135deg,#f6fff0,#e8f5e9);border:2px solid #a5d6a7;border-radius:16px;padding:24px;margin-bottom:28px;}
+    .rl-situation-label{font-size:11px;font-weight:800;color:#2e7d32;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;}
+    .rl-situation-text{font-size:17px;font-weight:700;color:#1c1c1c;line-height:1.5;}
+    .rl-situation-amount{font-size:28px;font-weight:800;color:#2e7d32;margin-top:8px;}
+    .rl-reward{border-radius:14px;padding:16px 20px;margin:4px 0 20px;font-size:14px;font-weight:700;line-height:1.6;}
+    .rl-reward-ok{background:#d7ffb2;border:2px solid #58cc02;color:#2a6e00;}
+    .rl-reward-bad{background:#ffd5d5;border:2px solid #ff4b4b;color:#8b0000;}
+    .rl-done-today{text-align:center;padding:48px 24px;}
+    .rl-done-icon{font-size:56px;margin-bottom:16px;}
+    .rl-done-title{font-size:22px;font-weight:800;color:#1c1c1c;margin-bottom:8px;}
+    .rl-done-sub{font-size:14px;color:#aaa;font-weight:600;}
+    .rl-streak-info{background:#fffbea;border:2px solid #ffd900;border-radius:12px;padding:14px 18px;margin-top:20px;font-size:14px;font-weight:700;color:#856404;}
+    .streak-big{text-align:center;padding:20px;background:linear-gradient(135deg,#fffbea,#fff3cd);border:2px solid #ffd900;border-radius:16px;margin-bottom:20px;}
+    .streak-big-num{font-size:48px;font-weight:800;color:#ff9600;}
+    .streak-big-label{font-size:14px;font-weight:700;color:#856404;margin-top:4px;}
+    .streak-big-msg{font-size:13px;color:#aaa;margin-top:6px;}
+    .locked-unit{opacity:0.5;}
+    .path-locked{opacity:0.4;pointer-events:none;}
   </style>
 </head>
 <body>
- 
 <div class="app">
   <aside class="sidebar">
     <div class="logo">💸 FinGram</div>
-    <div class="nav-item active" id="nav-learn"   onclick="goTo('learn')"><span class="nav-icon">📚</span> Učiť sa</div>
+    <div class="nav-item active" id="nav-learn"    onclick="goTo('learn')"><span class="nav-icon">📚</span> Učiť sa</div>
     <div class="nav-item"        id="nav-reallife" onclick="goTo('reallife')"><span class="nav-icon">🌍</span> Real Life</div>
-    <div class="nav-item"        id="nav-profile"  onclick="goTo('profile'); renderProfile();"><span class="nav-icon">👤</span> Profil</div>
+    <div class="nav-item"        id="nav-profile"  onclick="goTo('profile');renderProfile();"><span class="nav-icon">👤</span> Profil</div>
     <div class="nav-sep"></div>
     <div class="sidebar-bottom">
-      <div class="user-chip" onclick="logout()" title="Odhlásiť sa">
+      <div class="user-chip" onclick="logout()">
         <div class="user-avatar" id="sb-avatar">?</div>
-        <div>
-          <div class="user-name"  id="sb-name">Načítavam...</div>
-          <div class="user-level">Odhlásiť sa</div>
-        </div>
+        <div><div class="user-name" id="sb-name">Načítavam...</div><div class="user-level">Odhlásiť sa</div></div>
       </div>
     </div>
   </aside>
- 
   <div class="main">
- 
-    <!-- ─── LEARN ─────────────────────────────────────── -->
+
     <div id="screen-learn" class="screen active">
       <div class="topbar">
         <div class="pill pill-fire">🔥 <span class="js-streak">0</span> dní</div>
@@ -81,14 +59,13 @@
       <p class="page-sub">Ovládni svoje peniaze krok za krokom</p>
       <div id="learn-path"></div>
     </div>
- 
-    <!-- ─── QUIZ ───────────────────────────────────────── -->
+
     <div id="screen-quiz" class="screen">
       <div class="quiz-wrap">
         <div class="quiz-topbar">
           <button class="close-btn" onclick="goTo('learn')">✕</button>
           <div class="prog-outer" style="flex:1;"><div class="prog-inner" id="qprog" style="width:0%;"></div></div>
-          <span style="font-size:13px;color:#aaa;font-weight:700;" id="q-num">1/4</span>
+          <span style="font-size:13px;color:#aaa;font-weight:700;" id="q-num">1/6</span>
           <div class="hearts" id="quiz-hearts"></div>
         </div>
         <p class="q-text" id="q-text"></p>
@@ -97,24 +74,22 @@
         <button class="next-btn" id="q-next" style="display:none;" onclick="nextQ()">Pokračovať</button>
       </div>
     </div>
- 
-    <!-- ─── DONE ───────────────────────────────────────── -->
+
     <div id="screen-done" class="screen">
       <div class="done-wrap">
         <div class="done-emoji">🎉</div>
         <h1 class="done-title">Lekcia splnená!</h1>
-        <p class="done-sub">Výborná práca! Pokračuj takto každý deň.</p>
+        <p class="done-sub">Výborná práca! +1 ❤️ za dokončenie</p>
         <div class="stat-row">
           <div class="stat-box"><div class="stat-num" id="d-xp">+0</div><div class="stat-lbl">XP získané</div></div>
           <div class="stat-box"><div class="stat-num" id="d-acc">100%</div><div class="stat-lbl">presnosť</div></div>
           <div class="stat-box"><div class="stat-num" id="d-streak">🔥 1</div><div class="stat-lbl">séria dní</div></div>
         </div>
-        <button class="btn-green"   onclick="goTo('learn')">Späť na mapu</button>
+        <button class="btn-green" onclick="goTo('learn')">Späť na mapu</button>
         <button class="btn-outline" onclick="replayLesson()">Zopakovať lekciu</button>
       </div>
     </div>
- 
-    <!-- ─── REAL LIFE ──────────────────────────────────── -->
+
     <div id="screen-reallife" class="screen">
       <div class="rl-wrap">
         <div class="topbar">
@@ -125,8 +100,7 @@
         <div id="rl-content"></div>
       </div>
     </div>
- 
-    <!-- ─── PROFILE ─────────────────────────────────────── -->
+
     <div id="screen-profile" class="screen">
       <div class="topbar">
         <div class="pill pill-fire">🔥 <span class="js-streak">0</span> dní</div>
@@ -139,19 +113,14 @@
           <p style="color:#aaa;font-size:14px;font-weight:600;">Základná úroveň</p>
         </div>
       </div>
-      <!-- Streak highlight -->
       <div class="streak-big">
         <div class="streak-big-num">🔥 <span id="prof-streak-num">0</span></div>
         <div class="streak-big-label">dní v sérii</div>
         <div class="streak-big-msg" id="prof-streak-msg">Začni dnes svoju sériu!</div>
       </div>
       <div class="profile-grid">
-        <div class="pcard">
-          <h3>Séria posledných 7 dní</h3>
-          <div class="streak-cal" id="streak-cal"></div>
-        </div>
-        <div class="pcard">
-          <h3>Štatistiky</h3>
+        <div class="pcard"><h3>Séria posledných 7 dní</h3><div class="streak-cal" id="streak-cal"></div></div>
+        <div class="pcard"><h3>Štatistiky</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
             <div><div style="font-size:24px;font-weight:800;" id="stat-xp">0</div><div style="font-size:12px;color:#aaa;margin-top:2px;">celkové XP</div></div>
             <div><div style="font-size:24px;font-weight:800;" id="stat-lessons">0</div><div style="font-size:12px;color:#aaa;margin-top:2px;">lekcie</div></div>
@@ -160,473 +129,377 @@
           </div>
         </div>
       </div>
-      <div class="pcard">
-        <h3>Odznaky</h3>
-        <div class="badge-row" id="badge-row"></div>
-      </div>
+      <div class="pcard"><h3>Odznaky</h3><div class="badge-row" id="badge-row"></div></div>
     </div>
- 
+
   </div>
 </div>
- 
 <script>
-// ── DATA – LEKCIE ─────────────────────────────────────────────────────────────
 const UNITS = [
-  {
-    id:1, title:"Základy sporenia", desc:"Nauč sa, ako a prečo sporiť každý deň", color:"green",
-    lessons:[
-      { id:"1-1", title:"Čo je sporenie?", icon:"💰", questions:[
-        {q:"Čo znamená pojem 'nouzový fond'?", answers:["Peniaze na luxusné nákupy","Rezerva na neočakávané výdavky","Investícia do akcií","Výplata vopred"], correct:1, explanation:"Nouzový fond je rezerva 3–6 mesačných výdavkov pre prípad výpadku príjmu, opravy auta alebo chorôb."},
-        {q:"Aké je odporúčané pravidlo pre mesačné sporenie?", answers:["Sporiť 2 % príjmu","Sporiť len keď zostanú peniaze","Sporiť 10–20 % príjmu","Nesporiť, investovať všetko"], correct:2, explanation:"Odborníci odporúčajú 10–20 % mesačného príjmu. Kľúčová je pravidelnosť."},
-        {q:"Čo je výhodnejšie – bežný alebo sporiaci účet?", answers:["Bežný účet","Sporiaci účet – ponúka vyšší úrok","Je to jedno","Hotovosť doma"], correct:1, explanation:"Sporiaci účet zhodnotí peniaze o úrok. Na bežnom účte nič nezarobiš."},
-        {q:"Prečo je dobré mať konkrétne finančné ciele?", answers:["Nie sú potrebné","Motivujú a určia sumu sporenia","Sú len pre bohatých","Zvyšujú dane"], correct:1, explanation:"Konkrétny cieľ (napr. 1 000 € za 10 mesiacov) ťa motivuje – ľahko si vypočítaš 100 € mesačne."}
-      ]},
-      { id:"1-2", title:"Nouzový fond", icon:"🛡️", questions:[
-        {q:"Koľko mesačných výdavkov by mal mať nouzový fond?", answers:["1 mesiac","2 mesiace","3–6 mesiacov","12 mesiacov"], correct:2, explanation:"Odporúča sa 3–6 mesačných výdavkov. Dá ti čas nájsť nové zamestnanie alebo pokryť nečakané výdavky."},
-        {q:"Kde by si mal mať uložený nouzový fond?", answers:["V hotovosti doma","Na sporiacom účte – dostupný kedykoľvek","V akciách","V kryptomenách"], correct:1, explanation:"Nouzový fond musí byť rýchlo dostupný. Sporiaci účet je ideálny – bezpečný a zarába malý úrok."},
-        {q:"Čo by si mal použiť z nouzového fondu?", answers:["Dovolenku","Nový telefón","Opravu auta po nehode","Vianočné darčeky"], correct:2, explanation:"Nouzový fond je pre skutočné núdzové situácie – výpadok príjmu, oprava, zdravie."},
-        {q:"Máš mesačné výdavky 800 €. Aký by mal byť tvoj minimálny nouzový fond?", answers:["800 €","1 600 €","2 400 €","8 000 €"], correct:2, explanation:"Minimálne 3 mesiace × 800 € = 2 400 €. Ideálne 6 mesiacov = 4 800 €."}
-      ]},
-      { id:"1-3", title:"Úrok a inflácia", icon:"📈", questions:[
-        {q:"Čo je inflácia?", answers:["Rast cien tovarov a služieb","Pokles hodnoty akcií","Zvyšovanie miezd","Znižovanie daní"], correct:0, explanation:"Inflácia = rast cien. Za rovnaké peniaze kúpiš menej ako predtým."},
-        {q:"Čo je zložený úrok?", answers:["Úrok platený štátom","Úrok z úroku – zarábate aj zo svojich úrokov","Pokuta za neskoré platenie","Poplatok za účet"], correct:1, explanation:"Zložený úrok rastie exponenciálne! 1 000 € → 1 050 € → ďalší rok 5 % z 1 050 €."},
-        {q:"Máš 500 € s ročným úrokom 3 %. Koľko budeš mať po 1 roku?", answers:["500 €","503 €","515 €","550 €"], correct:2, explanation:"500 × 0,03 = 15 €. Po roku = 515 €."},
-        {q:"Reálny výnos sporenia je kladný, keď...", answers:["Úrok je vyšší ako inflácia","Máš viac ako 10 účtov","Sporenie trvá menej ako rok","Úrok je nulový"], correct:0, explanation:"Reálny výnos = úrok − inflácia. Úrok 4 % − inflácia 2 % = reálny zisk 2 %."}
-      ]},
-      { id:"1-4", title:"Finančné ciele", icon:"🎯", questions:[
-        {q:"Čo je SMART cieľ?", answers:["Cieľ ktorý je ťažký","Konkrétny, merateľný, dosiahnuteľný, relevantný a časovo ohraničený","Cieľ bez termínu","Cieľ pre iných"], correct:1, explanation:"SMART = Specific, Measurable, Achievable, Relevant, Time-bound."},
-        {q:"Chceš auto za 5 000 € o 2 roky. Koľko musíš sporiť mesačne?", answers:["100 €","150 €","208 €","500 €"], correct:2, explanation:"5 000 € ÷ 24 mesiacov = ~208 € mesačne."},
-        {q:"Aký je rozdiel medzi krátkodobým a dlhodobým cieľom?", answers:["Žiadny","Krátkodobý do 1 roka, dlhodobý nad 5 rokov","Krátkodobý je drahší","Dlhodobý je jednoduchší"], correct:1, explanation:"Krátkodobé ciele sú do 1 roka. Dlhodobé na 5+ rokov."},
-        {q:"Prečo je dôležité zapisovať si finančné ciele?", answers:["Nie je to dôležité","Zvyšuje pravdepodobnosť ich dosiahnutia","Aby si ich ukázal ostatným","Kvôli daniam"], correct:1, explanation:"Písomné ciele sa plnia až 42 % častejšie."}
-      ]}
-    ]
-  },
-  {
-    id:2, title:"Investovanie", desc:"ETF fondy, akcie a pasívny príjem", color:"blue",
-    lessons:[
-      { id:"2-1", title:"Čo je investovanie?", icon:"📊", questions:[
-        {q:"Aký je hlavný rozdiel medzi sporením a investovaním?", answers:["Žiadny rozdiel","Sporenie je bezpečnejšie, investovanie má vyšší potenciálny výnos aj riziko","Investovanie je vždy lepšie","Sporenie je len pre starých"], correct:1, explanation:"Sporenie = bezpečné, nízky výnos. Investovanie = vyššie riziko, ale aj vyšší potenciálny výnos."},
-        {q:"Čo je akcia?", answers:["Pôžička firme","Podiel vo vlastníctve firmy","Vládny dlhopis","Bankový vklad"], correct:1, explanation:"Keď kúpiš akciu, stávaš sa spoluvlastníkom firmy."},
-        {q:"Čo je ETF fond?", answers:["Jeden druh akcie","Košík mnohých akcií – diverzifikovaná investícia","Bankový produkt","Kryptomena"], correct:1, explanation:"ETF je košík stoviek akcií. Nízke riziko, nízke poplatky."},
-        {q:"Prečo je dôležitý dlhodobý horizont pri investovaní?", answers:["Nie je dôležitý","Krátkodobé výkyvy sa vyrovnajú a historicky trhy rastú","Kvôli daniam","Lebo banky to vyžadujú"], correct:1, explanation:"Historicky akciové trhy rastú priemerne 7–10 % ročne."}
-      ]},
-      { id:"2-2", title:"Riziko a výnos", icon:"⚖️", questions:[
-        {q:"Čo znamená diverzifikácia?", answers:["Investovať všetko do jednej akcie","Rozložiť investície medzi rôzne aktíva","Predávať akcie každý deň","Investovať len do zlata"], correct:1, explanation:"Diverzifikácia = nedávaj všetky vajcia do jedného košíka."},
-        {q:"Čo je volatilita?", answers:["Stály rast hodnoty","Miera kolísania ceny investície","Bankový poplatok","Druh dlhopisu"], correct:1, explanation:"Volatilita meria, ako veľmi cena kolíše."},
-        {q:"Ktorá investícia je všeobecne najbezpečnejšia?", answers:["Kryptomeny","Jednotlivé akcie","Štátne dlhopisy","Komodity"], correct:2, explanation:"Štátne dlhopisy – nízke riziko, ale aj nízky výnos."},
-        {q:"1 000 € na 20 rokov pri 7 % ročne. Koľko budeš mať?", answers:["1 400 €","2 140 €","3 870 €","7 000 €"], correct:2, explanation:"1 000 × (1,07)^20 ≈ 3 870 €. Zložený úrok je mocný!"}
-      ]}
-    ]
-  },
-  {
-    id:3, title:"Dlhy a úvery", desc:"Zodpovedné využívanie kreditu", color:"purple",
-    lessons:[
-      { id:"3-1", title:"Čo je úver?", icon:"💳", questions:[
-        {q:"Čo je úrok pri úvere?", answers:["Poplaток banke za vedenie účtu","Cena za požičanie peňazí – percento z dlžnej sumy","Bonus za včasné splácanie","Zľava na ďalší úver"], correct:1, explanation:"Úrok je cena peňazí. Ak si požičiaš 1 000 € pri 5 % ročne, zaplatíš navyše 50 € ročne."},
-        {q:"Čo je RPSN?", answers:["Ročná percentuálna sadzba nákladov – celková cena úveru","Typ bankového účtu","Štátna dotácia","Daňové číslo"], correct:0, explanation:"RPSN zahŕňa úrok aj všetky poplatky. Vždy porovnávaj RPSN, nie len úrokovú sadzbu."},
-        {q:"Kedy je rozumné vziať si úver?", answers:["Na dovolenku","Na nové topánky","Na bývanie alebo vzdelanie","Na gambling"], correct:2, explanation:"Úver dáva zmysel na veci ktoré zvyšujú tvoju hodnotu alebo majú dlhú životnosť – bývanie, auto do práce, vzdelanie."},
-        {q:"Čo sa stane ak nesplácaš úver?", answers:["Nič, banka zabudne","Úrok rastie, poškodí sa tvoj credit rating, môže prísť exekúcia","Dostaneš zľavu","Úver sa automaticky odpustí"], correct:1, explanation:"Nesplácanie má vážne následky – rastúci dlh, čierna listina, exekúcia majetku."}
-      ]},
-      { id:"3-2", title:"Hypotéka", icon:"🏠", questions:[
-        {q:"Čo je hypotéka?", answers:["Úver na auto","Dlhodobý úver zabezpečený nehnuteľnosťou","Štátna dotácia na bývanie","Nájomná zmluva"], correct:1, explanation:"Hypotéka je úver kde zárukou je samotná nehnuteľnosť. Ak nespláčaš, banka môže vziať byt."},
-        {q:"Čo je fixácia úrokovej sadzby?", answers:["Trvalé zamknutie sadzby navždy","Obdobie počas ktorého sa úroková sadzba nemení","Pokuta za predčasné splatenie","Poistenie hypotéky"], correct:1, explanation:"Fixácia (1,3,5,10 rokov) ti garantuje stabilnú splátku. Po skončení sa sadzba môže zmeniť."},
-        {q:"Koľko percent z ceny nehnuteľnosti by si mal mať nasporených?", answers:["0 % – stačí hypotéka","10–20 %","50 %","100 %"], correct:1, explanation:"Banky zvyčajne požičajú max 80–90 % hodnoty. Zvyšok musíš mať vlastný – plus rezervu na zariadenie a poplatky."},
-        {q:"Máš hypotéku 100 000 € na 30 rokov pri 3 %. Koľko zaplatíš celkovo?", answers:["100 000 €","115 000 €","145 000 €","200 000 €"], correct:2, explanation:"Pri 3 % na 30 rokov zaplatíš cca 145 000 € – teda 45 000 € navyše na úrokoch. Preto sa oplatí splácať rýchlejšie."}
-      ]}
-    ]
-  }
+  // ═══ JEDNOTKA 1 – ZÁKLADY SPORENIA ═══════════════════════════════════════
+  { id:1, title:"Základy sporenia", desc:"Nauč sa, ako a prečo sporiť každý deň", color:"green", lessons:[
+    { id:"1-1", title:"Čo je sporenie?", icon:"💰", questions:[
+      {q:"Čo je základný princíp sporenia?", answers:["Minúť všetko hneď","Odkladať časť príjmu na neskôr","Požičiavať si peniaze","Investovať do akcií"], correct:1, explanation:"Sporenie znamená vedome odkladať časť príjmu – vytváraš si vankúš pre budúcnosť a núdzové situácie."},
+      {q:"Aké je odporúčané minimum na mesačné sporenie?", answers:["2 % príjmu","5 % príjmu","10 % príjmu","50 % príjmu"], correct:2, explanation:"Zlaté pravidlo hovorí sporiť aspoň 10 % príjmu. Ak to nejde, začni s 5 % a postupne zvyšuj."},
+      {q:"Čo je výhodnejšie pre sporenie?", answers:["Bežný účet","Sporiaci účet","Hotovosť pod vankúšom","Kryptomeny"], correct:1, explanation:"Sporiaci účet ponúka úrok – peniaze ti pasívne rastú. Bežný účet a hotovosť žiadny úrok nedávajú."},
+      {q:"Prečo je dôležité sporiť pravidelne každý mesiac?", answers:["Nie je to dôležité","Kvôli daniam","Vytvára to návyk a využívaš efekt zloženého úroku","Banka to vyžaduje"], correct:2, explanation:"Pravidelnosť je kľúčová. Malé sumy každý mesiac sa vďaka zloženému úroku časom premenia na veľké úspory."},
+      {q:"Čo by si mal urobiť hneď po výplate?", answers:["Minúť na zábavu","Zaplatiť účty a odložiť sporenie PRED výdavkami","Čakať čo zostane na konci mesiaca","Investovať všetko"], correct:1, explanation:"Pravidlo 'zaplať si najprv' – hneď po výplate odlož sporenie. Nečakaj čo zostane, lebo zvyčajne nezostane nič."},
+      {q:"Máš plat 900 €. Koľko by si mal minimálne sporiť mesačne?", answers:["9 €","45 €","90 €","450 €"], correct:2, explanation:"10 % z 900 € = 90 € mesačne. Za rok je to 1 080 € – to je solidný základ nouzového fondu."},
+      {q:"Čo je automatické sporenie?", answers:["Sporenie bez práce cez automatický prevod","Investovanie do akcií","Sporenie len v lete","Bankový úver"], correct:0, explanation:"Nastav si automatický prevod v deň výplaty. Peniaze odídu skôr ako ich minieš – najjednoduchší spôsob sporenia."}
+    ]},
+    { id:"1-2", title:"Nouzový fond", icon:"🛡️", questions:[
+      {q:"Na čo slúži nouzový fond?", answers:["Na dovolenku","Na nečakané výdavky a krízové situácie","Na investovanie","Na dôchodok"], correct:1, explanation:"Nouzový fond je tvoja finančná záchranná sieť – strata práce, oprava auta, choroba. Bez neho ťa každá kríza pošle do dlhov."},
+      {q:"Koľko mesačných výdavkov by mal mať nouzový fond?", answers:["1 mesiac","2 mesiace","3–6 mesiacov","2 roky"], correct:2, explanation:"3–6 mesiacov je štandard. 3 mesiace ak máš stabilnú prácu, 6 mesiacov ak si SZČO alebo máš nestabilný príjem."},
+      {q:"Kde by si mal uchovávať nouzový fond?", answers:["V akciách – vyšší výnos","Na bežnom účte alebo sporiacom účte – ľahko dostupný","V nehnuteľnosti","V hotovosti doma v trezore"], correct:1, explanation:"Nouzový fond musí byť IHNEĎ dostupný. Akcie môžu klesnúť práve keď ich potrebuješ. Sporiaci účet je ideálny kompromis."},
+      {q:"Máš mesačné výdavky 700 €. Aký je ideálny nouzový fond?", answers:["700 €","2 100 €","4 200 €","7 000 €"], correct:2, explanation:"6 mesiacov × 700 € = 4 200 €. Toto ti dá pohodový čas riešiť krízovú situáciu bez paniky."},
+      {q:"Minul si časť nouzového fondu. Čo spravíš?", answers:["Nechám ho takto, stačí","Čo najskôr ho doplním na pôvodnú výšku","Fond zrušiem, bol zbytočný","Požičiam si od banky na doplnenie"], correct:1, explanation:"Nouzový fond je ako zásoby – po použití ho treba doplniť. Nastav si zvýšené sporenie kým nie je fond opäť plný."},
+      {q:"Čo NIE je dôvod na použitie nouzového fondu?", answers:["Výpadok príjmu","Nečakaná oprava auta","Výpredaj v obchode – 50% zľava","Nečakaný lekársky výdavok"], correct:2, explanation:"Výpredaj je plánovaný výdavok, nie núdzová situácia. Nouzový fond je pre skutočné krízové udalosti ktoré si nemohol predvídať."},
+      {q:"Ako rýchlo by si mal vybudovať nouzový fond?", answers:["Nie je spech, kedykoľvek","Čo najskôr – je to prvá finančná priorita","Až po kúpe auta","Až po investovaní"], correct:1, explanation:"Nouzový fond je PRVÁ vec ktorú treba vybudovať – ešte pred investovaním. Bez neho každá kríza ruinuje všetky ostatné plány."}
+    ]},
+    { id:"1-3", title:"Úrok a inflácia", icon:"📈", questions:[
+      {q:"Čo je inflácia?", answers:["Rast hodnoty peňazí","Pokles cien","Rast cien tovarov a služieb v čase","Štátna daň"], correct:2, explanation:"Inflácia = rast cien. Ak je inflácia 3 %, to čo stálo 100 € vlani stojí dnes 103 €. Peniaze strácajú kúpnu silu."},
+      {q:"Čo sa stane s hodnotou tvojich úspor pri inflácii 5 % a úroku 1 %?", answers:["Rastú o 6 %","Rastú o 4 %","Reálne klesajú o 4 %","Nič sa nedeje"], correct:2, explanation:"Reálny výnos = úrok − inflácia = 1 % − 5 % = −4 %. Tvoje peniaze na sporiacom účte reálne strácajú hodnotu!"},
+      {q:"Čo je zložený úrok?", answers:["Úrok len z pôvodnej sumy","Úrok z úroku – zarábate aj zo svojich predchádzajúcich úrokov","Bankový poplatok","Štátny príspevok"], correct:1, explanation:"Zložený úrok je ôsmy div sveta (Einstein). Každý rok zarábate úrok aj z predchádzajúcich úrokov – exponenciálny rast."},
+      {q:"Máš 1 000 € pri 5 % ročnom úroku. Koľko budeš mať po 10 rokoch (zložený úrok)?", answers:["1 500 €","1 629 €","2 000 €","5 000 €"], correct:1, explanation:"1 000 × (1,05)^10 = 1 629 €. Bez akéhokoľvek ďalšieho vkladu zarobíš 629 € len vďaka zloženému úroku."},
+      {q:"Prečo je dôležité začať sporiť čo najskôr?", answers:["Nie je to dôležité","Čím dlhší čas, tým viac pracuje zložený úrok","Kvôli daniam","Lebo úroky klesajú neskôr"], correct:1, explanation:"Čas je najdôležitejší faktor. 100 € mesačne od 20 rokov = oveľa viac ako 200 € mesačne od 40 rokov, aj keď celkovo vložíš menej."},
+      {q:"Čo je nominálny vs reálny výnos?", answers:["Sú to isté veci","Nominálny je pred infláciou, reálny je po odčítaní inflácie","Reálny je vyšší","Nominálny je záporný"], correct:1, explanation:"Nominálny výnos 6 % pri inflácii 3 % = reálny výnos 3 %. Vždy sleduj reálny výnos – to je skutočné zbohatnutie."},
+      {q:"Ako sa brániš pred infláciou?", answers:["Držíš hotovosť doma","Investuješ do aktív ktoré rastú rýchlejšie ako inflácia","Nepotrebuješ sa brániť","Kupuješ viac spotrebných vecí"], correct:1, explanation:"Akcie, nehnuteľnosti a ETF fondy historicky rastú rýchlejšie ako inflácia. Hotovosť a bežný účet pred infláciou nechránia."}
+    ]},
+    { id:"1-4", title:"Finančné ciele", icon:"🎯", questions:[
+      {q:"Čo je SMART cieľ?", answers:["Ťažký cieľ","Konkrétny, merateľný, dosiahnuteľný, relevantný, časovo ohraničený","Cieľ bez termínu","Cieľ pre iných"], correct:1, explanation:"SMART = Specific, Measurable, Achievable, Relevant, Time-bound. 'Chcem sporiť' nie je SMART. 'Ušetrím 2 000 € do 31.12.' je SMART."},
+      {q:"Ktorý z týchto je SMART finančný cieľ?", answers:["Chcem byť bohatý","Budem viac sporiť","Ušetrím 500 € za 5 mesiacov odkладaním 100 € mesačne","Kúpim si auto"], correct:2, explanation:"Konkrétna suma (500 €), časový rámec (5 mesiacov) a akčný plán (100 €/mesiac) – to je SMART cieľ."},
+      {q:"Čo je krátkodobý finančný cieľ?", answers:["Dôchodok","Kúpa bytu","Dovolenka za 6 mesiacov","Vzdelanie detí"], correct:2, explanation:"Krátkodobé ciele sú do 1 roka – dovolenka, nový telefón, nouzový fond. Vyžadujú pravidelné sporenie."},
+      {q:"Chceš kúpiť auto za 8 000 € o 2 roky. Koľko musíš sporiť mesačne?", answers:["200 €","333 €","400 €","667 €"], correct:1, explanation:"8 000 € ÷ 24 mesiacov = 333 € mesačne. SMART plán rozloží veľký cieľ na malé, zvládnuteľné kroky."},
+      {q:"Prečo je dobré mať viacero finančných cieľov naraz?", answers:["Nie je to dobré – mätie to","Môžeš sporiť na viaceré veci súčasne a každý cieľ má vlastný účet","Kvôli daniam","Banka to vyžaduje"], correct:1, explanation:"Môžeš mať účty na nouzový fond, dovolenku aj auto zároveň. Vizuálny pokrok na každom cieli ťa motivuje."},
+      {q:"Čo je pravidlo 50/30/20?", answers:["50 % práca, 30 % zábava, 20 % spánok","50 % potreby, 30 % záľuby, 20 % sporenie a dlhy","50 % sporenie, 30 % investície, 20 % výdavky","Počet hodín v týždni"], correct:1, explanation:"Populárny rozpočtový rámec: 50 % na potreby (nájom, jedlo), 30 % na záľuby, 20 % na sporenie a splácanie dlhov."},
+      {q:"Čo spravíš keď dosiahneš finančný cieľ?", answers:["Miniem všetko čo som nasporil","Nastavím nový, vyšší cieľ","Prestanem sporiť","Oslávim míňaním"], correct:1, explanation:"Dosiahnutie cieľa je motivácia pokračovať. Nastav nový cieľ – sporenie by mal byť celoživotný návyk, nie jednorazová akcia."}
+    ]},
+    { id:"1-5", title:"Rozpočet a výdavky", icon:"📊", questions:[
+      {q:"Čo je osobný rozpočet?", answers:["Bankový produkt","Plán príjmov a výdavkov na mesiac","Daňové priznanie","Investičný portfólio"], correct:1, explanation:"Rozpočet je jednoducho plán – koľko zarobíš a koľko a na čo miniš. Bez plánu peniaze jednoducho miznú."},
+      {q:"Čo je fixný výdavok?", answers:["Výdavok ktorý sa mení každý mesiac","Výdavok ktorý je každý mesiac rovnaký – nájom, splátky","Jednorazový výdavok","Neočakávaný výdavok"], correct:1, explanation:"Fixné výdavky: nájom, splátky, predplatné. Variabilné: jedlo, zábava, oblečenie. Fixné sú predvídateľné, variabilné vieš znížiť."},
+      {q:"Čo je najčastejší dôvod prečo ľudia nemôžu sporiť?", answers:["Príliš nízky plat","Nemajú rozpočet a nevedia kam idú peniaze","Príliš vysoké dane","Sporenie je zbytočné"], correct:1, explanation:"Výskumy ukazujú: väčšina ľudí nevie koľko minieva na jednotlivé kategórie. Keď to zistíš, vždy nájdeš kde ušetriť."},
+      {q:"Aký je rozdiel medzi potrebou a záľubou?", answers:["Žiadny rozdiel","Potreba je nevyhnutná pre život, záľuba je príjemná ale nie nutná","Záľuby sú dôležitejšie","Potreby sú drahšie"], correct:1, explanation:"Potreby: jedlo, nájom, lieky, MHD do práce. Záľuby: reštaurácie, Netflix, nové oblečenie. Obe sú v poriadku – len ich treba vyvážiť."},
+      {q:"Máš príjem 1 200 €. Podľa pravidla 50/30/20 koľko ide na sporenie?", answers:["120 €","180 €","240 €","360 €"], correct:2, explanation:"20 % z 1 200 € = 240 € na sporenie a dlhy. Ak nemáš dlhy, celých 240 € môže ísť do sporenia."},
+      {q:"Čo je 'latte faktor'?", answers:["Druh kávy","Malé každodenné výdavky ktoré sa časom sčítavajú na veľké sumy","Bankový poplatok","Druh investície"], correct:1, explanation:"Káva každý deň = 3 € × 365 = 1 095 € ročne. Malé výdavky sú neviditeľné ale obrovské. Neutrácaj automaticky – rozmýšľaj."},
+      {q:"Ako sledovať výdavky najjednoduchšie?", answers:["Pamätať si všetko v hlave","Aplikácia na telefóne alebo tabuľka v Exceli","Nekontrolovať – je to stresujúce","Pozerať zostatok raz za rok"], correct:1, explanation:"Aplikácie ako Wallet, MoneyMoney alebo jednoduchá Excel tabuľka stačia. Kľúč je kontrolovať výdavky aspoň raz týždenne."}
+    ]}
+  ]},
+
+  // ═══ JEDNOTKA 2 – INVESTOVANIE ═══════════════════════════════════════════
+  { id:2, title:"Investovanie", desc:"ETF fondy, akcie a pasívny príjem", color:"blue", lessons:[
+    { id:"2-1", title:"Základy investovania", icon:"📊", questions:[
+      {q:"Aký je hlavný rozdiel medzi sporením a investovaním?", answers:["Žiadny","Sporenie je bezpečné s nízkym výnosom, investovanie má vyšší potenciál aj riziko","Investovanie je vždy lepšie","Sporenie je pre starých ľudí"], correct:1, explanation:"Sporenie = istota, nízky výnos. Investovanie = riziko, ale historicky oveľa vyšší výnos. Oboje má zmysel – záleží na cieli."},
+      {q:"Čo je akcia?", answers:["Pôžička firme","Podiel vo vlastníctve firmy","Vládny dlhopis","Bankový vklad"], correct:1, explanation:"Akcia = podiel vo firme. Ak sa firme darí, hodnota akcie rastie. Ak nie, klesá. Si spolumajiteľom firmy."},
+      {q:"Čo je dlhopis?", answers:["Podiel vo firme","Pôžička firme alebo štátu – dostaneš späť istinu + úrok","Kryptomena","Podielový fond"], correct:1, explanation:"Dlhopis = požičiaš peniaze firme alebo štátu. Oni ti sľúbia vrátiť ich s úrokom. Bezpečnejšie ako akcie, nižší výnos."},
+      {q:"Čo je ETF fond?", answers:["Jedna akcia","Košík stoviek akcií ktorý kopíruje index – diverzifikácia za nízke poplatky","Bankový vklad","Kryptomena"], correct:1, explanation:"ETF (Exchange Traded Fund) je ako nákupný košík plný akcií. Kúpou jedného ETF investuješ do stoviek firiem naraz."},
+      {q:"Prečo je dôležitý dlhodobý horizont?", answers:["Nie je dôležitý","Krátkodobé výkyvy sa vyrovnajú a historicky trhy rastú 7–10 % ročne","Kvôli daniam","Lebo úroky klesajú"], correct:1, explanation:"S&P 500 (top 500 amerických firiem) mal za posledných 100 rokov priemerný ročný výnos ~10 %. Krátkodobé prepady sú normálne."},
+      {q:"Čo je podielový fond?", answers:["Bankový účet","Fond kde správca zbiera peniaze od mnohých ľudí a investuje ich","Štátny dlhopis","Kryptomena"], correct:1, explanation:"Podielový fond je ako spoločné investovanie – správca rozhoduje kde investovať. Výhoda: diverzifikácia. Nevýhoda: poplatky za správu."},
+      {q:"Kedy je správny čas začať investovať?", answers:["Až keď budem mať veľa peňazí","Až v 40 rokoch","Čo najskôr – čas je najdôležitejší faktor","Až keď pochopím všetko o trhoch"], correct:2, explanation:"Najlepší čas bol včera, druhý najlepší je dnes. 100 € mesačne od 20 rokov pri 7 % = ~262 000 € pri odchode do dôchodku."},
+      {q:"Čo je pasívne investovanie?", answers:["Neinvestovanie","Investovanie do indexových fondov bez aktívneho výberu akcií","Denné obchodovanie akcií","Investovanie len do zlata"], correct:1, explanation:"Pasívne investovanie = kúp ETF kopírujúci index a drž ho dlhodobo. Nižšie poplatky, jednoduchosť, a výskumy ukazujú že prekonáva väčšinu aktívnych správcov."}
+    ]},
+    { id:"2-2", title:"Riziko a diverzifikácia", icon:"⚖️", questions:[
+      {q:"Čo je investičné riziko?", answers:["Istota straty peňazí","Pravdepodobnosť že hodnota investície klesne alebo nestúpne podľa očakávania","Bankový poplatok","Daňová povinnosť"], correct:1, explanation:"Riziko = neistota výsledku. Každá investícia nesie riziko. Vyššie riziko = vyšší potenciálny výnos aj strata."},
+      {q:"Čo je diverzifikácia?", answers:["Investovať všetko do jednej najlepšej akcie","Rozložiť investície medzi rôzne aktíva, sektory a krajiny","Meniť investície každý mesiac","Investovať len do bezpečných aktív"], correct:1, explanation:"'Nedávaj všetky vajcia do jedného košíka.' Ak jedna firma skrachuje, nezničí celé portfólio. ETF toto robí automaticky."},
+      {q:"Čo je volatilita?", answers:["Stály rast","Miera kolísania ceny investície","Bankový poplatok","Výnos investície"], correct:1, explanation:"Vysoká volatilita = veľké výkyvy nahor aj nadol. Akcie sú volatilnejšie ako dlhopisy. Pre dlhodobého investora je volatilita príležitosť, nie hrozba."},
+      {q:"Ak vložíš všetky úspory do jednej akcie a firma skrachuje, čo sa stane?", answers:["Dostaneš náhradu od štátu","Prídeš o celú investíciu","Polovica sa zachráni","Nič, akcie sú poistené"], correct:1, explanation:"Preto je diverzifikácia kľúčová. Nikdy nedávaj viac ako 5–10 % portfólia do jednej firmy. ETF toto rieši automaticky."},
+      {q:"Ktorá kombinácia má typicky najlepší pomer riziko/výnos dlhodobo?", answers:["Hotovosť","Štátne dlhopisy","Globálny akciový ETF","Jedna technologická akcia"], correct:2, explanation:"Globálny akciový ETF (napr. VWCE) investuje do 3000+ firiem po celom svete. Historicky ~7–8 % ročne po inflácii pri rozumnom riziku."},
+      {q:"Čo je rebalansovanie portfólia?", answers:["Predaj všetkých akcií","Pravidelné upravovanie rozloženia portfólia späť na pôvodný pomer","Nákup nových akcií","Zmena banky"], correct:1, explanation:"Ak akcie vzrástli a teraz tvoria 80 % namiesto 60 %, rebalansovanie predá časť akcií a kúpi dlhopisy – vrátis sa na cieľové rozloženie."},
+      {q:"Čo je drawdown?", answers:["Výber peňazí z účtu","Pokles hodnoty portfólia od vrcholu po dno","Bankový poplatok","Typ akcie"], correct:1, explanation:"Drawdown meria maximálny pokles. S&P 500 mal v roku 2008 drawdown −57 %. Kto predal, realizoval stratu. Kto vydržal, zarobil na odraze."}
+    ]},
+    { id:"2-3", title:"ETF a indexové fondy", icon:"📉", questions:[
+      {q:"Čo kopíruje indexový fond S&P 500?", answers:["500 najväčších európskych firiem","500 najväčších amerických firiem","500 najlacnejších akcií","Zlatý index"], correct:1, explanation:"S&P 500 obsahuje 500 najväčších amerických firiem – Apple, Microsoft, Amazon, Google... Kúpou ETF na S&P 500 vlastníš kúsok každej."},
+      {q:"Aký je hlavný rozdiel medzi ETF a podielovým fondom?", answers:["ETF je drahší","ETF sa obchoduje na burze ako akcia, podielový fond nie","Podielový fond je bezpečnejší","Nie je rozdiel"], correct:1, explanation:"ETF kupuješ a predávaš na burze kedykoľvek počas dňa. Podielový fond kupuješ raz za deň za NAV cenu. ETF má zvyčajne nižšie poplatky."},
+      {q:"Čo je TER (Total Expense Ratio)?", answers:["Daň z investícií","Ročný poplatok za správu ETF vyjadrený v %","Výnos ETF","Minimálna investícia"], correct:1, explanation:"TER 0,2 % znamená že z 10 000 € zaplatíš 20 € ročne na poplatky. Hľadaj ETF s TER pod 0,3 %. Každé euro v poplatkoch znižuje výnos."},
+      {q:"Čo je ISIN kód?", answers:["PIN kód do banky","Medzinárodné identifikačné číslo cenného papiera","Daňové číslo","Číslo bankového účtu"], correct:1, explanation:"ISIN je unikátny identifikátor každého cenného papiera. Napr. VWCE (Vanguard globálny ETF) má ISIN IE00BK5BQT80."},
+      {q:"Čo je dollar-cost averaging (DCA)?", answers:["Investovanie len v dolároch","Pravidelné investovanie rovnakej sumy bez ohľadu na cenu","Nákup len keď cena klesne","Predaj akcií za doláre"], correct:1, explanation:"DCA = každý mesiac investuješ napr. 100 €. Keď je trh hore, kúpiš menej akcií. Keď je dole, kúpiš viac. Priemeruje vstupnú cenu."},
+      {q:"Kde môžeš kúpiť ETF na Slovensku?", answers:["Len v banke","U online brokera – napr. Interactive Brokers, Degiro, XTB","V supermarkete","U poisťovacieho agenta"], correct:1, explanation:"Online brokeri umožňujú kúpiť ETF za nízke poplatky. Degiro, XTB a Interactive Brokers sú populárne voľby dostupné Slovákom."},
+      {q:"Aký je odporúčaný minimálny investičný horizont pre akciové ETF?", answers:["1 mesiac","6 mesiacov","1–3 roky","5–10+ rokov"], correct:3, explanation:"Akciové ETF sú pre dlhodobých investorov. V krátkom horizonte môžeš predávať so stratou. Čím dlhší horizont, tým vyššia pravdepodobnosť zisku."},
+      {q:"Čo je dividenda?", answers:["Bankový poplatok","Časť zisku ktorú firma vypláca akcionárom","Daň z investícií","Typ dlhopisu"], correct:1, explanation:"Niektoré firmy vyplácajú dividendy – podiel zo zisku. Napr. ak vlastníš 100 akcií a firma vypláca 1 € dividendu, dostaneš 100 €."}
+    ]},
+    { id:"2-4", title:"Investičná stratégia", icon:"🏦", questions:[
+      {q:"Čo je investičný horizont?", answers:["Geografická poloha investície","Čas počas ktorého plánuješ investíciu držať","Maximálna možná strata","Typ brokera"], correct:1, explanation:"Investičný horizont určuje aké investície sú pre teba vhodné. Krátky horizont = bezpečnejšie aktíva. Dlhý horizont = môžeš si dovoliť vyššie riziko."},
+      {q:"Máš 23 rokov a investuješ na dôchodok (40 rokov). Aká stratégia má zmysel?", answers:["Len dlhopisy – nechcem riskovať","Prevažne akcie – dlhý horizont kompenzuje krátkodobé výkyvy","Len zlato","Len hotovosť"], correct:1, explanation:"S 40-ročným horizontom môžeš mať 80–100 % v akciách. Krátkodobé prepady nemajú dlhodobý vplyv a akcie historicky prekonávajú iné aktíva."},
+      {q:"Čo je investičný profil?", answers:["Bankový účet","Kombinácia tvojej tolerancie rizika, horizontu a cieľov","Daňové priznanie","Typ brokera"], correct:1, explanation:"Pred investovaním si urči: Koľko môžeš investovať? Na aký čas? Ako by si reagoval na pokles 30 %? Podľa toho zvoliš správnu stratégiu."},
+      {q:"Čo by si nemal robiť pri poklese trhu o 30 %?", answers:["Pokračovať v pravidelnom investovaní","Kúpiť viac – ceny sú zľavnené","Predať všetko v panike","Ignorovať pokles a pokračovať"], correct:2, explanation:"Predaj pri poklese je najčastejšia chyba. Realizuješ stratu a premeškáš odraze. Korekcie a krízy sú normálnou súčasťou trhov."},
+      {q:"Čo je likvidita investície?", answers:["Výnos investície","Rýchlosť a jednoduchosť premeny investície na hotovosť","Bezpečnosť investície","Daňová povinnosť"], correct:1, explanation:"ETF = vysoká likvidita (predáš za sekundy). Nehnuteľnosť = nízka likvidita (predaj trvá mesiace). Nouzový fond musí byť v likvídnych aktívach."},
+      {q:"Čo je magický trojuholník investovania?", answers:["Zlato, striebro, platina","Bezpečnosť, výnos, likvidita – nemôžeš mať všetky tri naraz","Akcie, dlhopisy, nehnuteľnosti","Krátkodobé, strednodobé, dlhodobé"], correct:1, explanation:"Každá investícia je kompromis: vysoký výnos = nižšia bezpečnosť alebo likvidita. Štátne dlhopisy sú bezpečné a likvidné ale nízky výnos. Akcie majú vysoký výnos ale nízku bezpečnosť krátkodobo."},
+      {q:"Ako veľmi by malo závisieť tvoje investovanie od médií a noviniek?", answers:["Úplne – treba sledovať správy každý deň","Čiastočne – len pre dlhodobé trendy","Minimálne – médiá zvyčajne škodia dlhodobým investorom","Vôbec nie – správy nemajú vplyv"], correct:2, explanation:"Médiá šíria paniku aj eufóriu. Investori ktorí reagujú na správy zvyčajne kupujú draho a predávajú lacno. Dlhodobá stratégia víťazí nad reaktívnym obchodovaním."}
+    ]},
+    { id:"2-5", title:"Daně a investície", icon:"💼", questions:[
+      {q:"Čo je daň z kapitálových ziskov?", answers:["Daň z platu","Daň z výnosu z predaja investícií","Daň z dividendy","Všetky vyššie uvedené"], correct:1, explanation:"Keď predáš akcie so ziskom, musíš zaplatiť daň z tohto zisku. Na Slovensku je to 19 % (pri základe do 37 981 €) alebo 25 %."},
+      {q:"Ako dlho musíš držať akcie na Slovensku aby si sa vyhol dani z kapitálových ziskov?", answers:["6 mesiacov","1 rok","3 roky","Nie je oslobodenie"], correct:3, explanation:"Na Slovensku zatiaľ nie je časové oslobodenie od dane z kapitálových ziskov ako v niektorých iných krajinách. Vždy konzultuj s daňovým poradcom."},
+      {q:"Čo je III. pilier (doplnkové dôchodkové sporenie)?", answers:["Štátny dôchodok","Dobrovoľné dôchodkové sporenie s daňovými výhodami","Povinné poistenie","Bankový produkt"], correct:1, explanation:"III. pilier ti dáva daňový odpočet až 180 € ročne. Ak zamestnávateľ prispieva, je to zadarmo peniaze. Výnosy sú zvyčajne konzervatívne."},
+      {q:"Čo je II. pilier (starobné dôchodkové sporenie)?", answers:["Dobrovoľné sporenie","Povinné sporenie kde časť odvodov ide na tvoj osobný účet","Štátna dávka","Podielový fond"], correct:1, explanation:"II. pilier: 5,5 % z hrubej mzdy ide na tvoj osobný účet v DSS. Pri dôchodku dostaneš nasporené peniaze. Je rozumné vstúpiť do neho."},
+      {q:"Čo je dividend withholding tax?", answers:["Daň z predaja akcií","Daň zrazená pri výplate dividendy – zvyčajne 15–30 % v závislosti od krajiny","Poistenie portfólia","Poplatok brokera"], correct:1, explanation:"Americké firmy automaticky zrazia 15 % z dividendy pre slovenských investorov (vďaka daňovej zmluve SK-USA). Dividendové ETF majú tento efekt zabudovaný."},
+      {q:"Prečo sú akumulačné ETF daňovo efektívnejšie ako distribučné?", answers:["Nie sú – sú rovnaké","Akumulačné reinvestujú dividendy automaticky – neplatíš daň z dividendy každý rok","Distribučné sú lepšie","Závisí od brokera"], correct:1, explanation:"Akumulačné ETF (napr. VWCE) reinvestujú dividendy = neplatíš daň z dividendy ročne. Daň platíš až pri predaji. Výhoda pre dlhodobých investorov."},
+      {q:"Kde treba uviesť príjmy z investícií na Slovensku?", answers:["Nemusia sa uvádzať","V daňovom priznaní – typ B","Len ak je zisk nad 10 000 €","Nikde – broker to urobí za teba"], correct:1, explanation:"Príjmy z predaja cenných papierov treba uviesť v daňovom priznaní (typ B). Broker ti pošle výpis. Pri pochybnostiach konzultuj daňového poradcu."}
+    ]}
+  ]},
+
+  // ═══ JEDNOTKA 3 – DLHY A ÚVERY ═══════════════════════════════════════════
+  { id:3, title:"Dlhy a úvery", desc:"Zodpovedné využívanie kreditu", color:"purple", lessons:[
+    { id:"3-1", title:"Základy úverov", icon:"💳", questions:[
+      {q:"Čo je úver?", answers:["Darček od banky","Požičanie peňazí s povinnosťou vrátenia + úrok","Štátna dotácia","Bankový vklad"], correct:1, explanation:"Úver = požičaš si peniaze a zaplatíš ich späť s úrokom. Banka zarobí na úroku, ty získaš peniaze teraz ale zaplatíš viac celkovo."},
+      {q:"Čo je RPSN?", answers:["Číslo bankového účtu","Ročná percentuálna sadzba nákladov – celková cena úveru vrátane poplatkov","Štátna dotácia","Daňové číslo"], correct:1, explanation:"RPSN je najdôležitejšie číslo pri porovnávaní úverov. Zahŕňa úrok aj všetky poplatky. Vždy porovnávaj RPSN, nie len úrokovú sadzbu."},
+      {q:"Máš dve ponuky: úver s úrokom 8 % a RPSN 12 % vs úrok 10 % a RPSN 10,5 %. Ktorý je lacnejší?", answers:["Prvý – nižší úrok","Druhý – nižšie RPSN","Sú rovnaké","Nedá sa porovnať"], correct:1, explanation:"RPSN 10,5 % < RPSN 12 %. Druhý úver je lacnejší napriek vyššiemu nominálnemu úroku, lebo má nižšie poplatky."},
+      {q:"Na čo je rozumné vziať si úver?", answers:["Dovolenku","Nové oblečenie","Bývanie, auto do práce alebo vzdelanie","Konzolu a TV"], correct:2, explanation:"Úver dáva zmysel na aktíva ktoré majú dlhú životnosť alebo zvyšujú tvoju hodnotu. Bývanie, auto do práce, vzdelanie. Spotrebný tovar – nie."},
+      {q:"Čo je úverový register?", answers:["Zoznam bánk","Databáza kde sú záznamy o tvojich úveroch a ich splácaní","Daňový register","Zamestnávateľský register"], correct:1, explanation:"Banky si overujú tvoju kreditnú históriu v úverovom registri. Nesplácanie = zlý záznam = odmietnutý úver v budúcnosti alebo vyšší úrok."},
+      {q:"Čo sa stane keď nesplácaš úver?", answers:["Nič, banka zabudne","Úrok rastie, poškodí sa kreditná história, môže prísť exekúcia","Úver sa odpustí","Dostaneš zľavu"], correct:1, explanation:"Nesplácanie má vážne dôsledky: rastúci dlh (úrok + penále), čierna listina v úverovom registri, súdne vymáhanie, exekúcia majetku."},
+      {q:"Čo je konsolidácia dlhov?", answers:["Odpustenie dlhov","Zlúčenie viacerých úverov do jedného s lepšími podmienkami","Nový úver na míňanie","Daňový odpočet"], correct:1, explanation:"Konsolidácia zlúči napr. 3 spotrebné úvery do jedného hypotekárneho s nižším úrokom. Znižuje mesačnú splátku, ale môže predĺžiť dobu splácania."},
+      {q:"Aké je pravidlo pri rozhodovaní o úvere?", answers:["Vždy si požičaj čo najviac","Mesačná splátka by nemala presiahnuť 30–40 % čistého príjmu","Berte úver len v cudzej mene","Úver nikdy nebrať"], correct:1, explanation:"Zlaté pravidlo: splátky všetkých úverov by nemali presiahnuť 30–40 % mesačného čistého príjmu. Inak hrozí finančná záťaž a problémy pri zmene príjmu."}
+    ]},
+    { id:"3-2", title:"Hypotéka", icon:"🏠", questions:[
+      {q:"Čo je hypotéka?", answers:["Nájomná zmluva","Dlhodobý úver zabezpečený nehnuteľnosťou","Štátna dotácia na bývanie","Poistenie nehnuteľnosti"], correct:1, explanation:"Hypotéka = úver kde zárukou je kupovaná nehnuteľnosť. Ak nespláčaš, banka môže nehnuteľnosť predať. Typicky 20–30 rokov splácania."},
+      {q:"Čo je LTV (Loan to Value)?", answers:["Daňový odpočet","Pomer výšky úveru k hodnote nehnuteľnosti – napr. LTV 80 % = banka požičia 80 %","Úroková sadzba","Mesačná splátka"], correct:1, explanation:"LTV 80 % = banka požičia 80 % hodnoty, 20 % musíš mať vlastných. Nižšie LTV = nižšie riziko pre banku = zvyčajne nižší úrok."},
+      {q:"Koľko percent z ceny nehnuteľnosti by si mal mať nasporených?", answers:["0 % – stačí hypotéka","10–20 % plus rezerva na zariadenie a poplatky","50 %","100 %"], correct:1, explanation:"Banky väčšinou požičajú max 80–90 %. Okrem vlastného podielu potrebuješ rezervu na zariadenie, poplatky za prevod, kataster a poistenie."},
+      {q:"Čo je fixácia úrokovej sadzby?", answers:["Trvalé zamknutie sadzby navždy","Obdobie počas ktorého sa úroková sadzba nemení – 1, 3, 5 alebo 10 rokov","Pokuta za predčasné splatenie","Typ poistenia"], correct:1, explanation:"Fixácia garantuje stabilnú splátku počas obdobia. Dlhšia fixácia = vyšší úrok ale istota. Kratšia fixácia = nižší úrok ale riziko zdraženia."},
+      {q:"Byt stojí 150 000 €. Banka požičia 80 %. Koľko musíš mať vlastných zdrojov?", answers:["15 000 €","20 000 €","30 000 €","50 000 €"], correct:2, explanation:"80 % z 150 000 € = 120 000 € od banky. Vlastné zdroje = 150 000 − 120 000 = 30 000 €. Plus odporúčaná rezerva ~10 000 €."},
+      {q:"Oplatí sa splácať hypotéku rýchlejšie?", answers:["Nie, nič tým nezískaš","Áno – každé euro navyše šetrí úroky a skráti dobu splácania","Závisí len od banky","Rýchlejšie splácanie je zakázané"], correct:1, explanation:"Mimoriadne splátky šetria obrovské sumy na úrokoch. Napr. 100 € navyše mesačne na 100 000 € hypotéke pri 3 % môže ušetriť 15 000 € a skrátiť dobu o 5 rokov."},
+      {q:"Čo je záložné právo banky pri hypotéke?", answers:["Právo banky na tvoj plat","Právo banky predať nehnuteľnosť ak nespláčaš hypotéku","Poistenie hypotéky","Garancia štátu"], correct:1, explanation:"Záložné právo = banka je zapísaná v katastri ako veriteľ. Ak nespláčaš, banka môže nehnuteľnosť exekučne predať a uspokojí svoju pohľadávku."},
+      {q:"Čo je predčasné splatenie hypotéky?", answers:["Splatenie iba časti istiny","Splatenie celej hypotéky pred dohodnutým termínom – môže byť za poplatok","Refinancovanie","Predĺženie splatnosti"], correct:1, explanation:"Počas fixácie môže banka účtovať poplatok za predčasné splatenie. Po skončení fixácie je predčasné splatenie zvyčajne zadarmo alebo za minimálny poplatok."}
+    ]},
+    { id:"3-3", title:"Kreditné karty", icon:"💳", questions:[
+      {q:"Čo je kreditná karta?", answers:["Karta napojená na tvoj bankový účet","Karta kde míňaš peniaze banky s povinnosťou vrátenia","Darčeková karta","Prepaid karta"], correct:1, explanation:"Kreditná karta = požičiavaš si od banky. Na rozdiel od debetnej karty míňaš cudzie peniaze. Ak splatíš do dátumu splatnosti, nezaplatíš úrok."},
+      {q:"Čo je bezúrokové obdobie kreditnej karty?", answers:["Čas kedy karta nefunguje","Obdobie (zvyčajne 45–55 dní) počas ktorého splatíš dlh bez úroku","Dovolenka od splácania","Čas na aktiváciu karty"], correct:1, explanation:"Bezúrokové obdobie je skvelá výhoda – platíš kartou, peniaze ostávajú na účte (zarábajú úrok), a splatíš celý dlh v termíne. Nič ťa nestojí."},
+      {q:"Čo sa stane ak nezaplatíš celý dlh z kreditky v termíne?", answers:["Nič, máš ďalší mesiac","Začne sa účtovať úrok 15–25 % ROČNE na celý dlh","Karta sa zablokuje","Dostaneš upozornenie"], correct:1, explanation:"Úrok na kreditkách je extrémne vysoký – 20–25 % ročne. 1 000 € dlh = 200 € ročne na úrokoch. Vždy splácaj celý dlh, nie len minimum!"},
+      {q:"Čo je limit kreditnej karty?", answers:["Počet transakcií","Maximálna suma ktorú môžeš mať na kreditke","Mesačný poplatok","Úroková sadzba"], correct:1, explanation:"Limit je maximálny dlh. Ak máš limit 2 000 € a minul si 1 500 €, zostatok je 500 €. Neprekračuj 30 % limitu – vyšší pomer dlhu k limitu škodí kreditnému skóre."},
+      {q:"Kedy má kreditná karta zmysel?", answers:["Nikdy – je to vždy zlé","Keď vždy splácaš celý dlh v termíne – čerpáš výhody bez úrokov","Keď potrebuješ peniaze na dlhodobé míňanie","Keď nemáš na účte dostatok"], correct:1, explanation:"Kreditka má výhody: cashback, poistenie, bezúrokové obdobie, body. Ale len ak splácaš CELÝ dlh každý mesiac. Inak je to najdrahší spôsob požičiavania."},
+      {q:"Čo je minimálna platba na kreditke?", answers:["Odporúčaná platba","Najnižšia suma ktorú musíš zaplatiť aby karta nebola v omeškaní – zvyčajne 2–5 % dlhu","Celý dlh","Mesačný poplatok"], correct:1, explanation:"Minimálna platba je PASCA. Ak máš 3 000 € dlh a platíš len minimum 60 €/mesiac pri 20 % úroku – splatíš dlh za 30+ rokov a zaplatíš viac na úrokoch ako samotný dlh!"},
+      {q:"Máš kreditku s limitom 3 000 €. Koľko % by si mal maximálne využívať?", answers:["100 % – na to je limit","50 % – 1 500 €","30 % – 900 €","0 % – nepoužívaj ju"], correct:2, explanation:"Odborníci odporúčajú využívať max 30 % limitu (900 €). Vyššie využitie škodí kreditnému skóre a naznačuje finančné problémy."}
+    ]},
+    { id:"3-4", title:"Spotrebné úvery", icon:"🛒", questions:[
+      {q:"Čo je spotrebný úver?", answers:["Hypotéka","Krátkodobý nezabezpečený úver na spotrebu – auto, elektronika, dovolenka","Podnikateľský úver","Studentský úver"], correct:1, explanation:"Spotrebný úver je nezabezpečený (bez zálohy) preto má vyšší úrok ako hypotéka. Typicky 5–20 % RPSN podľa banky a tvojho profilu."},
+      {q:"Čo je nebanková pôžička?", answers:["Pôžička od priateľa","Pôžička od nebankovej spoločnosti – zvyčajne vyšší úrok, menej regulácií","Bankový kontokorent","Štátna pôžička"], correct:1, explanation:"Nebankové spoločnosti sú menej regulované a účtujú výrazne vyššie úroky. RPSN môže byť 50–100 % alebo viac. Vždy preferuj banku!"},
+      {q:"Čo je kontokorent?", answers:["Typ sporenia","Povolené prečerpanie bežného účtu – môžeš ísť do mínusu do stanoveného limitu","Kreditná karta","Termínovaný vklad"], correct:1, explanation:"Kontokorent = banka ti povolí ísť do mínusu napr. do 1 000 €. Úrok sa platí len za skutočne prečerpanú sumu a len za dni čo ju používaš."},
+      {q:"Čo je payday loan (rýchla pôžička)?", answers:["Lacný bankový úver","Veľmi krátkodobá pôžička s extrémne vysokým RPSN – často 300–1000 %+","Štátna pomoc","Bezúročná pôžička"], correct:1, explanation:"Payday loans sú finančná pasca. 'Požičaj si 200 € a vrát 220 € za 2 týždne' = RPSN 300 %+. Nikdy ich nepoužívaj – vždy existuje lepšia možnosť."},
+      {q:"Aké je pravidlo pri kúpe auta na úver?", answers:["Bez pravidiel, kúp čo chceš","Mesačná splátka by nemala presiahnuť 15–20 % čistého príjmu","Auto vždy platiť hotovosťou","Auto nikdy na úver"], correct:1, explanation:"Auto je depreciačné aktívum – stráca hodnotu. Splátka nad 20 % príjmu je príliš zaťažujúca. Odporúčané: zostarok do 3 rokov, záloha 20 %+."},
+      {q:"Čo je dlhová špirála?", answers:["Typ investície","Situácia keď si berieš nové dlhy na splatenie starých – dlh rastie exponenciálne","Typ sporenia","Bankový produkt"], correct:1, explanation:"Dlhová špirála: nový úver na splátku starého → rastúce dlhy → stres → ďalší úver. Jediné riešenie: zastaviť nové úvery, konsolidovať, alebo vyhľadať finančné poradenstvo."},
+      {q:"Čo robiť keď nemôžeš splácať úver?", answers:["Ignorovať a dúfať","Ihneď kontaktovať banku – väčšina bánk ponúka odklad alebo reštrukturalizáciu","Vziať si ďalší úver","Utiecť do zahraničia"], correct:1, explanation:"Banka radšej reštrukturalizuje ako vymáha. Ak sa ozveš včas, môžeš dostať odklad splátok, predĺženie splatnosti alebo nižšiu splátku. Nekontaktovanie situáciu zhoršuje."}
+    ]},
+    { id:"3-5", title:"Budovanie kreditného profilu", icon:"⭐", questions:[
+      {q:"Čo je kreditné skóre?", answers:["Číslo bankového účtu","Hodnotenie tvojej kreditnej spoľahlivosti – čím vyššie, tým lepšie podmienky úverov","Daňové hodnotenie","Zamestnávateľské hodnotenie"], correct:1, explanation:"Kreditné skóre hodnotí ako si spláca záväzky. Vysoké skóre = nižší úrok, ľahšie schválenie. Nízke skóre = odmietnutie alebo vysoký úrok."},
+      {q:"Čo zlepšuje kreditné skóre?", answers:["Nesplácanie","Pravidelné a včasné splácanie všetkých záväzkov","Mnoho žiadostí o úver naraz","Zatváranie všetkých účtov"], correct:1, explanation:"Kreditné skóre sa buduje časom: splácaj včas, udržuj nízke využitie kreditného limitu, nemaj príliš veľa úverov naraz."},
+      {q:"Čo poškodzuje kreditné skóre?", answers:["Pravidelné sporenie","Omeškanie splátok, exekúcie, príliš veľa žiadostí o úver","Používanie debetnej karty","Zmena zamestnania"], correct:1, explanation:"Omeškanie splátok zostáva v registri 5 rokov. Exekúcia ešte dlhšie. Každá žiadosť o úver zanecháva stopu – príliš veľa žiadostí naraz je varovný signál."},
+      {q:"Ako dlho zostávajú negatívne záznamy v úverovom registri?", answers:["1 mesiac","6 mesiacov","5 rokov","Navždy"], correct:2, explanation:"Negatívne záznamy (omeškanie, nesplácanie) zostávajú v NRKI registri 5 rokov. Potom sa vymažú. Preto je dôležité splácať včas od začiatku."},
+      {q:"Čo je NRKI?", answers:["Typ úveru","Nebanková Register Klientskych Informácií – slovenský úverový register","Daňový úrad","Poisťovňa"], correct:1, explanation:"NRKI je hlavný slovenský úverový register kde banky overujú tvojú kreditnú históriu pred schválením úveru. Môžeš si vyžiadať výpis zadarmo."},
+      {q:"Kedy je dobré začať budovať kreditnú históriu?", answers:["Až v 40 rokoch keď potrebuješ hypotéku","Čo najskôr – napríklad malou kreditnou kartou ktorú splácaš mesačne","Nikdy – kreditná história nie je dôležitá","Len ak pracuješ vo verejnom sektore"], correct:1, explanation:"Dlhá pozitívna kreditná história je plus pri žiadosti o hypotéku. Malá kreditka s pravidelnými platbami je skvelý začiatok – ale VŽDY splácaj celý dlh!"},
+      {q:"Môžeš si opraviť zlé kreditné skóre?", answers:["Nie, je trvalé","Áno – čas a disciplinované splácanie záväzkov ho postupne zlepší","Len s platou korupcie","Len cez špeciálnu agentúru"], correct:1, explanation:"Kreditné skóre sa dá opraviť – trvá to 1–5 rokov disciplíny. Splácaj načas, znižuj dlhy, vyhýbaj sa novým úverom. Čas lieči finančnú minulosť."}
+    ]}
+  ]},
+
+  // ═══ JEDNOTKA 4 – DANE A ODVODY ══════════════════════════════════════════
+  { id:4, title:"Dane a odvody", desc:"Pochop slovenský daňový systém", color:"orange", lessons:[
+    { id:"4-1", title:"Základy daní", icon:"🧾", questions:[
+      {q:"Čo je daň z príjmov fyzickej osoby na Slovensku?", answers:["Dobrovoľný príspevok","Povinná platba štátu z príjmov – 19 % do 37 981 € a 25 % nad túto sumu","Sociálne poistenie","Zdravotné poistenie"], correct:1, explanation:"Na Slovensku platíš 19 % daň z príjmov do sumy 37 981 € ročne a 25 % z časti nad túto sumu. Plus nezdaniteľná časť základu dane 4 922 € ročne."},
+      {q:"Čo je nezdaniteľná časť základu dane?", answers:["Suma ktorú netreba zdaniť – znižuje daňový základ","Štátna dotácia","Sociálne dávky","Daňový bonus"], correct:0, explanation:"Nezdaniteľná časť (4 922 € ročne / 410 € mesačne) sa odpočíta od základu dane. Zamestnávateľ ju automaticky uplatňuje ak podpíšeš vyhlásenie."},
+      {q:"Čo je hrubá a čistá mzda?", answers:["Sú to isté veci","Hrubá = pred odvodmi a daňou, čistá = po odčítaní daní a odvodov – to čo dostaneš na účet","Čistá je vyššia","Závisí od zamestnávateľa"], correct:1, explanation:"Z hrubej mzdy 1 000 € zaplatíš ~13,4 % sociálne poistenie + 4 % zdravotné poistenie + daň = dostaneš na ruku ~740 €. Vždy sa pýtaj na hrubú mzdu!"},
+      {q:"Čo je daňový bonus na dieťa?", answers:["Štátna dotácia","Zníženie daňovej povinnosti o sumu za každé dieťa – 140 € mesačne (do 15 rokov)","Príspevok od zamestnávateľa","Sociálna dávka"], correct:1, explanation:"Rodič dostane daňový bonus 140 €/mesiac na dieťa do 15 rokov a 50 €/mesiac na dieťa 15–25 rokov (ak študuje). Výrazne znižuje daňovú povinnosť."},
+      {q:"Do kedy treba podať daňové priznanie na Slovensku?", answers:["Do 31. januára","Do 31. marca (možno predĺžiť do 30. júna)","Do 31. decembra","Kedykoľvek"], correct:1, explanation:"Daňové priznanie sa podáva do 31. marca za predchádzajúci rok. Môžeš požiadať o predĺženie do 30. júna alebo 30. septembra (ak máš príjmy zo zahraničia)."},
+      {q:"Kto nemusí podávať daňové priznanie?", answers:["Nikto – všetci musia","Zamestnanec ktorého zamestnávateľ vykonal ročné zúčtovanie a nemal iné príjmy","Len dôchodcovia","Len štátni zamestnanci"], correct:1, explanation:"Ak si zamestnanec s príjmom len zo zamestnania, zamestnávateľ môže urobiť ročné zúčtovanie za teba. Nemusíš podávať daňové priznanie – ale môžeš, ak ti to vychádza výhodnejšie."},
+      {q:"Čo je daňový preplatok?", answers:["Pokuta od daňového úradu","Situácia keď si zaplatil viac daní ako mal – štát ti vráti rozdiel","Daňový dlh","Sociálne dávky"], correct:1, explanation:"Ak ti zamestnávateľ zrazil viac daní ako treba (napr. lebo si uplatnil bonus na dieťa neskoro), dostaneš preplatok späť – zvyčajne do 30 dní od podania."},
+      {q:"Čo je SZČO?", answers:["Typ banky","Samostatne zárobkovo činná osoba – živnostník alebo freelancer","Verejná inštitúcia","Typ sporenia"], correct:1, explanation:"SZČO platí dane a odvody inak ako zamestnanec. Platí preddavky na daň, sociálne aj zdravotné poistenie samostatne. Má aj odlišné daňové možnosti (paušálne výdavky)."}
+    ]},
+    { id:"4-2", title:"Odvody a poistenie", icon:"🏥", questions:[
+      {q:"Čo je sociálne poistenie?", answers:["Dobrovoľné sporenie","Povinné platby do Sociálnej poisťovne – dôchodkové, nemocenské, úrazové poistenie","Zdravotné poistenie","Životné poistenie"], correct:1, explanation:"Sociálne poistenie zahŕňa dôchodkové (18 %), nemocenské (1,4 %), poistenie v nezamestnanosti (1 %) a ďalšie. Zamestnanec platí 13,4 %, zamestnávateľ 24,8 %."},
+      {q:"Čo je zdravotné poistenie?", answers:["Dobrovoľné poistenie","Povinná platba zdravotnej poisťovni – 4 % zamestnanec, 10 % zamestnávateľ","Typ sporenia","Daň z príjmov"], correct:1, explanation:"Zdravotné poistenie je povinné pre každého. Zamestnanec platí 4 % z hrubej mzdy, zamestnávateľ 10 %. Kryje zdravotnú starostlivosť."},
+      {q:"Ako funguje nemocenská dávka?", answers:["Plný plat od prvého dňa","Prvých 10 dní platí zamestnávateľ (25–55 % denného vymeriavacieho základu), od 11. dňa Sociálna poisťovňa (55–60 %)","Len ak si hospitalizovaný","Zamestnávateľ nič neplatí"], correct:1, explanation:"Pri pracovnej neschopnosti dostaneš menej ako plat. Preto je dôležitý nouzový fond – nemocenská nestačí na pokrytie všetkých výdavkov."},
+      {q:"Čo je OČR (ošetrovanie člena rodiny)?", answers:["Typ dovolenky","Dávka keď sa staráš o chorého člena rodiny – 55 % denného vymeriavacieho základu","Plný plat","Daňový odpočet"], correct:1, explanation:"OČR dostaneš keď sa staráš o chorého príbuzného alebo dieťa do 11 rokov. Je nižšia ako plat, preto nouzový fond pomáha aj v týchto situáciách."},
+      {q:"Čo je materská dávka?", answers:["Štátny príspevok na dieťa","Dávka pre matku/otca počas materskej dovolenky – 75 % denného vymeriavacieho základu","Plný plat","Daňový bonus"], correct:1, explanation:"Materská = 75 % priemeru posledných 2 rokov. Môže ju čerpať aj otec. Trvá 34 týždňov (matka), 28 týždňov (otec). Rodičovský príspevok nasleduje po materskej."},
+      {q:"Čo je minimálna mzda na Slovensku (2024)?", answers:["500 €","650 €","750 €","780 €"], correct:3, explanation:"Minimálna mzda na Slovensku v roku 2024 je 750 € hrubého (od 1.1.2024). Čistá mzda je nižšia po odčítaní odvodov a dane."},
+      {q:"Čo sú daňovo uznateľné výdavky SZČO?", answers:["Všetko čo miniem","Výdavky priamo súvisiace s podnikaním ktoré znižujú základ dane","Len nákup auta","Len nájom kancelárie"], correct:1, explanation:"SZČO môže odpočítať výdavky na podnikanie: notebook, softvér, telefón, auto, nájom kancelárie... Alebo použiť paušálne výdavky 60 % bez dokladov."}
+    ]},
+    { id:"4-3", title:"DPH a nepriame dane", icon:"🧮", questions:[
+      {q:"Čo je DPH?", answers:["Daň z príjmov","Daň z pridanej hodnoty – platíš ju v cene každého tovaru a služby","Clo","Spotrebná daň"], correct:1, explanation:"DPH je skrytá v cene produktov. Základná sadzba na Slovensku je 20 %. Znížená sadzba 10 % platí napr. na potraviny, lieky, knihy."},
+      {q:"Aká je základná sadzba DPH na Slovensku?", answers:["10 %","15 %","20 %","25 %"], correct:2, explanation:"Základná DPH sadzba je 20 %. Znížená 10 % platí na základné potraviny, lieky, noviny, knihy. Niektoré položky sú oslobodené (napr. finančné služby)."},
+      {q:"Ak stojí produkt 100 € bez DPH, koľko zaplatíš vrátane 20 % DPH?", answers:["110 €","115 €","120 €","125 €"], correct:2, explanation:"100 € + 20 % DPH = 100 × 1,2 = 120 €. DPH = 20 €. Firmy sú povinné uviesť cenu vrátane DPH v obchodoch."},
+      {q:"Čo je platca DPH?", answers:["Každý spotrebiteľ","Firma alebo SZČO s obratom nad 49 790 € ročne ktorá odvádza DPH štátu","Len veľké korporácie","Len výrobcovia"], correct:1, explanation:"Firmy s obratom nad 49 790 € musia byť platcami DPH. Účtujú zákazníkom DPH a odvádzajú ju štátu (mínus DPH ktorú sami zaplatili na vstupoch)."},
+      {q:"Čo je spotrebná daň?", answers:["Daň z príjmov","Špeciálna daň na konkrétne produkty – alkohol, cigarety, pohonné hmoty","DPH","Daň z nehnuteľnosti"], correct:1, explanation:"Spotrebné dane sú na alkohol, cigarety, pohonné hmoty, elektrinu. Okrem DPH. Preto je benzín tak drahý – obsahuje spotrebnú daň aj DPH."},
+      {q:"Prečo je dôležité rozumieť daniam?", answers:["Nie je to dôležité","Správným plánovaním môžeš legálne znížiť daňovú povinnosť a vyhnúť sa pokutám","Len kvôli podnikaniu","Dane sú príliš zložité na pochopenie"], correct:1, explanation:"Daňová optimalizácia = legálne zníženie daní (nie daňové úniky). Daňový bonus, nezdaniteľné časti, III. pilier, príspevok na rekreáciu – to všetko znižuje dane."}
+    ]},
+    { id:"4-4", title:"Daňové tipy pre Slovákov", icon:"💡", questions:[
+      {q:"Ako využiť III. pilier na zníženie daní?", answers:["Nedá sa využiť","Príspevky do III. piliera do 180 € ročne sú odpočítateľnou položkou od základu dane","Len pre zamestnancov nad 50 rokov","Len pri príjme nad 50 000 €"], correct:1, explanation:"Ak ročne vložíš do III. piliera 180 €, znížiš základ dane o 180 €. Pri 19 % sadzbe ušetríš 34,2 € na daniach. Plus ak prispieva zamestnávateľ – ušetríš viac."},
+      {q:"Čo je príspevok na rekreáciu a ako ho využiť?", answers:["Štátna dotácia","Zamestnávateľ môže poskytnúť príspevok 55 % nákladov na rekreáciu až 275 € ročne – bez dane","Len pre štátnych zamestnancov","Len v zahraničí"], correct:1, explanation:"Zamestnávatelia s 50+ zamestnancami musia ponúknuť príspevok na rekreáciu. Zamestnanci u menších firiem o to môžu požiadať. Je to výhodný benefit bez dane."},
+      {q:"Čo je daňový bonus na zaplatené úroky z hypotéky?", answers:["Nie je takýto bonus","Odpočet zaplatených úrokov z hypotéky od základu dane – max 400 € ročne pre prvú nehnuteľnosť","Plné vrátenie úrokov","Len pre mladých do 35 rokov"], correct:1, explanation:"Ak si kúpil prvú nehnuteľnosť hypotékou, môžeš odpočítať zaplatené úroky od základu dane – max 400 € ročne. Platí pre hypotéky do výšky 50 000 €."},
+      {q:"Čo je paušálna náhrada výdavkov pre SZČO?", answers:["Fixná suma bez dokladov","SZČO môže uplatniť 60 % príjmov ako výdavky bez dokladov (max 20 000 € ročne)","Len pre podnikateľov s obratom nad 100 000 €","Typ poistenia"], correct:1, explanation:"Paušálne výdavky 60 % zjednodušia daňové priznanie – nepotrebuješ zbierať každý doklad. Vhodné pre SZČO s nízkymi reálnymi výdavkami."},
+      {q:"Kedy sa oplatí podať daňové priznanie aj keď nemusíš?", answers:["Nikdy","Keď ti vychádza daňový preplatok – napr. ak si pracoval časť roka","Len ak máš príjem nad 50 000 €","Len pri nehnuteľnostiach"], correct:1, explanation:"Ak si pracoval len časť roka, môže ti vychádzať preplatok z daní. Podaním daňového priznania ho dostaneš späť. Za rok 2023 mohol byť preplatok aj niekoľko stoviek €."},
+      {q:"Čo je zákonné poistenie zamestnávateľa?", answers:["Poistenie pre zamestnancov","Povinné poistenie zodpovednosti zamestnávateľa za škodu spôsobenú zamestnancom pri práci","Zdravotné poistenie","Životné poistenie"], correct:1, explanation:"Každý zamestnávateľ musí mať toto poistenie. Ak ťa zraní pri práci, poistenie kryje liečebné náklady, ušlý zárobok a prípadnú trvalú invaliditu."},
+      {q:"Ako funguje ročné zúčtovanie dane?", answers:["Robí ho sám zamestnanec","Môže ho urobiť zamestnávateľ za zamestnanca do 15. februára – zúčtuje všetky príjmy a uplatnené nezdaniteľné časti","Robí ho Finančná správa automaticky","Nie je povinné"], correct:1, explanation:"Väčšina zamestnancov nemusí podávať daňové priznanie – stačí požiadať zamestnávateľa o ročné zúčtovanie. Prípadný preplatok dostaneš v marci."}
+    ]},
+    { id:"4-5", title:"Dane z majetku a nehnuteľností", icon:"🏡", questions:[
+      {q:"Čo je daň z nehnuteľnosti?", answers:["Jednorazová daň pri kúpe","Ročná daň platená obci za vlastníctvo pozemku, bytu alebo domu","DPH z nájmu","Poistenie nehnuteľnosti"], correct:1, explanation:"Daň z nehnuteľnosti platíš každý rok obci kde sa nehnuteľnosť nachádza. Výška závisí od výmery a sadzby obce. Platí ju vlastník, nie nájomník."},
+      {q:"Kedy musíš platiť daň z predaja nehnuteľnosti?", answers:["Vždy","Ak predáš nehnuteľnosť do 5 rokov od nadobudnutia za viac ako si zaplatil","Nikdy","Len ak predáš za viac ako 100 000 €"], correct:1, explanation:"Ak predáš nehnuteľnosť do 5 rokov a zarobíš na nej, zdaňuje sa rozdiel medzi predajnou a obstarávacou cenou. Po 5 rokoch je predaj oslobodený od dane."},
+      {q:"Ak si kúpil byt za 120 000 € a po 3 rokoch ho predáš za 150 000 €, čo zdaníš?", answers:["Celých 150 000 €","Rozdiel 30 000 € (pri 19 % dani = 5 700 €)","Nič – do 5 rokov je oslobodenie","Len 15 000 €"], correct:1, explanation:"Zisk 30 000 € je príjem z predaja nehnuteľnosti – zdaníš ho sadzbou 19 % (alebo 25 % ak celkový základ dane prekračuje limit). Daň = 5 700 €."},
+      {q:"Čo je daň z dedičstva na Slovensku?", answers:["19 % z hodnoty dedičstva","15 % pre vzdialených príbuzných","Na Slovensku bola zrušená – dedičstvo sa nedaní","Závisí od hodnoty majetku"], correct:2, explanation:"Na Slovensku bola daň z dedičstva zrušená v roku 2004. Dedičstvo sa nedaní bez ohľadu na hodnotu alebo stupeň príbuznosti. Platíš len notárske poplatky."},
+      {q:"Čo je darovacia daň na Slovensku?", answers:["10 % z hodnoty daru","Bola zrušená – dary medzi fyzickými osobami sa nedania","25 % pre nepríbuzných","Závisí od hodnoty daru"], correct:1, explanation:"Darovacia daň bola na Slovensku zrušená v roku 2004 spolu s dedičskou daňou. Dary sú oslobodené od dane. Výnimka: dary od zamestnávateľa sa zdania ako príjem."},
+      {q:"Ak prenajímaš byt, musíš platiť daň z nájmu?", answers:["Nie, nájom sa nedaní","Áno, príjem z nájmu sa zahrnie do daňového priznania a zdaňuje sadzbou 19 %/25 %","Len ak nájom presahuje 1 000 € mesačne","Len ak prenajímaš viac bytov"], correct:1, explanation:"Príjem z prenájmu nehnuteľnosti je zdaniteľný príjem. Uvádza sa v daňovom priznaní. Môžeš si odpočítať výdavky súvisiace s prenájmom (energie, opravy, poistenie)."}
+    ]}
+  ]},
+
+  // ═══ JEDNOTKA 5 – DÔCHODOK A DLHODOBÉ PLÁNOVANIE ════════════════════════
+  { id:5, title:"Dôchodok a budúcnosť", desc:"Zabezpeč svoju finančnú slobodu", color:"orange", lessons:[
+    { id:"5-1", title:"Dôchodkový systém SR", icon:"👴", questions:[
+      {q:"Z čoho sa skladá slovenský dôchodkový systém?", answers:["Len zo štátneho dôchodku","I. pilier (štátny), II. pilier (DSS) a III. pilier (DDS) – tri piliere","Len zo súkromného sporenia","Len z investícií"], correct:1, explanation:"Slovenský dôchodkový systém má 3 piliere: I. pilier = štátny priebežný systém, II. pilier = osobné sporenie v DSS, III. pilier = dobrovoľné doplnkové sporenie."},
+      {q:"Ako funguje I. pilier?", answers:["Sporiš na vlastný účet","Dnešní pracujúci platia odvody na dôchodky dnešným dôchodcom – priebežný systém","Štát investuje tvoje peniaze","Povinná poisťovňa"], correct:1, explanation:"I. pilier je solidárny systém – tvoje odvody idú na dôchodky aktuálnych dôchodcov. Tvoj budúci dôchodok závisí od odpracovaných rokov a výšky zárobku."},
+      {q:"Kedy môžeš odísť do dôchodku na Slovensku?", answers:["V 60 rokoch","Dôchodkový vek rastie – aktuálne 64 rokov, pre mladších pravdepodobne 65+","V 55 rokoch","Kedykoľvek chceš"], correct:1, explanation:"Dôchodkový vek na Slovensku sa postupne zvyšuje. Pre ročník 1967 je to 64 rokov. Pre mladších ročníky bude pravdepodobne 65 alebo viac."},
+      {q:"Prečo je I. pilier nedostatočný pre pohodlný dôchodok?", answers:["Je dostatočný pre všetkých","Náhradový pomer je len ~40–45 % posledného platu, populácia starne","Štát nedovolí vyšší dôchodok","I. pilier neexistuje"], correct:1, explanation:"Priemerný slovenský dôchodok nahradí len ~40–45 % posledného príjmu. Ak zarábaš 1 500 € čistého, dôchodok bude ~650 €. Preto treba II. a III. pilier."},
+      {q:"Čo je náhradový pomer dôchodku?", answers:["Počet rokov poistenia","Pomer výšky dôchodku k poslednému príjmu – na Slovensku ~40–45 %","Vek odchodu do dôchodku","Výška odvodu do Sociálnej poisťovne"], correct:1, explanation:"Náhradový pomer 45 % znamená: ak si zarábal 1 200 €, dôchodok bude ~540 €. Odporúčaný náhradový pomer pre dôstojný dôchodok je 70–80 %."},
+      {q:"Koľko rokov poistenia potrebuješ na riadny starobný dôchodok?", answers:["10 rokov","15 rokov","25 rokov","Minimálne 15 rokov, pre plný dôchodok čo najviac"], correct:3, explanation:"Minimálne 15 rokov poistenia treba na starobný dôchodok. Čím viac odpracovaných rokov a vyšší plat, tým vyšší dôchodok. Každý rok poistenia zvyšuje dôchodok."},
+      {q:"Čo môžeš urobiť ak chceš odísť do dôchodku skôr?", answers:["Nič – dôchodkový vek je fixný","Sporiť a investovať súkromne na dosiahnutie finančnej nezávislosti skôr","Požiadať štát o výnimku","Odísť do zahraničia"], correct:1, explanation:"FIRE (Financial Independence, Retire Early) hnutie: agresívne sporiť 50–70 % príjmu a investovať aby si dosiahol finančnú slobodu v 40–50 rokoch. Vyžaduje disciplínu."}
+    ]},
+    { id:"5-2", title:"II. a III. pilier", icon:"💼", questions:[
+      {q:"Čo je II. pilier?", answers:["Dobrovoľné sporenie","Povinné (pre vstupujúcich) sporenie kde 5,5 % z hrubého platu ide na tvoj osobný účet v DSS","Štátna dávka","Životné poistenie"], correct:1, explanation:"II. pilier: 5,5 % z hrubej mzdy ide do DSS (dôchodková správcovská spoločnosť) na tvoj osobný účet. Peniaze sú tvoje – zdedia sa, nie sú v štátnom systéme."},
+      {q:"Oplatí sa vstúpiť do II. piliera?", answers:["Nie, len štát na tom zarába","Áno – peniaze sú tvoje osobné, zdedia sa a historicky dobre výnosné indexové fondy v DSS","Závisí len od veku","Len pre bohatých"], correct:1, explanation:"Väčšina odborníkov odporúča II. pilier – peniaze sú na osobnom účte, zdedia sa, a môžeš si vybrať indexový fond s historicky dobrými výnosmi."},
+      {q:"Čo je III. pilier (DDS)?", answers:["Štátny dôchodok","Dobrovoľné doplnkové dôchodkové sporenie s daňovými výhodami – odpočet 180 € ročne","Povinné sporenie","Životné poistenie"], correct:1, explanation:"III. pilier je dobrovoľný. Príspevky do 180 € ročne si môžeš odpočítať od základu dane. Ak prispieva aj zamestnávateľ – double výhoda."},
+      {q:"Aký je rozdiel medzi indexovým a aktívne riadeným fondom v DSS?", answers:["Žiadny rozdiel","Indexový kopíruje trh s nízkymi poplatkami, aktívny vyberá akcie so správcom – väčšinou vyššie poplatky a nižší výnos","Aktívny je vždy lepší","Indexový je len pre bohatých"], correct:1, explanation:"Výskumy ukazujú: dlhodobo 80–90 % aktívne riadených fondov nezarobí viac ako indexový fond. A to pri vyšších poplatkoch. Indexový fond v DSS je pre väčšinu najlepšou voľbou."},
+      {q:"Čo sa stane s peniazmi v II. pilieri ak zomrieš?", answers:["Prepadnú štátu","Zdedia sa – stávajú sa súčasťou dedičstva","Vrátia sa do Sociálnej poisťovne","Dostane ich zamestnávateľ"], correct:1, explanation:"Na rozdiel od I. piliera, peniaze v II. pilieri sú tvoje osobné – zdedia sa. Môžeš určiť oprávnenú osobu. To je jedna z hlavných výhod II. piliera."},
+      {q:"Kedy môžeš vybrať peniaze z III. piliera bez penalizácie?", answers:["Kedykoľvek","Po dovŕšení 55 rokov a minimálne 10 rokoch sporenia","Len pri odchode do dôchodku","Po 65 rokoch"], correct:1, explanation:"Peniaze z III. piliera môžeš vybrať bez penalizácie po 55 rokoch veku ak si sporil aspoň 10 rokov. Pri predčasnom výbere platíš 19 % daň zo štátnych príspevkov a výnosov."},
+      {q:"Ako maximalizovať dôchodkové sporenie?", answers:["Len I. pilier stačí","II. pilier + III. pilier s maximálnym daňovým odpočtom + vlastné investovanie do ETF","Len III. pilier","Len investovanie do nehnuteľností"], correct:1, explanation:"Optimálna stratégia: II. pilier (povinné) + III. pilier do 180 € ročne (daňový odpočet) + pravidelné investovanie do globálnych ETF. Tri zdroje dôchodkového príjmu."}
+    ]},
+    { id:"5-3", title:"Finančná sloboda", icon:"🦅", questions:[
+      {q:"Čo je finančná sloboda?", answers:["Mať milión eur","Stav keď pasívny príjem pokrýva všetky výdavky a nemusíš pracovať ak nechceš","Bezplatné bankové služby","Žiadne dlhy"], correct:1, explanation:"Finančná sloboda = tvoje investície generujú dostatok pasívneho príjmu na pokrytie životného štýlu. Nemusíš predávať čas za peniaze. Môžeš pracovať zo záľuby."},
+      {q:"Čo je pravidlo 4 %?", answers:["Sporiť 4 % príjmu","Môžeš každý rok vybrať 4 % portfólia a s 95 % pravdepodobnosťou ti peniaze vydržia 30+ rokov","Úrok na sporiacom účte","DPH sadzba"], correct:1, explanation:"Pravidlo 4 % (Trinity Study): ak máš 500 000 € v akciách, môžeš ročne vybrať 20 000 € (4 %) a portfólio vydrží historicky 30+ rokov. Základ FIRE stratégie."},
+      {q:"Koľko potrebuješ nasporených na finančnú slobodu pri výdavkoch 1 500 € mesačne?", answers:["180 000 €","300 000 €","450 000 €","1 500 000 €"], correct:2, explanation:"Pravidlo 4 %: ročné výdavky × 25 = cieľ. 1 500 € × 12 = 18 000 € ročne × 25 = 450 000 €. S týmto portfóliom môžeš vyberať 1 500 € mesačne dlhodobo."},
+      {q:"Čo je FIRE?", answers:["Požiar portfólia","Financial Independence, Retire Early – agresívne sporenie a investovanie na skorý dôchodok","Typ ETF","Daňová úspora"], correct:1, explanation:"FIRE hnutie: sporíš 50–70 % príjmu, investuješ do ETF, a cielíš na finančnú slobodu v 35–50 rokoch. Vyžaduje životný štýl pod príjmom ale dáva slobodu."},
+      {q:"Čo je pasívny príjem?", answers:["Príjem za menej práce","Príjem z investícií a aktív ktorý plynie bez aktívnej práce – dividendy, nájom, úroky","Plat za nočné zmeny","Sociálne dávky"], correct:1, explanation:"Pasívny príjem: dividendy z akcií, nájom z bytu, úroky z dlhopisov, royalties. Cieľ finančnej slobody = vybudovať dostatok pasívneho príjmu na pokrytie výdavkov."},
+      {q:"Ako vypočítaš mieru sporenia?", answers:["Ušetrené peniaze / celkové výdavky","Ušetrené peniaze / príjem × 100 %","Príjem / výdavky","Výdavky / príjem × 100 %"], correct:1, explanation:"Miera sporenia = (ušetrené / príjem) × 100. Ak zarábaš 1 200 € a odložíš 240 €, miera sporenia = 20 %. FIRE cieľ je 50 %+."},
+      {q:"Čo je koeficient výdavkov (expense ratio) a prečo je dôležitý pri dlhodobom investovaní?", answers:["Pomer výdavkov na jedlo","Ročný poplatok ETF alebo fondu – pri dlhodobom investovaní dramaticky ovplyvňuje konečnú sumu","Daňová sadzba","Inflačný koeficient"], correct:1, explanation:"0,2 % vs 1,5 % ročný poplatok: na 100 000 € za 30 rokov je rozdiel ~200 000 €! Pri dlhodobom investovaní sú nízke poplatky kľúčové. Vždy hľadaj ETF s TER pod 0,3 %."},
+      {q:"Čo je geografická arbitráž (geo-arbitrage)?", answers:["Investovanie v zahraničí","Presťahovanie sa do krajiny s nižšími životnými nákladmi pri zachovaní príjmu v silnejšej mene","Daňová optimalizácia","Typ nehnuteľnostnej investície"], correct:1, explanation:"Geo-arbitráž: zarábať v EUR alebo USD a žiť v krajine kde EUR ďalej natiahne (napr. Balkán, Juhovýchodná Ázia). Populárna stratégia pre digitálnych nomádov a skorých dôchodcov."}
+    ]},
+    { id:"5-4", title:"Poistenie a ochrana majetku", icon:"🔒", questions:[
+      {q:"Prečo je poistenie dôležité?", answers:["Nie je dôležité – je to len biznis poisťovní","Chráni ťa pred katastrofickými finančnými stratami ktoré by zničili roky sporenia","Len kvôli zákonnej povinnosti","Len pre bohatých"], correct:1, explanation:"Poistenie je ochrana pred nízkopravdepodobnými ale vysokonákladnými udalosťami. Bez poistenia môže jeden úraz, požiar alebo autonehoda zničiť roky finančného budovania."},
+      {q:"Čo by malo byť poistené povinne?", answers:["Len auto","Auto (PZP), zdravie (zákonné), zodpovednosť za škodu","Len nehnuteľnosť","Nič nie je povinné"], correct:1, explanation:"Povinné poistenia na Slovensku: PZP (povinné zmluvné poistenie auta), zdravotné poistenie, úrazové poistenie pre SZČO a zamestnávateľa."},
+      {q:"Čo je životné poistenie a kedy ho naozaj potrebuješ?", answers:["Vždy a pre každého","Keď máš finančné záväzky alebo ľudí závislých od tvojho príjmu – hypotéka, deti","Nikdy – je to zbytočné","Len po 50 rokoch"], correct:1, explanation:"Životné poistenie má zmysel ak: máš hypotéku, závisí od teba rodina, alebo máš ďalšie záväzky. Slobodný 25-ročník bez záväzkov ho nepotrebuje."},
+      {q:"Čo je poistenie domácnosti vs poistenie nehnuteľnosti?", answers:["Sú to isté","Poistenie domácnosti kryje obsah (nábytok, elektronika), poistenie nehnuteľnosti kryje samotnú stavbu","Poistenie domácnosti je povinné","Poistenie nehnuteľnosti kryje obsah"], correct:1, explanation:"Oboje je odporúčané ak vlastníš nehnuteľnosť. Poistenie stavby kryje škody na budove (požiar, povodeň). Poistenie domácnosti kryje obsah (krádež, škody)."},
+      {q:"Čo je spoluúčasť pri poistení?", answers:["Mesačný poplatok","Suma ktorú platíš sám pri poistnej udalosti pred tým ako poisťovňa začne platiť","Ročná prémia","Výška poistného plnenia"], correct:1, explanation:"Spoluúčasť 10 % alebo fixná suma (napr. 200 €) znižuje poistné. Logika: drobné škody riešiš sám, poisťovňa kryje katastrofické udalosti. Vyššia spoluúčasť = nižšie poistné."},
+      {q:"Čo je úrazové poistenie a potrebuješ ho?", answers:["Povinné poistenie","Dobrovoľné poistenie kryjúce trvalé následky alebo smrť úrazom – vhodné ak nemáš veľa úspor","Zdravotné poistenie","Len pre šoférov"], correct:1, explanation:"Úrazové poistenie ti vypláca sumu pri trvalej invalidite alebo smrti úrazom. Vhodné ak nemáš dostatok úspor na pokrytie dlhodobej pracovnej neschopnosti."},
+      {q:"Ako optimalizovať náklady na poistenie?", answers:["Poistiť všetko na maximum","Poistiť len riziká ktoré by ťa finančne zruinovali, vyhnúť sa zbytočnému poisteniu maličkostí","Nekupovať žiadne poistenie","Kúpiť poistenie len raz v živote"], correct:1, explanation:"Poistenie je na katastrofy, nie maličkosti. Poisistenie mobilu za 10 €/mesiac je zlá investícia. Poistenie against totálna invalidita alebo smrť pri hypotéke je rozumné."}
+    ]},
+    { id:"5-5", title:"Nehnuteľnosti ako investícia", icon:"🏘️", questions:[
+      {q:"Prečo sú nehnuteľnosti populárna investícia?", answers:["Nie sú populárne","Hmatateľné aktívum, ochrana pred infláciou, pasívny príjem z nájmu, dlhodobý rast hodnoty","Lebo sú lacné","Lebo banky ich odporúčajú"], correct:1, explanation:"Nehnuteľnosti majú výhody: fyzický majetok, historický rast hodnoty, príjem z prenájmu, možnosť páky (hypotéka). Nevýhody: nízka likvidita, správa, vysoký vstupný kapitál."},
+      {q:"Čo je hrubý a čistý výnos z prenájmu?", answers:["Sú rovnaké","Hrubý = ročný nájom / cena nehnuteľnosti × 100. Čistý = po odčítaní výdavkov (dane, správa, opravy, neobsadenosť)","Hrubý je nižší","Závisí od lokality"], correct:1, explanation:"Byt za 150 000 € s nájmom 700 €/mesiac = hrubý výnos (700×12)/150 000 = 5,6 %. Čistý výnos po daniach, správe a opravách bude 3–4 %."},
+      {q:"Čo je páka (leverage) pri nehnuteľnostiach?", answers:["Zariadenie na sťahovanie","Investovanie cudzích peňazí (hypotéky) na kúpu aktíva – zosilňuje zisky aj straty","Typ prenájmu","Daňová úspora"], correct:1, explanation:"Kúpiš byt za 100 000 €, vlastné zdroje 20 000 €, hypotéka 80 000 €. Ak byt zdraží o 10 %, zarobíš 10 000 € na vlastnej investícii 20 000 € = výnos 50 %! Ale páka zosilňuje aj straty."},
+      {q:"Čo je neobsadenosť nehnuteľnosti a ako to ovplyvňuje výnos?", answers:["Byt bez nábytku","Čas keď nehnuteľnosť negeneruje nájom – znižuje reálny výnos","Počet izieb","Typ hypotéky"], correct:1, explanation:"Realisticky počítaj s 1–2 mesiacmi neobsadenosti ročne. Byt s nájmom 700 € ale 1 mesiac voľný = príjem len 7 700 € namiesto 8 400 €. Toto znižuje čistý výnos."},
+      {q:"Čo je REIT?", answers:["Typ hypotéky","Real Estate Investment Trust – fond investujúci do nehnuteľností, obchoduje sa na burze","Daňový odpočet","Typ poistenia"], correct:1, explanation:"REIT ti umožňuje investovať do nehnuteľností cez burzu – aj za 100 €, bez hypotéky, bez starostí so správou. Diverzifikácia do stoviek nehnuteľností naraz. Niektoré ETF obsahujú REITs."},
+      {q:"Oplatí sa kúpiť byt na prenájom v dnešnej dobe na Slovensku?", answers:["Vždy áno","Závisí od lokality, ceny, hypotéky a nájmu – treba prerátať čistý výnos a porovnať s alternatívami","Vždy nie","Len v Bratislave"], correct:1, explanation:"V roku 2024 sú ceny nehnuteľností vysoké a hypotéky drahé. Čistý výnos z prenájmu môže byť 2–3 %, ETF historicky dávajú 7–8 %. Nehnuteľnosť má iné výhody (páka, stabilita) ale treba prerátať konkrétne čísla."},
+      {q:"Čo je due diligence pri kúpe nehnuteľnosti?", answers:["Právna prehliadka","Dôkladná preverka nehnuteľnosti – právny stav, technický stav, záložné práva, dlhy na nej","Bankové schválenie","Notárske overenie"], correct:1, explanation:"Pred kúpou: over kataster (záložné práva, vecné bremená), nechaj urobiť technický posudok, over dlhy na nehnuteľnosti (energie, správa). Ušetríš na problémoch neskôr."}
+    ]}
+  ]}
 ];
- 
-// ── DATA – REAL LIFE SITUÁCIE ─────────────────────────────────────────────────
+
+// ── REAL LIFE ─────────────────────────────────────────────────────────────────
 const REAL_LIFE = [
-  {
-    situation: "Dostal si prvú výplatu z brigády – 450 €. Kamaráti ťa volajú na výlet, ktorý stojí 380 €.",
-    amount: "450 €",
-    question: "Čo spravíš?",
-    answers: [
-      "Idem na výlet, miniem takmer všetko",
-      "Odložím 90 € (20 %), zvyšok je na výlet a bežné výdavky",
-      "Celých 450 € odložím na sporenie",
-      "Požičiam si na výlet od rodičov a výplatu odložím"
-    ],
-    correct: 1,
-    explanation: "Správne! Pravidlo 20 % – odlož aspoň pätinu každej výplaty. Zvyšok môžeš slobodne použiť bez výčitiek svedomia."
-  },
-  {
-    situation: "Tvoja práčka sa pokazila. Oprava stojí 180 €, nová stojí 350 €. Na sporiacom účte máš 600 €.",
-    amount: "600 € úspory",
-    question: "Čo je finančne rozumnejšie?",
-    answers: [
-      "Kúpim novú na splátky, nechcem míňať úspory",
-      "Opravím starú za 180 € z nouzového fondu",
-      "Počkám kým sa situácia vyrieši sama",
-      "Požičiam si od kamaráta"
-    ],
-    correct: 1,
-    explanation: "Presne na toto slúži nouzový fond! Oprava je lacnejšia a úspory zostanú. Splátky na práčku by ťa stáli viac kvôli úrokom."
-  },
-  {
-    situation: "Zamestnávateľ ti ponúka zvýšenie platu o 200 € mesačne. Momentálne sporím 50 € mesačne.",
-    amount: "+200 € / mesiac",
-    question: "Ako naložíš s príplatkom?",
-    answers: [
-      "Celých 200 € miniem – zaslúžim si lepší životný štandard",
-      "100 € investujem/sporím, 100 € na lepší životný štandard",
-      "Celých 200 € odložím, životný štandard nemeniam",
-      "Kúpim si drahší telefón na splátky"
-    ],
-    correct: 1,
-    explanation: "Zlatá stredná cesta! Pri každom zvýšení príjmu zvýš aj sporenie. Polovica na budúcnosť, polovica na kvalitu života teraz."
-  },
-  {
-    situation: "Nájdeš online reklamu: 'Investuj 500 € a za mesiac máš 2 000 €! Zaručený výnos 300 %!'",
-    amount: "Sľub: 300 % výnos",
-    question: "Čo spravíš?",
-    answers: [
-      "Investujem, zní to skvelo!",
-      "Investujem len 100 € – riskovať budem málo",
-      "Ignorujem to – zaručený vysoký výnos je vždy podvod",
-      "Pýtam sa kamarátov či to vyskúšali"
-    ],
-    correct: 2,
-    explanation: "Správne! Zlaté pravidlo: ak to znie príliš dobre, je to podvod. Reálne investície vynášajú 5–10 % ročne. 300 % za mesiac = pyramid scheme alebo podvod."
-  },
-  {
-    situation: "Máš kreditnú kartu s limitom 1 500 €. Na konci mesiaca nemôžeš splatiť celý dlh 800 €, len minimum 25 €.",
-    amount: "Dlh: 800 €, úrok 20 % ročne",
-    question: "Čo spravíš?",
-    answers: [
-      "Zaplatím len minimum 25 € – viac si teraz nemôžem dovoliť",
-      "Zaplatím čo najviac môžem – úrok z kreditky je drahý",
-      "Ignorujem to, nejako sa to vyrieši",
-      "Veziem si ďalší úver na splatenie kreditky"
-    ],
-    correct: 1,
-    explanation: "20 % ročný úrok je veľmi drahý! Ak splácaš len minimum, dlh rastie. Vždy splať čo najviac. 800 € pri 20 % = 160 € ročne na úrokoch."
-  },
-  {
-    situation: "Kamarát ti ponúka účasť v MLM biznise. Stačí vložiť 300 € a získavať provízie za nábor ďalších ľudí.",
-    amount: "Vstupný poplatok: 300 €",
-    question: "Čo spravíš?",
-    answers: [
-      "Vstúpim, vyzerá to ako dobrá príležitosť",
-      "Požičiam si na vstup, potom to vrátim z provízií",
-      "Odmietnem – väčšina MLM schém stráca väčšina účastníkov peniaze",
-      "Vstúpim ale len ak vstúpi aj kamarát"
-    ],
-    correct: 2,
-    explanation: "Správne! Výskumy ukazujú, že 99 % účastníkov MLM prichádza o peniaze. Ak zisk závisí od náboru, nie od produktu – je to pyramída."
-  },
-  {
-    situation: "Máš 22 rokov a prvú prácu. Zamestnávateľ ponúka dobrovoľné doplnkové dôchodkové sporenie s príspevkom firmy 50 €/mesiac.",
-    amount: "Firma prispeje 50 €/mesiac",
-    question: "Čo spravíš?",
-    answers: [
-      "Nezapisуjem sa, dôchodok je ďaleko",
-      "Zapíšem sa a prispievam aj ja aspoň 20 €/mesiac",
-      "Počkám, až budem mať viac peňazí",
-      "Dôchodok rieši štát, ja nemusím"
-    ],
-    correct: 1,
-    explanation: "Zlaté pravidlo: nikdy neodmietaj zadarmo peniaze! 50 € od firmy + 20 € od teba = 70 €/mesiac. Za 40 rokov pri 5 % výnose = ~106 000 €!"
-  },
-  {
-    situation: "Ideš nakupovať potraviny. V obchode vidíš: balenie 500g za 2,40 € a balenie 1kg za 4,20 €.",
-    amount: "500g = 2,40 € | 1kg = 4,20 €",
-    question: "Čo je výhodnejšie?",
-    answers: [
-      "500g balenie – je lacnejšie",
-      "1kg balenie – cena za gram je nižšia",
-      "Je to jedno",
-      "Kúpim oboje pre istotu"
-    ],
-    correct: 1,
-    explanation: "500g = 0,48 €/100g. 1kg = 0,42 €/100g. Väčšie balenie je lacnejšie o 12,5 %. Vždy porovnávaj cenu za jednotku, nie celkovú cenu!"
-  }
+  { situation:"Dostal si prvú výplatu z brigády – 450 €. Kamaráti ťa volajú na výlet za 380 €.", amount:"450 €", question:"Čo spravíš?", answers:["Idem na výlet, miniem takmer všetko","Odložím 90 € (20 %), zvyšok na výlet a bežné výdavky","Celých 450 € odložím na sporenie","Požičiam si na výlet od rodičov"], correct:1, explanation:"Správne! Pravidlo 20 % – odlož aspoň pätinu každej výplaty. Zvyšok môžeš slobodne použiť bez výčitiek svedomia."},
+  { situation:"Tvoja práčka sa pokazila. Oprava stojí 180 €, nová stojí 350 €. Na sporiacom účte máš 600 €.", amount:"600 € úspory", question:"Čo je finančne rozumnejšie?", answers:["Kúpim novú na splátky","Opravím starú za 180 € z nouzového fondu","Počkám kým sa situácia vyrieši sama","Požičiam si od kamaráta"], correct:1, explanation:"Presne na toto slúži nouzový fond! Oprava je lacnejšia a úspory zostanú. Splátky na práčku by ťa stáli viac kvôli úrokom."},
+  { situation:"Zamestnávateľ ti ponúka zvýšenie platu o 200 € mesačne.", amount:"+200 € / mesiac", question:"Ako naložíš s príplatkom?", answers:["Celých 200 € miniem – zaslúžim si viac","100 € investujem/sporím, 100 € na lepší životný štandard","Celých 200 € odložím","Kúpim drahší telefón na splátky"], correct:1, explanation:"Zlatá stredná cesta! Pri každom zvýšení príjmu zvýš aj sporenie. Polovica na budúcnosť, polovica na kvalitu života teraz."},
+  { situation:"Nájdeš online reklamu: 'Investuj 500 € a za mesiac máš 2 000 €! Zaručený výnos 300 %!'", amount:"Sľub: 300 % výnos", question:"Čo spravíš?", answers:["Investujem, znie to skvelo!","Investujem len 100 € – riskovať budem málo","Ignorujem to – zaručený vysoký výnos je vždy podvod","Pýtam sa kamarátov či to vyskúšali"], correct:2, explanation:"Správne! Ak to znie príliš dobre, je to podvod. Reálne investície vynášajú 5–10 % ročne. 300 % za mesiac = pyramid scheme."},
+  { situation:"Máš kreditnú kartu s limitom 1 500 €. Na konci mesiaca nemôžeš splatiť celý dlh 800 €, len minimum 25 €.", amount:"Dlh: 800 €, úrok 20 % ročne", question:"Čo spravíš?", answers:["Zaplatím len minimum 25 €","Zaplatím čo najviac môžem – úrok z kreditky je drahý","Ignorujem to","Veziem si ďalší úver na splatenie kreditky"], correct:1, explanation:"20 % ročný úrok je veľmi drahý! Ak splácaš len minimum, dlh rastie. Vždy splať čo najviac."},
+  { situation:"Kamarát ti ponúka účasť v MLM biznise. Stačí vložiť 300 € a získavať provízie za nábor.", amount:"Vstupný poplatok: 300 €", question:"Čo spravíš?", answers:["Vstúpim, vyzerá to ako príležitosť","Požičiam si na vstup","Odmietnem – väčšina MLM schém stráca väčšina účastníkov peniaze","Vstúpim len ak vstúpi aj kamarát"], correct:2, explanation:"99 % účastníkov MLM prichádza o peniaze. Ak zisk závisí od náboru, nie od produktu – je to pyramída."},
+  { situation:"Máš 22 rokov a prvú prácu. Zamestnávateľ ponúka III. pilier s príspevkom firmy 50 €/mesiac.", amount:"Firma prispeje 50 €/mesiac", question:"Čo spravíš?", answers:["Nezapíšem sa, dôchodok je ďaleko","Zapíšem sa a prispievam aj ja aspoň 20 €/mesiac","Počkám kým budem mať viac peňazí","Dôchodok rieši štát, ja nemusím"], correct:1, explanation:"Nikdy neodmietaj zadarmo peniaze! 50 € od firmy + 20 € od teba = 70 €/mesiac. Za 40 rokov pri 5 % = ~106 000 €!"},
+  { situation:"Ideš nakupovať potraviny. Vidíš: balenie 500g za 2,40 € a balenie 1kg za 4,20 €.", amount:"500g = 2,40 € | 1kg = 4,20 €", question:"Čo je výhodnejšie?", answers:["500g balenie – je lacnejšie","1kg balenie – cena za gram je nižšia","Je to jedno","Kúpim oboje"], correct:1, explanation:"500g = 0,48 €/100g. 1kg = 0,42 €/100g. Väčšie balenie je lacnejšie o 12,5 %. Vždy porovnávaj cenu za jednotku!"},
+  { situation:"Dostaneš email: 'Tvoj bankový účet bol zablokovaný. Kliknite tu a zadajte údaje na odblokovanie.'", amount:"Podozrivý email z 'banky'", question:"Čo spravíš?", answers:["Kliknem na link a zadám údaje – nechcem prísť o prístup","Zavolám priamo na banku na overenom čísle","Odpoviem emailom a pošlem údaje","Posuniem email kamarátovi"], correct:1, explanation:"Klasický phishing útok! Banky nikdy nežiadajú údaje emailom. Vždy volaj na číslo z rubnej strany karty alebo z oficiálnej stránky banky."},
+  { situation:"Máš 1 000 € úspory. Kamarát ťa pozýva na investovanie do kryptomien – 'Bitcoin pôjde na 1 000 000 $!'", amount:"1 000 € úspory", question:"Čo urobíš?", answers:["Investujem všetko – nechcem premeškať","Investujem max 5–10 % (50–100 €) ako špekulatívnu časť, zvyšok do ETF","Nekupujem vôbec krypto – je to podvod","Pôžičiam si viac a investujem 5 000 €"], correct:1, explanation:"Krypto je vysoko špekulatívne. Pravidlo: nikdy nevkladaj viac ako môžeš stratiť. 5–10 % portfólia ako špekulatívna časť je rozumné. Zvyšok do diverzifikovaných ETF."}
 ];
- 
+
 // ── STATE ─────────────────────────────────────────────────────────────────────
 const MAX_HEARTS = 5;
- 
-function loadState() {
-  const s = localStorage.getItem('fg_state');
-  if (s) return JSON.parse(s);
-  return { xp:0, streak:0, hearts:MAX_HEARTS, lastActiveDate:null, lastRLDate:null, rlIndex:0, completedLessons:[], completedUnits:[] };
-}
-function saveState(s) { localStorage.setItem('fg_state', JSON.stringify(s)); }
- 
-function updateStreak(state) {
-  const today = new Date().toDateString();
-  const yesterday = new Date(Date.now()-86400000).toDateString();
-  if (state.lastActiveDate === today) return state;
-  state.streak = (state.lastActiveDate === yesterday) ? state.streak + 1 : 1;
-  state.lastActiveDate = today;
-  saveState(state); return state;
-}
- 
-function isLessonDone(state, id) { return state.completedLessons.includes(id); }
-function isUnitUnlocked(state, uid) {
-  if (uid===1) return true;
-  const prev = UNITS.find(u=>u.id===uid-1);
-  return prev ? prev.lessons.every(l=>isLessonDone(state,l.id)) : false;
-}
-function isLessonUnlocked(state, uid, idx) {
-  if (!isUnitUnlocked(state,uid)) return false;
-  if (idx===0) return true;
-  const unit = UNITS.find(u=>u.id===uid);
-  return isLessonDone(state, unit.lessons[idx-1].id);
-}
-function completeLesson(state, lessonId, xpEarned) {
-  if (!state.completedLessons.includes(lessonId)) state.completedLessons.push(lessonId);
-  state.xp += xpEarned;
-  // Bonus srdce za dokončenú lekciu (max 5)
-  if (state.hearts < MAX_HEARTS) state.hearts++;
-  UNITS.forEach(u => {
-    if (u.lessons.every(l=>state.completedLessons.includes(l.id)) && !state.completedUnits.includes(u.id))
-      state.completedUnits.push(u.id);
-  });
-  state.lastActiveDate = new Date().toDateString();
-  saveState(state); return state;
-}
-function getUnitProgress(state, unit) {
-  const done = unit.lessons.filter(l=>isLessonDone(state,l.id)).length;
-  return { done, total:unit.lessons.length };
-}
- 
-// ── HEARTS UI ─────────────────────────────────────────────────────────────────
-function renderHearts(containerId) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = '';
-  for (let i=0; i<MAX_HEARTS; i++) {
-    const h = document.createElement('span');
-    h.className = 'heart' + (i < appState.hearts ? '' : ' empty');
-    h.textContent = '❤️';
-    el.appendChild(h);
-  }
-}
-function loseHeart() {
-  if (appState.hearts > 0) appState.hearts--;
-  saveState(appState);
-  renderAllHearts();
-}
-function renderAllHearts() {
-  renderHearts('topbar-hearts');
-  renderHearts('quiz-hearts');
-  renderHearts('rl-hearts');
-}
- 
+function loadState(){const s=localStorage.getItem('fg_state');if(s)return JSON.parse(s);return{xp:0,streak:0,hearts:MAX_HEARTS,lastActiveDate:null,lastRLDate:null,rlIndex:0,completedLessons:[],completedUnits:[]};}
+function saveState(s){localStorage.setItem('fg_state',JSON.stringify(s));}
+function updateStreak(state){const today=new Date().toDateString();const yesterday=new Date(Date.now()-86400000).toDateString();if(state.lastActiveDate===today)return state;state.streak=(state.lastActiveDate===yesterday)?state.streak+1:1;state.lastActiveDate=today;saveState(state);return state;}
+function isLessonDone(state,id){return state.completedLessons.includes(id);}
+function isUnitUnlocked(state,uid){if(uid===1)return true;const prev=UNITS.find(u=>u.id===uid-1);return prev?prev.lessons.every(l=>isLessonDone(state,l.id)):false;}
+function isLessonUnlocked(state,uid,idx){if(!isUnitUnlocked(state,uid))return false;if(idx===0)return true;const unit=UNITS.find(u=>u.id===uid);return isLessonDone(state,unit.lessons[idx-1].id);}
+function completeLesson(state,lessonId,xpEarned){if(!state.completedLessons.includes(lessonId))state.completedLessons.push(lessonId);state.xp+=xpEarned;if(state.hearts<MAX_HEARTS)state.hearts++;UNITS.forEach(u=>{if(u.lessons.every(l=>state.completedLessons.includes(l.id))&&!state.completedUnits.includes(u.id))state.completedUnits.push(u.id);});state.lastActiveDate=new Date().toDateString();saveState(state);return state;}
+function getUnitProgress(state,unit){const done=unit.lessons.filter(l=>isLessonDone(state,l.id)).length;return{done,total:unit.lessons.length};}
+
+// ── HEARTS ────────────────────────────────────────────────────────────────────
+function renderHearts(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='';for(let i=0;i<MAX_HEARTS;i++){const h=document.createElement('span');h.className='heart'+(i<appState.hearts?'':' empty');h.textContent='❤️';el.appendChild(h);}}
+function loseHeart(){if(appState.hearts>0)appState.hearts--;saveState(appState);renderAllHearts();}
+function renderAllHearts(){renderHearts('topbar-hearts');renderHearts('quiz-hearts');renderHearts('rl-hearts');}
+
 // ── QUIZ ──────────────────────────────────────────────────────────────────────
-let quizLesson=null, quizQ=0, quizCorrect=0, quizXP=0, quizAnswered=false;
+let quizLesson=null,quizQ=0,quizCorrect=0,quizXP=0,quizAnswered=false;
 const LETTERS=['A','B','C','D'];
- 
-function startLesson(unitId, lessonIndex) {
-  const unit = UNITS.find(u=>u.id===unitId);
-  if (!isLessonUnlocked(appState, unitId, lessonIndex)) return;
-  if (appState.hearts <= 0) {
-    alert('Nemáš žiadne srdcia! Dokonči Real Life výzvu alebo počkaj na ďalší deň.');
-    return;
-  }
-  quizLesson = unit.lessons[lessonIndex];
-  quizQ=0; quizCorrect=0; quizXP=0; quizAnswered=false;
-  goTo('quiz'); renderQuestion();
-}
- 
-function renderQuestion() {
-  const q = quizLesson.questions[quizQ];
-  const total = quizLesson.questions.length;
-  document.getElementById('qprog').style.width = Math.round((quizQ/total)*100)+'%';
-  document.getElementById('q-num').textContent = (quizQ+1)+'/'+total;
-  document.getElementById('q-text').textContent = q.q;
-  const fb = document.getElementById('q-feedback');
-  fb.style.display='none'; fb.className='feedback';
-  document.getElementById('q-next').style.display='none';
-  quizAnswered=false;
-  const div = document.getElementById('q-answers');
-  div.innerHTML='';
-  q.answers.forEach((a,i) => {
-    const btn = document.createElement('button');
-    btn.className='ans-btn';
-    btn.innerHTML='<span class="ans-letter">'+LETTERS[i]+'</span><span>'+a+'</span>';
-    btn.onclick=()=>selectAnswer(i);
-    div.appendChild(btn);
-  });
-  renderHearts('quiz-hearts');
-}
- 
-function selectAnswer(idx) {
-  if (quizAnswered) return;
-  quizAnswered=true;
-  const q = quizLesson.questions[quizQ];
-  const btns = document.querySelectorAll('.ans-btn');
-  btns.forEach(b=>b.disabled=true);
-  const ok = idx===q.correct;
-  btns[idx].classList.add(ok?'correct':'wrong');
-  if (!ok) { btns[q.correct].classList.add('correct'); loseHeart(); }
-  if (ok) { quizCorrect++; quizXP+=10; }
-  const fb = document.getElementById('q-feedback');
-  fb.style.display='block';
-  fb.className='feedback '+(ok?'fb-ok':'fb-bad');
-  fb.innerHTML=(ok?'✅ <strong>Správne!</strong> ':'❌ <strong>Nesprávne.</strong> ')+q.explanation;
-  document.getElementById('q-next').style.display='block';
-}
- 
-function nextQ() {
-  quizQ++;
-  if (quizQ>=quizLesson.questions.length) finishLesson();
-  else renderQuestion();
-}
-function replayLesson() {
-  quizQ=0; quizCorrect=0; quizXP=0; quizAnswered=false;
-  goTo('quiz'); renderQuestion();
-}
-function finishLesson() {
-  appState = completeLesson(appState, quizLesson.id, quizXP);
-  appState = updateStreak(appState);
-  updateTopbar();
-  const acc = Math.round((quizCorrect/quizLesson.questions.length)*100);
-  document.getElementById('d-xp').textContent = '+'+quizXP;
-  document.getElementById('d-acc').textContent = acc+'%';
-  document.getElementById('d-streak').textContent = '🔥 '+appState.streak;
-  goTo('done');
-}
- 
+function startLesson(uid,idx){const unit=UNITS.find(u=>u.id===uid);if(!isLessonUnlocked(appState,uid,idx))return;if(appState.hearts<=0){alert('Nemáš žiadne srdcia! Dokonči Real Life výzvu alebo počkaj na ďalší deň.');return;}quizLesson=unit.lessons[idx];quizQ=0;quizCorrect=0;quizXP=0;quizAnswered=false;goTo('quiz');renderQuestion();}
+function renderQuestion(){const q=quizLesson.questions[quizQ];const total=quizLesson.questions.length;document.getElementById('qprog').style.width=Math.round((quizQ/total)*100)+'%';document.getElementById('q-num').textContent=(quizQ+1)+'/'+total;document.getElementById('q-text').textContent=q.q;const fb=document.getElementById('q-feedback');fb.style.display='none';fb.className='feedback';document.getElementById('q-next').style.display='none';quizAnswered=false;const div=document.getElementById('q-answers');div.innerHTML='';q.answers.forEach((a,i)=>{const btn=document.createElement('button');btn.className='ans-btn';btn.innerHTML='<span class="ans-letter">'+LETTERS[i]+'</span><span>'+a+'</span>';btn.onclick=()=>selectAnswer(i);div.appendChild(btn);});renderHearts('quiz-hearts');}
+function selectAnswer(idx){if(quizAnswered)return;quizAnswered=true;const q=quizLesson.questions[quizQ];const btns=document.querySelectorAll('.ans-btn');btns.forEach(b=>b.disabled=true);const ok=idx===q.correct;btns[idx].classList.add(ok?'correct':'wrong');if(!ok){btns[q.correct].classList.add('correct');loseHeart();}if(ok){quizCorrect++;quizXP+=10;}const fb=document.getElementById('q-feedback');fb.style.display='block';fb.className='feedback '+(ok?'fb-ok':'fb-bad');fb.innerHTML=(ok?'✅ <strong>Správne!</strong> ':'❌ <strong>Nesprávne.</strong> ')+q.explanation;document.getElementById('q-next').style.display='block';}
+function nextQ(){quizQ++;if(quizQ>=quizLesson.questions.length)finishLesson();else renderQuestion();}
+function replayLesson(){quizQ=0;quizCorrect=0;quizXP=0;quizAnswered=false;goTo('quiz');renderQuestion();}
+function finishLesson(){appState=completeLesson(appState,quizLesson.id,quizXP);appState=updateStreak(appState);updateTopbar();const acc=Math.round((quizCorrect/quizLesson.questions.length)*100);document.getElementById('d-xp').textContent='+'+quizXP;document.getElementById('d-acc').textContent=acc+'%';document.getElementById('d-streak').textContent='🔥 '+appState.streak;goTo('done');}
+
 // ── REAL LIFE ─────────────────────────────────────────────────────────────────
-function renderRealLife() {
-  const container = document.getElementById('rl-content');
-  const today = new Date().toDateString();
-  const alreadyDone = appState.lastRLDate === today;
- 
-  if (alreadyDone) {
-    container.innerHTML = `
-      <div class="rl-done-today">
-        <div class="rl-done-icon">✅</div>
-        <div class="rl-done-title">Dnes si to zvládol!</div>
-        <div class="rl-done-sub">Vráť sa zajtra pre novú situáciu</div>
-        <div class="rl-streak-info">🔥 Tvoja séria: <strong>${appState.streak} dní</strong> – len tak ďalej!</div>
-      </div>`;
-    return;
-  }
- 
-  const idx = appState.rlIndex % REAL_LIFE.length;
-  const rl = REAL_LIFE[idx];
-  let answered = false;
- 
-  container.innerHTML = `
-    <div class="rl-badge">🌍 Real Life výzva · +1 ❤️ za správnu odpoveď</div>
-    <h1 class="page-title">Čo by si spravil?</h1>
-    <p class="page-sub">Skutočné životné situácie – správna odpoveď zarába srdce</p>
-    <div class="rl-situation">
-      <div class="rl-situation-label">📍 Situácia</div>
-      <div class="rl-situation-text">${rl.situation}</div>
-      <div class="rl-situation-amount">${rl.amount}</div>
-    </div>
-    <p style="font-size:16px;font-weight:800;color:#1c1c1c;margin-bottom:16px;">${rl.question}</p>
-    <div id="rl-answers"></div>
-    <div id="rl-feedback" class="rl-reward" style="display:none;"></div>
-    <button class="next-btn" id="rl-next" style="display:none;" onclick="goTo('learn')">Späť na lekcie</button>
-  `;
- 
+function renderRealLife(){
+  const container=document.getElementById('rl-content');
+  const today=new Date().toDateString();
+  if(appState.lastRLDate===today){container.innerHTML='<div class="rl-done-today"><div class="rl-done-icon">✅</div><div class="rl-done-title">Dnes si to zvládol!</div><div class="rl-done-sub">Vráť sa zajtra pre novú situáciu</div><div class="rl-streak-info">🔥 Tvoja séria: <strong>'+appState.streak+' dní</strong> – len tak ďalej!</div></div>';return;}
+  const idx=appState.rlIndex%REAL_LIFE.length;
+  const rl=REAL_LIFE[idx];
+  let answered=false;
+  container.innerHTML='<div class="rl-badge">🌍 Real Life výzva · +1 ❤️ za správnu odpoveď</div><h1 class="page-title">Čo by si spravil?</h1><p class="page-sub">Skutočné životné situácie – správna odpoveď zarába srdce</p><div class="rl-situation"><div class="rl-situation-label">📍 Situácia</div><div class="rl-situation-text">'+rl.situation+'</div><div class="rl-situation-amount">'+rl.amount+'</div></div><p style="font-size:16px;font-weight:800;color:#1c1c1c;margin-bottom:16px;">'+rl.question+'</p><div id="rl-answers"></div><div id="rl-feedback" style="display:none;"></div><button class="next-btn" id="rl-next" style="display:none;" onclick="goTo(\'learn\')">Späť na lekcie</button>';
   renderHearts('rl-hearts');
- 
-  const answersDiv = document.getElementById('rl-answers');
-  rl.answers.forEach((a,i) => {
-    const btn = document.createElement('button');
+  const answersDiv=document.getElementById('rl-answers');
+  rl.answers.forEach((a,i)=>{
+    const btn=document.createElement('button');
     btn.className='ans-btn';
     btn.innerHTML='<span class="ans-letter">'+LETTERS[i]+'</span><span>'+a+'</span>';
-    btn.onclick = () => {
-      if (answered) return;
-      answered = true;
+    btn.onclick=()=>{
+      if(answered)return;answered=true;
       document.querySelectorAll('#rl-answers .ans-btn').forEach(b=>b.disabled=true);
-      const ok = i===rl.correct;
+      const ok=i===rl.correct;
       btn.classList.add(ok?'correct':'wrong');
-      if (!ok) document.querySelectorAll('#rl-answers .ans-btn')[rl.correct].classList.add('correct');
- 
-      const fb = document.getElementById('rl-feedback');
+      if(!ok)document.querySelectorAll('#rl-answers .ans-btn')[rl.correct].classList.add('correct');
+      const fb=document.getElementById('rl-feedback');
       fb.style.display='block';
-      if (ok) {
-        fb.className='rl-reward';
-        fb.innerHTML='✅ <strong>Správne! +1 ❤️</strong><br>'+rl.explanation;
-        if (appState.hearts < MAX_HEARTS) appState.hearts++;
-      } else {
-        fb.className='rl-reward rl-reward-bad';
-        fb.innerHTML='❌ <strong>Nesprávne.</strong><br>'+rl.explanation;
-      }
- 
-      appState.lastRLDate = new Date().toDateString();
-      appState.rlIndex = (appState.rlIndex||0) + 1;
-      appState = updateStreak(appState);
-      saveState(appState);
-      updateTopbar();
-      renderAllHearts();
+      fb.className='rl-reward '+(ok?'rl-reward-ok':'rl-reward-bad');
+      fb.innerHTML=(ok?'✅ <strong>Správne! +1 ❤️</strong><br>':'❌ <strong>Nesprávne.</strong><br>')+rl.explanation;
+      if(ok&&appState.hearts<MAX_HEARTS)appState.hearts++;
+      appState.lastRLDate=new Date().toDateString();
+      appState.rlIndex=(appState.rlIndex||0)+1;
+      appState=updateStreak(appState);
+      saveState(appState);updateTopbar();renderAllHearts();
       document.getElementById('rl-next').style.display='block';
     };
     answersDiv.appendChild(btn);
   });
 }
- 
+
 // ── UI ────────────────────────────────────────────────────────────────────────
-function goTo(screen) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+screen).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const el = document.getElementById('nav-'+screen);
-  if (el) el.classList.add('active');
-  if (screen==='learn') renderLearnPath();
-  if (screen==='reallife') renderRealLife();
-}
- 
-function updateTopbar() {
-  document.querySelectorAll('.js-streak').forEach(el=>el.textContent=appState.streak);
-  document.querySelectorAll('.js-xp').forEach(el=>el.textContent=appState.xp);
-  renderAllHearts();
-}
- 
-function renderLearnPath() {
-  const container = document.getElementById('learn-path');
-  container.innerHTML='';
-  UNITS.forEach(unit => {
-    const unlocked = isUnitUnlocked(appState, unit.id);
-    const progress = getUnitProgress(appState, unit);
-    const header = document.createElement('div');
+function goTo(screen){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+screen).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const el=document.getElementById('nav-'+screen);if(el)el.classList.add('active');if(screen==='learn')renderLearnPath();if(screen==='reallife')renderRealLife();}
+function updateTopbar(){document.querySelectorAll('.js-streak').forEach(el=>el.textContent=appState.streak);document.querySelectorAll('.js-xp').forEach(el=>el.textContent=appState.xp);renderAllHearts();}
+
+function renderLearnPath(){
+  const container=document.getElementById('learn-path');container.innerHTML='';
+  UNITS.forEach(unit=>{
+    const unlocked=isUnitUnlocked(appState,unit.id);
+    const progress=getUnitProgress(appState,unit);
+    const header=document.createElement('div');
     header.className='unit-header '+unit.color+(!unlocked?' locked-unit':'');
     header.innerHTML='<div><h2>Jednotka '+unit.id+' – '+unit.title+'</h2><p>'+unit.desc+'</p></div><span class="unit-badge">'+progress.done+' / '+progress.total+' lekcií</span>';
     container.appendChild(header);
-    const pathDiv = document.createElement('div');
+    const pathDiv=document.createElement('div');
     pathDiv.className='path'+(!unlocked?' path-locked':'');
-    unit.lessons.forEach((lesson,idx) => {
-      const done = isLessonDone(appState, lesson.id);
-      const lesUnlocked = isLessonUnlocked(appState, unit.id, idx);
-      const isCurrent = lesUnlocked && !done;
-      if (idx>0) {
-        const conn = document.createElement('div');
-        conn.className='connector'+(isLessonDone(appState,unit.lessons[idx-1].id)?' done':'');
-        pathDiv.appendChild(conn);
-      }
-      const rowDiv = document.createElement('div');
-      rowDiv.className='path-row';
-      if (idx%2===1) { const s=document.createElement('div'); s.style.width='56px'; rowDiv.appendChild(s); }
-      const nodeWrap = document.createElement('div');
-      nodeWrap.className='node-wrap';
-      if (lesUnlocked) nodeWrap.onclick=()=>startLesson(unit.id, idx);
-      const node = document.createElement('div');
-      node.className='node '+(done?'done':isCurrent?'current':'locked');
-      node.textContent=done?'✓':isCurrent?lesson.icon:'🔒';
-      const label = document.createElement('span');
-      label.className='node-label'+(isCurrent?' active-lbl':'');
-      label.textContent=lesson.title;
-      nodeWrap.appendChild(node); nodeWrap.appendChild(label); rowDiv.appendChild(nodeWrap);
-      if (idx%2===1) { const s=document.createElement('div'); s.style.width='56px'; rowDiv.appendChild(s); }
+    unit.lessons.forEach((lesson,idx)=>{
+      const done=isLessonDone(appState,lesson.id);
+      const lesUnlocked=isLessonUnlocked(appState,unit.id,idx);
+      const isCurrent=lesUnlocked&&!done;
+      if(idx>0){const conn=document.createElement('div');conn.className='connector'+(isLessonDone(appState,unit.lessons[idx-1].id)?' done':'');pathDiv.appendChild(conn);}
+      const rowDiv=document.createElement('div');rowDiv.className='path-row';
+      if(idx%2===1){const s=document.createElement('div');s.style.width='56px';rowDiv.appendChild(s);}
+      const nodeWrap=document.createElement('div');nodeWrap.className='node-wrap';
+      if(lesUnlocked)nodeWrap.onclick=()=>startLesson(unit.id,idx);
+      const node=document.createElement('div');node.className='node '+(done?'done':isCurrent?'current':'locked');node.textContent=done?'✓':isCurrent?lesson.icon:'🔒';
+      const label=document.createElement('span');label.className='node-label'+(isCurrent?' active-lbl':'');label.textContent=lesson.title;
+      nodeWrap.appendChild(node);nodeWrap.appendChild(label);rowDiv.appendChild(nodeWrap);
+      if(idx%2===1){const s=document.createElement('div');s.style.width='56px';rowDiv.appendChild(s);}
       pathDiv.appendChild(rowDiv);
     });
     container.appendChild(pathDiv);
-    const gap=document.createElement('div'); gap.style.height='24px'; container.appendChild(gap);
+    const gap=document.createElement('div');gap.style.height='24px';container.appendChild(gap);
   });
 }
- 
-function renderProfile() {
-  const user = JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť"}');
-  const initials = user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
+
+function renderProfile(){
+  const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť"}');
+  const initials=user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
   document.getElementById('prof-avatar').textContent=initials;
   document.getElementById('prof-name').textContent=user.name;
   document.getElementById('stat-xp').textContent=appState.xp;
@@ -635,48 +508,39 @@ function renderProfile() {
   document.getElementById('stat-hearts').textContent=appState.hearts+'/'+MAX_HEARTS;
   document.getElementById('prof-streak-num').textContent=appState.streak;
   const msgs=['Začni dnes svoju sériu!','Skvelý štart!','Tak držať!','Úžasné!','Neprekonateľný!','Legenda! 🔥'];
-  document.getElementById('prof-streak-msg').textContent = appState.streak===0?msgs[0]:appState.streak<3?msgs[1]:appState.streak<7?msgs[2]:appState.streak<14?msgs[3]:appState.streak<30?msgs[4]:msgs[5];
-  const calDiv=document.getElementById('streak-cal');
-  calDiv.innerHTML='';
+  document.getElementById('prof-streak-msg').textContent=appState.streak===0?msgs[0]:appState.streak<3?msgs[1]:appState.streak<7?msgs[2]:appState.streak<14?msgs[3]:appState.streak<30?msgs[4]:msgs[5];
+  const calDiv=document.getElementById('streak-cal');calDiv.innerHTML='';
   const days=['Po','Ut','St','Šv','Pi','So','Ne'];
   const today=new Date();
-  for (let i=6;i>=0;i--) {
-    const d=new Date(today); d.setDate(today.getDate()-i);
-    const hit=i<appState.streak;
-    const dd=document.createElement('div'); dd.className='sday';
-    dd.innerHTML='<div class="sday-circle '+(hit?'hit':'miss')+'">'+(hit?'✓':'')+'</div><div class="sday-label">'+days[d.getDay()===0?6:d.getDay()-1]+'</div>';
-    calDiv.appendChild(dd);
-  }
+  for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(today.getDate()-i);const hit=i<appState.streak;const dd=document.createElement('div');dd.className='sday';dd.innerHTML='<div class="sday-circle '+(hit?'hit':'miss')+'">'+(hit?'✓':'')+'</div><div class="sday-label">'+days[d.getDay()===0?6:d.getDay()-1]+'</div>';calDiv.appendChild(dd);}
+  const totalLessons=UNITS.reduce((s,u)=>s+u.lessons.length,0);
   const badges=[
     {icon:'🌱',label:'Začiatočník',ok:appState.completedLessons.length>=1},
     {icon:'🔥',label:'5 dní v sérii',ok:appState.streak>=5},
     {icon:'💡',label:'Prvá lekcia',ok:appState.completedLessons.length>=1},
-    {icon:'🎯',label:'Presný strelec',ok:appState.completedLessons.length>=3},
-    {icon:'🏆',label:'Top žiak',ok:appState.xp>=200},
-    {icon:'🌍',label:'Real Life hrdina',ok:appState.rlIndex>=3},
+    {icon:'🎯',label:'Presný strelec',ok:appState.completedLessons.length>=5},
+    {icon:'🏆',label:'Top žiak',ok:appState.xp>=500},
+    {icon:'🌍',label:'Real Life hrdina',ok:(appState.rlIndex||0)>=3},
     {icon:'📈',label:'Investor',ok:appState.completedUnits.includes(2)},
-    {icon:'💎',label:'Diamant',ok:appState.xp>=500},
+    {icon:'🧾',label:'Daňový expert',ok:appState.completedUnits.includes(4)},
+    {icon:'💎',label:'Diamant',ok:appState.completedLessons.length>=totalLessons},
   ];
-  const row=document.getElementById('badge-row'); row.innerHTML='';
-  badges.forEach(b=>{
-    const div=document.createElement('div'); div.className='badge'+(b.ok?'':' locked');
-    div.innerHTML='<div class="bi">'+b.icon+'</div><div class="bl">'+b.label+'</div>';
-    row.appendChild(div);
-  });
+  const row=document.getElementById('badge-row');row.innerHTML='';
+  badges.forEach(b=>{const div=document.createElement('div');div.className='badge'+(b.ok?'':' locked');div.innerHTML='<div class="bi">'+b.icon+'</div><div class="bl">'+b.label+'</div>';row.appendChild(div);});
 }
- 
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
-let appState = loadState();
-appState = updateStreak(appState);
-const user = JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť","email":"guest"}');
-const initials = user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
+let appState=loadState();
+appState=updateStreak(appState);
+const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť","email":"guest"}');
+const initials=user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
 document.getElementById('sb-name').textContent=user.name;
 document.getElementById('sb-avatar').textContent=initials;
 updateTopbar();
 renderLearnPath();
- 
-function logout() { localStorage.removeItem('fg_user'); window.location.href='index.html'; }
+function logout(){localStorage.removeItem('fg_user');window.location.href='index.html';}
 </script>
 </body>
 </html>
- 
+ENDOFFILE
+echo "done"
