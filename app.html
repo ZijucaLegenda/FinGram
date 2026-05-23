@@ -384,8 +384,7 @@ const UNITS = [
       {q:"Oplatí sa kúpiť byt na prenájom dnes?",answers:["Vždy áno","Závisí od čísel – treba prerátať čistý výnos a porovnať s alternatívami","Vždy nie","Len v Bratislave"],correct:1,explanation:"V 2024 sú ceny vysoké. Čistý výnos z prenájmu 2–3 % vs ETF 7–8 %. Treba prerátať konkrétne čísla pre danú lokalitu."},
       {q:"Čo je neobsadenosť a ako ovplyvňuje výnos?",answers:["Byt bez nábytku","Čas bez nájomníka – realisticky 1–2 mesiace ročne, znižuje reálny výnos","Počet izieb","Typ hypotéky"],correct:1,explanation:"700 € × 11 mesiacov = 7 700 € namiesto 8 400 €. Vždy počítaj s neobsadenosťou pri plánovaní výnosu."}
     ]}
-  ]
-;
+];
  
 const REAL_LIFE=[
   {situation:"Dostal si prvú výplatu z brigády – 450 €. Kamaráti ťa volajú na výlet za 380 €.",amount:"450 €",question:"Čo spravíš?",answers:["Idem na výlet, miniem takmer všetko","Odložím 90 € (20 %), zvyšok na výlet","Celých 450 € odložím","Požičiam si na výlet"],correct:1,explanation:"Pravidlo 20 % – odlož aspoň pätinu každej výplaty. Zvyšok môžeš slobodne použiť."},
@@ -410,7 +409,7 @@ function isLessonUnlocked(s,uid,idx){if(!isUnitUnlocked(s,uid))return false;if(i
 function completeLesson(s,id,xp){if(!s.completedLessons.includes(id))s.completedLessons.push(id);s.xp+=xp;if(s.hearts<MAX_HEARTS)s.hearts++;UNITS.forEach(u=>{if(u.lessons.every(l=>s.completedLessons.includes(l.id))&&!s.completedUnits.includes(u.id))s.completedUnits.push(u.id);});s.lastActiveDate=new Date().toDateString();saveState(s);return s;}
 function getUnitProgress(s,unit){const done=unit.lessons.filter(l=>isLessonDone(s,l.id)).length;return{done,total:unit.lessons.length};}
  
-function renderHearts(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='';for(let i=0;i<MAX_HEARTS;i++){const h=document.createElement('span');h.className='heart'+(i<appState.hearts?'':' empty');h.textContent='❤️';el.appendChild(h);}}
+function renderHearts(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<span style="font-size:16px;font-weight:800;color:'+(appState.hearts>0?'#ff4b4b':'#bbb')+';">'+appState.hearts+' ❤️</span>';}
 function loseHeart(){if(appState.hearts>0)appState.hearts--;saveState(appState);renderAllHearts();}
 function renderAllHearts(){renderHearts('topbar-hearts');renderHearts('quiz-hearts');renderHearts('rl-hearts');}
  
