@@ -409,7 +409,7 @@ function isLessonUnlocked(s,uid,idx){if(!isUnitUnlocked(s,uid))return false;if(i
 function completeLesson(s,id,xp){if(!s.completedLessons.includes(id))s.completedLessons.push(id);s.xp+=xp;if(s.hearts<MAX_HEARTS)s.hearts++;UNITS.forEach(u=>{if(u.lessons.every(l=>s.completedLessons.includes(l.id))&&!s.completedUnits.includes(u.id))s.completedUnits.push(u.id);});s.lastActiveDate=new Date().toDateString();saveState(s);return s;}
 function getUnitProgress(s,unit){const done=unit.lessons.filter(l=>isLessonDone(s,l.id)).length;return{done,total:unit.lessons.length};}
  
-function renderHearts(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<span style="font-size:16px;font-weight:800;color:'+(appState.hearts>0?'#ff4b4b':'#bbb')+';">'+appState.hearts+' ❤️</span>';}
+function renderHearts(id){const el=document.getElementById(id);if(!el)return;const h=typeof appState!=='undefined'?appState.hearts:5;el.innerHTML='<span style="font-size:15px;font-weight:800;color:'+(h>0?'#ff4b4b':'#bbb')+';">'+h+' ❤️</span>';}
 function loseHeart(){if(appState.hearts>0)appState.hearts--;saveState(appState);renderAllHearts();}
 function renderAllHearts(){renderHearts('topbar-hearts');renderHearts('quiz-hearts');renderHearts('rl-hearts');}
  
