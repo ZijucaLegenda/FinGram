@@ -399,7 +399,7 @@ const REAL_LIFE=[
 ];
  
 const MAX_HEARTS=5;
-function loadState(){const s=localStorage.getItem('fg_state');if(s)return JSON.parse(s);return{xp:0,streak:0,hearts:MAX_HEARTS,lastActiveDate:null,lastRLDate:null,rlIndex:0,completedLessons:[],completedUnits:[]};}
+function loadState(){const s=localStorage.getItem('fg_state');if(s){const parsed=JSON.parse(s);if(parsed.hearts===undefined||parsed.hearts===null)parsed.hearts=MAX_HEARTS;return parsed;}return{xp:0,streak:0,hearts:MAX_HEARTS,lastActiveDate:null,lastRLDate:null,rlIndex:0,completedLessons:[],completedUnits:[]};}
 function saveState(s){localStorage.setItem('fg_state',JSON.stringify(s));}
 function updateStreak(state){const today=new Date().toDateString();const yesterday=new Date(Date.now()-86400000).toDateString();if(state.lastActiveDate===today)return state;state.streak=(state.lastActiveDate===yesterday)?state.streak+1:1;state.lastActiveDate=today;saveState(state);return state;}
 function isLessonDone(s,id){return s.completedLessons.includes(id);}
