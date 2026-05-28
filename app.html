@@ -65,7 +65,7 @@
     </div>
   </aside>
   <div class="main">
-
+ 
     <div id="screen-learn" class="screen active">
       <div class="topbar">
         <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
@@ -76,7 +76,7 @@
       <p class="page-sub">Ovládni svoje peniaze krok za krokom</p>
       <div id="learn-path"></div>
     </div>
-
+ 
     <div id="screen-quiz" class="screen">
       <div class="quiz-wrap">
         <div class="quiz-topbar">
@@ -91,7 +91,7 @@
         <button class="next-btn" id="q-next" style="display:none;" onclick="nextQ()">Pokračovať</button>
       </div>
     </div>
-
+ 
     <div id="screen-done" class="screen">
       <div class="done-wrap">
         <div class="done-emoji">🎉</div>
@@ -106,7 +106,7 @@
         <button class="btn-outline" onclick="replayLesson()">Zopakovať lekciu</button>
       </div>
     </div>
-
+ 
     <div id="screen-reallife" class="screen">
       <div class="rl-wrap">
         <div class="topbar">
@@ -117,7 +117,7 @@
         <div id="rl-content"></div>
       </div>
     </div>
-
+ 
     <div id="screen-leaderboard" class="screen">
       <div class="lb-wrap">
         <div class="topbar">
@@ -130,7 +130,7 @@
         <div id="lb-rows"></div>
       </div>
     </div>
-
+ 
     <div id="screen-profile" class="screen">
       <div class="topbar">
         <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
@@ -160,7 +160,7 @@
         </div>
       </div>
     </div>
-
+ 
   </div>
 </div>
 <script>
@@ -366,7 +366,7 @@ const UNITS = [
   ]},
  
   // ═══ JEDNOTKA 5 – DÔCHODOK A DLHODOBÉ PLÁNOVANIE ════════════════════════
-  { id:5, title:"Dôchodok a budúcnosť", desc:"Zabezpeč svoju finančnú slobodu", color:"orange", lessons:[
+  { id:5, title:"Dôchodok a budúcnosť", desc:"Zabezpeč svoju finančnú slobodu", color:"teal", lessons:[
     { id:"5-1", title:"Dôchodkový systém SR", icon:"👴", questions:[
       {q:"Z čoho sa skladá slovenský dôchodkový systém?", answers:["Len zo štátneho dôchodku","I. pilier (štátny), II. pilier (DSS) a III. pilier (DDS) – tri piliere","Len zo súkromného sporenia","Len z investícií"], correct:1, explanation:"Slovenský dôchodkový systém má 3 piliere: I. pilier = štátny priebežný systém, II. pilier = osobné sporenie v DSS, III. pilier = dobrovoľné doplnkové sporenie."},
       {q:"Ako funguje I. pilier?", answers:["Sporiš na vlastný účet","Dnešní pracujúci platia odvody na dôchodky dnešným dôchodcom – priebežný systém","Štát investuje tvoje peniaze","Povinná poisťovňa"], correct:1, explanation:"I. pilier je solidárny systém – tvoje odvody idú na dôchodky aktuálnych dôchodcov. Tvoj budúci dôchodok závisí od odpracovaných rokov a výšky zárobku."},
@@ -438,9 +438,41 @@ function isLessonUnlocked(s,uid,idx){if(!isUnitUnlocked(s,uid))return false;if(i
 function completeLesson(s,id,xp){if(!s.completedLessons.includes(id))s.completedLessons.push(id);s.xp+=xp;if(s.hearts<MAX_HEARTS)s.hearts++;UNITS.forEach(u=>{if(u.lessons.every(l=>s.completedLessons.includes(l.id))&&!s.completedUnits.includes(u.id))s.completedUnits.push(u.id);});s.lastActiveDate=new Date().toDateString();saveState(s);return s;}
 function getUnitProgress(s,unit){const done=unit.lessons.filter(l=>isLessonDone(s,l.id)).length;return{done,total:unit.lessons.length};}
  
-function renderHearts(id){const el=document.getElementById(id);if(!el)return;const h=typeof appState!=='undefined'?appState.hearts:MAX_HEARTS;let html='';for(let i=0;i<MAX_HEARTS;i++){html+='<span class="heart'+(i<h?'':' empty')+'">❤️</span>';}el.innerHTML=html;}
+// ── SOUND EFFECTS ──────────────────────────────────────────────────────────
+const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+function playSound(type){
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);
+  if(type==='correct'){o.frequency.setValueAtTime(523,audioCtx.currentTime);o.frequency.setValueAtTime(659,audioCtx.currentTime+0.1);o.frequency.setValueAtTime(784,audioCtx.currentTime+0.2);g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.5);o.start();o.stop(audioCtx.currentTime+0.5);}
+  else{o.frequency.setValueAtTime(300,audioCtx.currentTime);o.frequency.setValueAtTime(200,audioCtx.currentTime+0.15);g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.4);o.start();o.stop(audioCtx.currentTime+0.4);}
+}
+ 
+// ── HEARTS ─────────────────────────────────────────────────────────────────
+function renderHearts(id){
+  const el=document.getElementById(id);if(!el)return;
+  const h=typeof appState!=='undefined'?appState.hearts:MAX_HEARTS;
+  let html='';for(let i=0;i<MAX_HEARTS;i++){html+='<span class="heart'+(i<h?'':' empty')+'">❤️</span>';}
+  el.innerHTML=html;
+}
 function loseHeart(){if(appState.hearts>0)appState.hearts--;saveState(appState);renderAllHearts();}
 function renderAllHearts(){renderHearts('topbar-hearts');renderHearts('quiz-hearts');renderHearts('rl-hearts');}
+ 
+// ── STREAK LABEL ───────────────────────────────────────────────────────────
+function streakLabel(n){return n===1?'deň':n>=2&&n<=4?'dni':'dní';}
+function updateStreakLabels(){
+  document.querySelectorAll('.js-streak').forEach(el=>el.textContent=appState.streak);
+  document.querySelectorAll('.js-streak-label').forEach(el=>el.textContent=streakLabel(appState.streak));
+}
+ 
+// ── LEVEL ──────────────────────────────────────────────────────────────────
+function getLevel(xp){
+  if(xp<50)  return{label:'Začiatočník',icon:'🌱'};
+  if(xp<150) return{label:'Učeň',icon:'📖'};
+  if(xp<300) return{label:'Šikovný',icon:'💡'};
+  if(xp<500) return{label:'Pokročilý',icon:'📈'};
+  if(xp<800) return{label:'Expert',icon:'🏆'};
+  return{label:'Finančný guru',icon:'💎'};
+}
  
 let quizLesson=null,quizQ=0,quizCorrect=0,quizXP=0,quizAnswered=false;
 const LETTERS=['A','B','C','D'];
@@ -450,7 +482,7 @@ function startLesson(uid,idx){
   if(!isLessonUnlocked(appState,uid,idx))return;
   if(appState.hearts<=0){
     const m=document.createElement('div');m.className='modal-overlay';m.id='hm';
-    m.innerHTML='<div class="modal-box"><div style="font-size:56px;margin-bottom:12px;">💔</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">Nemáš srdcia!</h2><div style="display:flex;justify-content:center;gap:4px;margin:12px 0;font-size:24px;">💔💔💔💔💔</div><p style="font-size:14px;color:#777;margin-bottom:20px;line-height:1.6;">Srdcia sa ti minuli. Zarob si nové v <strong>🌍 Real Life</strong> alebo počkaj do zajtrajška.</p><button class="modal-btn-primary" onclick="document.getElementById(\'hm\').remove();goTo(\'reallife\')">🌍 Ísť na Real Life</button><button class="modal-btn-secondary" onclick="document.getElementById(\'hm\').remove()" style="margin-top:8px;">Zavrieť</button></div>';
+    m.innerHTML='<div class="modal-box"><div style="font-size:56px;margin-bottom:12px;">💔</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">Nemáš srdcia!</h2><div style="display:flex;justify-content:center;gap:4px;margin:12px 0;font-size:24px;">💔💔💔💔💔</div><p style="font-size:14px;color:#777;margin-bottom:20px;line-height:1.6;">Zarob si srdce v sekcii <strong>❤️ Získaj srdce</strong>.</p><button class="modal-btn-primary" onclick="document.getElementById(\'hm\').remove();goTo(\'reallife\')">❤️ Získať srdce</button><button class="modal-btn-secondary" onclick="document.getElementById(\'hm\').remove()" style="margin-top:8px;">Zavrieť</button></div>';
     document.body.appendChild(m);
     return;
   }
@@ -478,6 +510,7 @@ function selectAnswer(idx){
   btns[idx].classList.add(ok?'correct':'wrong');
   if(!ok){btns[q.correct].classList.add('correct');loseHeart();}
   if(ok){quizCorrect++;quizXP+=10;}
+  playSound(ok?'correct':'wrong');
   const fb=document.getElementById('q-feedback');fb.style.display='block';
   fb.className='feedback '+(ok?'fb-ok':'fb-bad');
   fb.innerHTML=(ok?'✅ <strong>Správne!</strong> ':'❌ <strong>Nesprávne.</strong> ')+q.explanation;
@@ -496,12 +529,19 @@ function finishLesson(){
   goTo('done');
 }
  
+// ── REAL LIFE – bez denného limitu ────────────────────────────────────────
 function renderRealLife(){
   const container=document.getElementById('rl-content');
-  const today=new Date().toDateString();
-  if(appState.lastRLDate===today){container.innerHTML='<div class="rl-done-today"><div class="rl-done-icon">✅</div><div class="rl-done-title">Dnes si to zvládol!</div><div class="rl-done-sub">Vráť sa zajtra pre novú situáciu</div><div class="rl-streak-info">🔥 Séria: <strong>'+appState.streak+' dní</strong></div></div>';return;}
-  const idx=(appState.rlIndex||0)%REAL_LIFE.length;const rl=REAL_LIFE[idx];let answered=false;
-  container.innerHTML='<div class="rl-badge">🌍 Real Life výzva · +1 ❤️ za správnu odpoveď</div><h1 class="page-title">Čo by si spravil?</h1><p class="page-sub">Skutočné životné situácie – správna odpoveď zarába srdce</p><div class="rl-situation"><div class="rl-situation-label">📍 Situácia</div><div class="rl-situation-text">'+rl.situation+'</div><div class="rl-situation-amount">'+rl.amount+'</div></div><p style="font-size:16px;font-weight:800;color:#1c1c1c;margin-bottom:16px;">'+rl.question+'</p><div id="rl-answers"></div><div id="rl-feedback" style="display:none;"></div><button class="next-btn" id="rl-next" style="display:none;" onclick="goTo(\'learn\')">Späť na lekcie</button>';
+  const idx=(appState.rlIndex||0)%REAL_LIFE.length;
+  const rl=REAL_LIFE[idx];let answered=false;
+  container.innerHTML=
+    '<div class="rl-intro"><div class="rl-intro-icon">❤️</div><div><h3>Získaj srdce!</h3><p>Vyriešte reálnu životnú situáciu správne a dostanete +1 ❤️. Môžeš hrať koľkokrát chceš.</p></div></div>'+
+    '<h1 class="page-title">Čo by si spravil?</h1>'+
+    '<p class="page-sub">Situácia č. '+(idx+1)+' z '+REAL_LIFE.length+'</p>'+
+    '<div class="rl-situation"><div class="rl-situation-label">📍 Situácia</div><div class="rl-situation-text">'+rl.situation+'</div><div class="rl-situation-amount">'+rl.amount+'</div></div>'+
+    '<p style="font-size:16px;font-weight:800;color:#1c1c1c;margin-bottom:16px;">'+rl.question+'</p>'+
+    '<div id="rl-answers"></div><div id="rl-feedback" style="display:none;"></div>'+
+    '<button class="next-btn" id="rl-next" style="display:none;" onclick="renderRealLife()">Ďalšia situácia →</button>';
   renderHearts('rl-hearts');
   const answersDiv=document.getElementById('rl-answers');
   rl.answers.forEach((a,i)=>{
@@ -516,9 +556,9 @@ function renderRealLife(){
       fb.className='rl-reward '+(ok?'rl-reward-ok':'rl-reward-bad');
       fb.innerHTML=(ok?'✅ <strong>Správne! +1 ❤️</strong><br>':'❌ <strong>Nesprávne.</strong><br>')+rl.explanation;
       if(ok&&appState.hearts<MAX_HEARTS)appState.hearts++;
-      appState.lastRLDate=new Date().toDateString();
       appState.rlIndex=(appState.rlIndex||0)+1;
       appState=updateStreak(appState);saveState(appState);updateTopbar();renderAllHearts();
+      playSound(ok?'correct':'wrong');
       document.getElementById('rl-next').style.display='block';
     };
     answersDiv.appendChild(btn);
@@ -532,17 +572,18 @@ function goTo(screen){
   const el=document.getElementById('nav-'+screen);if(el)el.classList.add('active');
   if(screen==='learn')renderLearnPath();
   if(screen==='reallife')renderRealLife();
+  if(screen==='leaderboard')renderLeaderboard();
+  if(screen==='profile')renderProfile();
 }
  
 function updateTopbar(){
-  document.querySelectorAll('.js-streak').forEach(el=>el.textContent=appState.streak);
+  updateStreakLabels();
   document.querySelectorAll('.js-xp').forEach(el=>el.textContent=appState.xp);
   renderAllHearts();
 }
  
 function renderLearnPath(){
   const container=document.getElementById('learn-path');container.innerHTML='';
-  // Zigzag offsets
   const offsets=[0,120,-120,80,-80,100,-100];
   UNITS.forEach(unit=>{
     const unlocked=isUnitUnlocked(appState,unit.id);
@@ -557,20 +598,16 @@ function renderLearnPath(){
       const done=isLessonDone(appState,lesson.id);
       const lesUnlocked=isLessonUnlocked(appState,unit.id,idx);
       const isCurrent=lesUnlocked&&!done;
-      // Connector arrow between nodes
       if(idx>0){
         const conn=document.createElement('div');
         conn.style.cssText='width:100%;height:28px;display:flex;align-items:center;justify-content:center;';
         const prevOff=offsets[(idx-1)%offsets.length];
         const curOff=offsets[idx%offsets.length];
-        let arrow='⬇';
-        if(curOff>prevOff)arrow='↘';
-        else if(curOff<prevOff)arrow='↙';
+        let arrow='⬇';if(curOff>prevOff)arrow='↘';else if(curOff<prevOff)arrow='↙';
         const prevDone=isLessonDone(appState,unit.lessons[idx-1].id);
         conn.innerHTML='<span style="font-size:18px;color:'+(prevDone?'#58cc02':'#ccc')+';">'+arrow+'</span>';
         pathDiv.appendChild(conn);
       }
-      // Node row with zigzag offset
       const offset=offsets[idx%offsets.length];
       const rowDiv=document.createElement('div');
       rowDiv.style.cssText='display:flex;justify-content:center;transform:translateX('+offset+'px);';
@@ -578,7 +615,7 @@ function renderLearnPath(){
       if(lesUnlocked)nodeWrap.onclick=()=>startLesson(unit.id,idx);
       const node=document.createElement('div');
       node.className='node '+(done?'done':isCurrent?'current':'locked');
-      if(done) node.innerHTML='<span style="font-size:28px;color:#fff;">✓</span>';
+      if(done)node.innerHTML='<span style="font-size:28px;color:#fff;">✓</span>';
       else if(isCurrent){node.innerHTML='<span style="font-size:28px;">'+lesson.icon+'</span>';node.style.animation='pulse 2s ease-in-out infinite';}
       else node.innerHTML='<span style="font-size:22px;opacity:0.5;">🔒</span>';
       const label=document.createElement('span');
@@ -597,29 +634,54 @@ function renderProfile(){
   const initials=user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
   document.getElementById('prof-avatar').textContent=initials;
   document.getElementById('prof-name').textContent=user.name;
+  const lv=getLevel(appState.xp);
+  document.getElementById('prof-level').textContent=lv.icon+' '+lv.label;
   document.getElementById('stat-xp').textContent=appState.xp;
   document.getElementById('stat-streak').textContent=appState.streak;
   document.getElementById('stat-lessons').textContent=appState.completedLessons.length;
   document.getElementById('stat-hearts').textContent=appState.hearts+'/'+MAX_HEARTS;
   document.getElementById('prof-streak-num').textContent=appState.streak;
+  const sl=streakLabel(appState.streak);
+  document.getElementById('prof-streak-label').textContent=sl+' v sérii';
   const msgs=['Začni dnes svoju sériu!','Skvelý štart!','Tak držať!','Úžasné!','Neprekonateľný!','Legenda! 🔥'];
   document.getElementById('prof-streak-msg').textContent=appState.streak===0?msgs[0]:appState.streak<3?msgs[1]:appState.streak<7?msgs[2]:appState.streak<14?msgs[3]:appState.streak<30?msgs[4]:msgs[5];
   const calDiv=document.getElementById('streak-cal');calDiv.innerHTML='';
   const days=['Po','Ut','St','Šv','Pi','So','Ne'];const today=new Date();
   for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(today.getDate()-i);const hit=i<appState.streak;const dd=document.createElement('div');dd.className='sday';dd.innerHTML='<div class="sday-circle '+(hit?'hit':'miss')+'">'+(hit?'✓':'')+'</div><div class="sday-label">'+days[d.getDay()===0?6:d.getDay()-1]+'</div>';calDiv.appendChild(dd);}
-  const totalLessons=UNITS.reduce((s,u)=>s+u.lessons.length,0);
-  const badges=[
-    {icon:'🌱',label:'Začiatočník',ok:appState.completedLessons.length>=1},
-    {icon:'🔥',label:'5 dní v sérii',ok:appState.streak>=5},
-    {icon:'🎯',label:'5 lekcií',ok:appState.completedLessons.length>=5},
-    {icon:'🏆',label:'Top žiak',ok:appState.xp>=500},
-    {icon:'🌍',label:'Real Life hrdina',ok:(appState.rlIndex||0)>=3},
-    {icon:'📈',label:'Investor',ok:appState.completedUnits.includes(2)},
-    {icon:'🧾',label:'Daňový expert',ok:appState.completedUnits.includes(4)},
-    {icon:'💎',label:'Diamant',ok:appState.completedLessons.length>=totalLessons},
-  ];
-  const row=document.getElementById('badge-row');row.innerHTML='';
-  badges.forEach(b=>{const div=document.createElement('div');div.className='badge'+(b.ok?'':' locked');div.innerHTML='<div class="bi">'+b.icon+'</div><div class="bl">'+b.label+'</div>';row.appendChild(div);});
+}
+ 
+function renderLeaderboard(){
+  const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Host"}');
+  const myName=user.name;
+  const myXP=appState.xp;
+  // Placeholder entries + current user inserted and sorted
+  const entries=[
+    {name:'Marek Kováč',xp:1240,lessons:18},
+    {name:'Zuzana Horváth',xp:980,lessons:14},
+    {name:'Tomáš Blaho',xp:760,lessons:11},
+    {name:'Nina Slobodová',xp:640,lessons:9},
+    {name:'Jakub Mináč',xp:520,lessons:8},
+    {name:'Petra Vargová',xp:410,lessons:6},
+    {name:'Lukáš Kráľ',xp:300,lessons:5},
+    {name:'Eva Novotná',xp:180,lessons:3},
+    {name:myName,xp:myXP,lessons:appState.completedLessons.length,isMe:true},
+  ].sort((a,b)=>b.xp-a.xp);
+  const rankIcons=['🥇','🥈','🥉'];
+  const rankClasses=['gold','silver','bronze'];
+  const container=document.getElementById('lb-rows');container.innerHTML='';
+  entries.forEach((e,i)=>{
+    const ini=e.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
+    const div=document.createElement('div');
+    div.className='lb-row'+(e.isMe?' lb-me':'');
+    const rankDisp=i<3?rankIcons[i]:'#'+(i+1);
+    const rankCls=i<3?rankClasses[i]:'';
+    div.innerHTML=
+      '<div class="lb-rank '+rankCls+'">'+rankDisp+'</div>'+
+      '<div class="lb-avatar">'+ini+'</div>'+
+      '<div class="lb-info"><div class="lb-name">'+e.name+(e.isMe?' <span style="font-size:11px;color:#58cc02;font-weight:800;">(ty)</span>':'')+'</div><div class="lb-sub">'+e.lessons+' lekcií dokončených</div></div>'+
+      '<div class="lb-xp">'+e.xp+' XP</div>';
+    container.appendChild(div);
+  });
 }
  
 let appState=loadState();
