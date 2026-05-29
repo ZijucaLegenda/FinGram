@@ -491,9 +491,14 @@ function getUnitProgress(s,unit){const done=unit.lessons.filter(l=>isLessonDone(
  
 // ── HEART REGEN ────────────────────────────────────────────────────────────
 function checkHeartRegen(){
-  if(appState.hearts>=MAX_HEARTS){appState.lastHeartRegenTime=Date.now();saveState(appState);return;}
+  if(appState.hearts>=MAX_HEARTS){
+    appState.lastHeartRegenTime=Date.now();
+    saveState(appState);return;
+  }
   const now=Date.now();
-  const elapsed=now-(appState.lastHeartRegenTime||now);
+  const last=appState.lastHeartRegenTime||now;
+  // Sanity check – ak je elapsed väčší ako 1 hodina, resetuj čas (zabraňuje okamžitému doplneniu)
+  const elapsed=Math.min(now-last, HEART_REGEN_MS*MAX_HEARTS);
   const regenCount=Math.floor(elapsed/HEART_REGEN_MS);
   if(regenCount>0){
     appState.hearts=Math.min(MAX_HEARTS,appState.hearts+regenCount);
@@ -530,7 +535,7 @@ function playSound(type){
 function renderHearts(id){
   const el=document.getElementById(id);if(!el)return;
   const h=typeof appState!=='undefined'?appState.hearts:MAX_HEARTS;
-  el.innerHTML='<span style="font-weight:800;font-size:15px;color:'+(h>0?'#ff4b4b':'#bbb')+';">'+h+' ❤️</span>';
+  el.innerHTML='<span style="font-weight:800;font-size:18px;color:'+(h>0?'#ff4b4b':'#bbb')+';">'+h+' ❤️</span>';
 }
 function loseHeart(){
   if(appState.hearts>0)appState.hearts--;
