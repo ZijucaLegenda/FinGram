@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinGram – Učiť sa</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="style.css">
   <style>
     body{background:linear-gradient(160deg,#f0f4f8 0%,#e8f5e9 100%);min-height:100vh;}
@@ -894,17 +895,156 @@ function renderLeaderboard(){
   });
 }
 
+// ── SUPABASE ───────────────────────────────────────────────
+const SUPABASE_URL='https://wjcsikrzvctorzejbjbw.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqY3Npa3J6dmN0b3J6ZWpiamJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzQ1OTIsImV4cCI6MjA5NTY1MDU5Mn0.4mTJeSN7sR6qEaFFi8b_PTnyEyE_pRsHvrooRcO8gjU';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// ── INIT ───────────────────────────────────────────────────
 let appState=loadState();
 appState=updateStreak(appState);
-const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Host","email":"guest"}');
-const ini=user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
-document.getElementById('sb-name').textContent=user.name;
-document.getElementById('sb-avatar').textContent=ini;
-updateTopbar();renderAllHearts();renderLearnPath();
+
+async function initApp(){
+  // Skontroluj či je používateľ prihlásený cez Supabase Auth
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    // Načítaj meno z DB
+    const {data:usr}=await sb.from('users').select('name,email').eq('id',session.user.id).single();
+    const name=usr?.name||session.user.email;
+    localStorage.setItem('fg_user',JSON.stringify({name,email:session.user.email,id:session.user.id}));
+    // Načítaj stats z DB
+    const {data:stats}=await sb.from('user_stats').select('*').eq('user_id',session.user.id).single();
+    if(stats){
+      appState.xp=stats.xp||0;
+      appState.hearts=stats.hearts??5;
+      appState.streak=stats.streak||0;
+      appState.lastHeartRegenTime=stats.last_heart_regen?new Date(stats.last_heart_regen).getTime():Date.now();
+    }
+    // Načítaj postup lekcií
+    const {data:progress}=await sb.from('user_progress').select('lesson_id').eq('user_id',session.user.id);
+    if(progress)appState.completedLessons=progress.map(p=>p.lesson_id.toString());
+    saveState(appState);
+  }
+  const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť","email":"guest"}');
+  const ini=user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('sb-name').textContent=user.name;
+  document.getElementById('sb-avatar').textContent=ini;
+  updateTopbar();renderAllHearts();renderLearnPath();
+}
+
+// ── ULOŽENIE STATS DO SUPABASE ─────────────────────────────
+async function syncStatsToSupabase(){
+  const user=JSON.parse(localStorage.getItem('fg_user')||'{}');
+  if(!user.id)return; // demo/hosť – len localStorage
+  await sb.from('user_stats').upsert({
+    user_id:user.id,
+    xp:appState.xp,
+    hearts:appState.hearts,
+    streak:appState.streak,
+    last_active_date:appState.lastActiveDate,
+    last_heart_regen:new Date(appState.lastHeartRegenTime||Date.now()).toISOString()
+  },{onConflict:'user_id'});
+}
+
+// ── ULOŽENIE POSTUPU LEKCIE ────────────────────────────────
+async function syncProgressToSupabase(lessonId,xpEarned){
+  const user=JSON.parse(localStorage.getItem('fg_user')||'{}');
+  if(!user.id)return;
+  await sb.from('user_progress').upsert({
+    user_id:user.id,
+    lesson_id:parseInt(lessonId),
+    xp_earned:xpEarned,
+    completed_at:new Date().toISOString()
+  },{onConflict:'user_id,lesson_id'});
+}
+
+// ── REBRÍČEK Z DATABÁZY ────────────────────────────────────
+async function renderLeaderboard(){
+  const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť"}');
+  const container=document.getElementById('lb-rows');
+  container.innerHTML='<div style="text-align:center;padding:20px;color:#aaa;">Načítavam...</div>';
+
+  const {data,error}=await sb
+    .from('user_stats')
+    .select('xp, streak, users(name)')
+    .order('xp',{ascending:false})
+    .limit(20);
+
+  if(error||!data||data.length===0){
+    // Fallback na placeholder
+    renderLeaderboardFallback(user);return;
+  }
+
+  const rankIcons=['🥇','🥈','🥉'];
+  const rankClasses=['gold','silver','bronze'];
+  container.innerHTML='';
+  data.forEach((e,i)=>{
+    const name=e.users?.name||'Anonym';
+    const isMe=name===user.name;
+    const ini=name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
+    const div=document.createElement('div');
+    div.className='lb-row'+(isMe?' lb-me':'');
+    const rankDisp=i<3?rankIcons[i]:'#'+(i+1);
+    const rankCls=i<3?rankClasses[i]:'';
+    div.innerHTML=
+      '<div class="lb-rank '+rankCls+'">'+rankDisp+'</div>'+
+      '<div class="lb-avatar">'+ini+'</div>'+
+      '<div class="lb-info"><div class="lb-name">'+name+(isMe?' <span style="font-size:11px;color:#58cc02;font-weight:800;">(ty)</span>':'')+'</div>'+
+      '<div class="lb-sub">🔥 '+e.streak+' streak</div></div>'+
+      '<div class="lb-xp">'+e.xp+' XP</div>';
+    container.appendChild(div);
+  });
+}
+
+function renderLeaderboardFallback(user){
+  const entries=[
+    {name:'Marek Kováč',xp:1240,streak:18},
+    {name:'Zuzana Horváth',xp:980,streak:14},
+    {name:'Tomáš Blaho',xp:760,streak:11},
+    {name:'Nina Slobodová',xp:640,streak:9},
+    {name:'Jakub Mináč',xp:520,streak:8},
+    {name:user.name,xp:appState.xp,streak:appState.streak,isMe:true},
+  ].sort((a,b)=>b.xp-a.xp);
+  const rankIcons=['🥇','🥈','🥉'];
+  const rankClasses=['gold','silver','bronze'];
+  const container=document.getElementById('lb-rows');container.innerHTML='';
+  entries.forEach((e,i)=>{
+    const ini=e.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
+    const div=document.createElement('div');
+    div.className='lb-row'+(e.isMe?' lb-me':'');
+    const rankDisp=i<3?rankIcons[i]:'#'+(i+1);
+    const rankCls=i<3?rankClasses[i]:'';
+    div.innerHTML=
+      '<div class="lb-rank '+rankCls+'">'+rankDisp+'</div>'+
+      '<div class="lb-avatar">'+ini+'</div>'+
+      '<div class="lb-info"><div class="lb-name">'+e.name+(e.isMe?' <span style="font-size:11px;color:#58cc02;font-weight:800;">(ty)</span>':'')+'</div>'+
+      '<div class="lb-sub">🔥 '+e.streak+' streak</div></div>'+
+      '<div class="lb-xp">'+e.xp+' XP</div>';
+    container.appendChild(div);
+  });
+}
+
+// ── PATCH completeLesson aby syncoval ─────────────────────
+const _origCompleteLesson=completeLesson;
+function completeLesson(s,id,xp){
+  const result=_origCompleteLesson(s,id,xp);
+  syncProgressToSupabase(id,xp);
+  syncStatsToSupabase();
+  return result;
+}
+
+// ── LOGOUT ────────────────────────────────────────────────
+async function logout(){
+  await sb.auth.signOut();
+  localStorage.removeItem('fg_user');
+  localStorage.removeItem('fg_state');
+  window.location.href='index.html';
+}
+
 const st=document.createElement('style');
 st.textContent='@keyframes pulse{0%,100%{box-shadow:0 6px 24px rgba(88,204,2,0.4)}50%{box-shadow:0 6px 36px rgba(88,204,2,0.75),0 0 0 8px rgba(88,204,2,0.1)}}';
 document.head.appendChild(st);
-function logout(){localStorage.removeItem('fg_user');window.location.href='index.html';}
+initApp();
 </script>
 </body>
 </html>
