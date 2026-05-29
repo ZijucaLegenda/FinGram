@@ -636,7 +636,10 @@ function nextQ(){quizQ++;if(quizQ>=quizLesson.questions.length)finishLesson();el
 function replayLesson(){quizQ=0;quizCorrect=0;quizXP=0;quizAnswered=false;goTo('quiz');renderQuestion();}
 function finishLesson(){
   appState=completeLesson(appState,quizLesson.id,quizXP);
-  appState=updateStreak(appState);updateTopbar();
+  appState=updateStreak(appState);
+  syncProgressToSupabase(quizLesson.id,quizXP);
+  syncStatsToSupabase();
+  updateTopbar();
   const acc=Math.round((quizCorrect/quizLesson.questions.length)*100);
   document.getElementById('d-xp').textContent='+'+quizXP;
   document.getElementById('d-acc').textContent=acc+'%';
@@ -1022,15 +1025,6 @@ function renderLeaderboardFallback(user){
       '<div class="lb-xp">'+e.xp+' XP</div>';
     container.appendChild(div);
   });
-}
-
-// ── PATCH completeLesson aby syncoval ─────────────────────
-const _origCompleteLesson=completeLesson;
-function completeLesson(s,id,xp){
-  const result=_origCompleteLesson(s,id,xp);
-  syncProgressToSupabase(id,xp);
-  syncStatsToSupabase();
-  return result;
 }
 
 // ── LOGOUT ────────────────────────────────────────────────
