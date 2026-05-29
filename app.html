@@ -594,7 +594,6 @@ function startLesson(uid,idx){
   const unit=UNITS.find(u=>u.id===uid);
   if(!isLessonUnlocked(appState,uid,idx))return;
   if(appState.hearts<=0){showNoHeartsModal(false);return;}
-  playSound('start');
   quizLesson=unit.lessons[idx];quizQ=0;quizCorrect=0;quizXP=0;quizAnswered=false;
   goTo('quiz');renderQuestion();
 }
@@ -646,7 +645,7 @@ function renderRealLife(){
   container.innerHTML=
     '<div class="rl-intro"><div class="rl-intro-icon">❤️</div><div><h3>Získaj srdce!</h3><p>Vyriešte reálnu životnú situáciu správne a dostanete +1 ❤️. Môžeš hrať koľkokrát chceš.</p></div></div>'+
     '<h1 class="page-title">Čo by si spravil?</h1>'+
-    '<p class="page-sub">Situácia č. '+(idx+1)+' z '+REAL_LIFE.length+'</p>'+
+    '<p class="page-sub">Vyriešte situáciu správne a získajte +1 ❤️</p>'+
     '<div class="rl-situation"><div class="rl-situation-label">📍 Situácia</div><div class="rl-situation-text">'+rl.situation+'</div><div class="rl-situation-amount">'+rl.amount+'</div></div>'+
     '<p style="font-size:16px;font-weight:800;color:#1c1c1c;margin-bottom:16px;">'+rl.question+'</p>'+
     '<div id="rl-answers"></div><div id="rl-feedback" style="display:none;"></div>'+
