@@ -53,8 +53,10 @@
   <aside class="sidebar">
     <div class="logo">💸 FinGram</div>
     <div class="nav-item active" id="nav-learn"       onclick="goTo('learn')"><span class="nav-icon">📚</span> Učiť sa</div>
-    <div class="nav-item"        id="nav-reallife"    onclick="goTo('reallife')"><span class="nav-icon">❤️</span> Získaј srdce</div>
+    <div class="nav-item"        id="nav-reallife"    onclick="goTo('reallife')"><span class="nav-icon">❤️</span> Získaj srdce</div>
     <div class="nav-item"        id="nav-leaderboard" onclick="goTo('leaderboard');renderLeaderboard();"><span class="nav-icon">🏆</span> Rebríček</div>
+    <div class="nav-item"        id="nav-diploma"     onclick="goTo('diploma');renderDiploma();"><span class="nav-icon">🎓</span> Diplom</div>
+    <div class="nav-item"        id="nav-rules"       onclick="goTo('rules')"><span class="nav-icon">📋</span> Pravidlá</div>
     <div class="nav-item"        id="nav-profile"     onclick="goTo('profile');renderProfile();"><span class="nav-icon">👤</span> Profil</div>
     <div class="nav-sep"></div>
     <div class="sidebar-bottom">
@@ -65,7 +67,7 @@
     </div>
   </aside>
   <div class="main">
- 
+
     <div id="screen-learn" class="screen active">
       <div class="topbar">
         <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
@@ -76,7 +78,7 @@
       <p class="page-sub">Ovládni svoje peniaze krok za krokom</p>
       <div id="learn-path"></div>
     </div>
- 
+
     <div id="screen-quiz" class="screen">
       <div class="quiz-wrap">
         <div class="quiz-topbar">
@@ -91,7 +93,7 @@
         <button class="next-btn" id="q-next" style="display:none;" onclick="nextQ()">Pokračovať</button>
       </div>
     </div>
- 
+
     <div id="screen-done" class="screen">
       <div class="done-wrap">
         <div class="done-emoji">🎉</div>
@@ -106,7 +108,7 @@
         <button class="btn-outline" onclick="replayLesson()">Zopakovať lekciu</button>
       </div>
     </div>
- 
+
     <div id="screen-reallife" class="screen">
       <div class="rl-wrap">
         <div class="topbar">
@@ -117,7 +119,7 @@
         <div id="rl-content"></div>
       </div>
     </div>
- 
+
     <div id="screen-leaderboard" class="screen">
       <div class="lb-wrap">
         <div class="topbar">
@@ -130,7 +132,16 @@
         <div id="lb-rows"></div>
       </div>
     </div>
- 
+
+    <!-- DIPLOM -->
+    <div id="screen-diploma" class="screen">
+      <div class="topbar">
+        <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
+        <div class="pill pill-xp">⚡ <span class="js-xp">0</span> XP</div>
+      </div>
+      <div id="diploma-content"></div>
+    </div>
+
     <div id="screen-profile" class="screen">
       <div class="topbar">
         <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
@@ -160,9 +171,37 @@
         </div>
       </div>
     </div>
- 
+
+    </div>
+
+    <!-- PRAVIDLÁ -->
+    <div id="screen-rules" class="screen">
+      <h1 class="page-title">📋 Pravidlá FinGram</h1>
+      <p class="page-sub">Všetko čo potrebuješ vedieť pred štartom</p>
+      <div style="display:flex;flex-direction:column;gap:14px;max-width:620px;">
+        <div class="pcard"><h3>❤️ Srdcia (životy)</h3><p style="font-size:14px;color:#555;line-height:1.7;">Začínaš s <strong>5 srdciami</strong>. Za každú nesprávnu odpoveď strácaš 1 srdce. Keď minú srdcia uprostred lekcie, lekcia sa ukončí a musíš si doplniť srdcia. Srdcia sa automaticky doplňujú <strong>1 srdce každých 10 minút</strong>. Správnu odpoveď v sekcii Získaj srdce ti vráti +1 srdce okamžite.</p></div>
+        <div class="pcard"><h3>⚡ XP body</h3><p style="font-size:14px;color:#555;line-height:1.7;">Za každú <strong>správnu odpoveď</strong> získaš <strong>10 XP</strong>. XP sa hromadia a posúvajú ťa na vyššie úrovne. Čím viac XP, tým vyššia úroveň – od Začiatočníka až po Finančného guru.</p></div>
+        <div class="pcard"><h3>🔥 Séria dní (streak)</h3><p style="font-size:14px;color:#555;line-height:1.7;">Každý deň keď dokončíš aspoň jednu lekciu alebo Real Life výzvu, zvyšuje sa tvoja séria. Ak vynecháš deň, séria sa resetuje na 0. Buduj čo najdlhšiu sériu!</p></div>
+        <div class="pcard"><h3>🔒 Odomykanie lekcií</h3><p style="font-size:14px;color:#555;line-height:1.7;">Lekcie sa odomykajú <strong>postupne</strong> – musíš dokončiť predchádzajúcu lekciu aby si mohol začať ďalšiu. Jednotky sa odomykajú po dokončení všetkých lekcií predchádzajúcej jednotky.</p></div>
+        <div class="pcard"><h3>❤️ Získaj srdce</h3><p style="font-size:14px;color:#555;line-height:1.7;">V sekcii <strong>Získaj srdce</strong> nájdeš reálne životné finančné situácie. Za správnu odpoveď dostaneš <strong>+1 srdce</strong>. Môžeš hrať koľkokrát chceš – situácie sa striedajú (20 rôznych scenárov).</p></div>
+        <div class="pcard"><h3>🎓 Diplom</h3><p style="font-size:14px;color:#555;line-height:1.7;">Po dokončení <strong>všetkých 25 lekcií</strong> získaš certifikát finančnej gramotnosti ktorý si môžeš vytlačiť.</p></div>
+        <div class="pcard"><h3>⌨️ Klávesnicové skratky</h3><p style="font-size:14px;color:#555;line-height:1.7;"><strong>1–4</strong> alebo <strong>A–D</strong> – vyber odpoveď &nbsp;|&nbsp; <strong>↑↓ / Tab</strong> – pohyb medzi odpoveďami &nbsp;|&nbsp; <strong>Enter</strong> – potvrď / pokračuj &nbsp;|&nbsp; <strong>Esc</strong> – zatvoriť kvíz</p></div>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<!-- MOBILNÁ NAVIGÁCIA -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <div class="mobile-nav-item active" id="mnav-learn" onclick="goTo('learn')"><span>📚</span><span>Učiť sa</span></div>
+    <div class="mobile-nav-item" id="mnav-reallife" onclick="goTo('reallife')"><span>❤️</span><span>Srdce</span></div>
+    <div class="mobile-nav-item" id="mnav-leaderboard" onclick="goTo('leaderboard');renderLeaderboard()"><span>🏆</span><span>Rebríček</span></div>
+    <div class="mobile-nav-item" id="mnav-diploma" onclick="goTo('diploma');renderDiploma()"><span>🎓</span><span>Diplom</span></div>
+    <div class="mobile-nav-item" id="mnav-profile" onclick="goTo('profile');renderProfile()"><span>👤</span><span>Profil</span></div>
+  </div>
+</nav>
 <script>
  
 const UNITS = [
@@ -425,11 +464,22 @@ const REAL_LIFE=[
   {situation:"Prvá práca, zamestnávateľ ponúka III. pilier s príspevkom firmy 50 €/mesiac.",amount:"Firma prispeje 50 €/mesiac",question:"Čo spravíš?",answers:["Nezapíšem sa, dôchodok je ďaleko","Zapíšem sa, prispievam aj ja 20 €/mes","Počkám","Dôchodok rieši štát"],correct:1,explanation:"Nikdy neodmietaj zadarmo peniaze! 70 €/mes za 40 rokov pri 5 % = ~106 000 €!"},
   {situation:"Potraviny: 500g za 2,40 € a 1kg za 4,20 €.",amount:"500g = 2,40 € | 1kg = 4,20 €",question:"Čo je výhodnejšie?",answers:["500g – je lacnejšie","1kg – cena za gram je nižšia","Je to jedno","Kúpim oboje"],correct:1,explanation:"500g = 0,48 €/100g. 1kg = 0,42 €/100g. Väčšie balenie je lacnejšie o 12,5 %."},
   {situation:"Email: 'Tvoj bankový účet bol zablokovaný. Kliknite tu a zadajte údaje.'",amount:"Podozrivý email",question:"Čo spravíš?",answers:["Kliknem na link","Zavolám priamo banke na overenom čísle","Odpoviem emailom","Posuniem kamarátovi"],correct:1,explanation:"Klasický phishing! Banky nikdy nežiadajú údaje emailom. Volaj na číslo z karty."},
-  {situation:"Máš 1 000 € úspory. Kamarát ťa pozýva investovať do kryptomien.",amount:"1 000 € úspory",question:"Čo urobíš?",answers:["Investujem všetko","Investujem max 10 % (100 €), zvyšok do ETF","Nekupujem vôbec","Pôžičiam si viac"],correct:1,explanation:"Krypto je špekulatívne. Max 5–10 % portfólia. Zvyšok do diverzifikovaných ETF."}
+  {situation:"Máš 1 000 € úspory. Kamarát ťa pozýva investovať do kryptomien.",amount:"1 000 € úspory",question:"Čo urobíš?",answers:["Investujem všetko","Investujem max 10 % (100 €), zvyšok do ETF","Nekupujem vôbec","Pôžičiam si viac"],correct:1,explanation:"Krypto je špekulatívne. Max 5–10 % portfólia. Zvyšok do diverzifikovaných ETF."},
+  {situation:"Dostal si faktúru od lekára 240 €. Nemáš nouzový fond.",amount:"Faktúra: 240 €",question:"Čo urobíš teraz a čo do budúcnosti?",answers:["Požičiam si od rodiny a zabudnem","Zaplatím z bežného účtu a začnem budovať nouzový fond","Ignorujem faktúru","Platím na splátky cez pôžičku"],correct:1,explanation:"Toto je presne dôvod prečo existuje nouzový fond. Zaplať faktúru a hneď začni sporiť aspoň 50 €/mesiac."},
+  {situation:"Banka ti ponúka spotrebný úver 3 000 € s RPSN 18 % alebo kreditnú kartu s RPSN 22 %.",amount:"Potrebuješ 3 000 €",question:"Ak naozaj musíš požičať, čo je lepšie?",answers:["Kreditná karta – praktickejšia","Spotrebný úver – nižšie RPSN","Oboje naraz","Nebanková pôžička"],correct:1,explanation:"RPSN 18 % < 22 %. Vždy porovnávaj RPSN, nie len úrokovú sadzbu. Lacnejší úver = menej zaplatíš celkovo."},
+  {situation:"Tvoj šéf ti ponúka prácu z domu 2 dni v týždni. Ušetríš 80 € mesačne na doprave.",amount:"Úspora: 80 € / mesiac",question:"Čo spravíš s ušetrenými peniazmi?",answers:["Miniem na niečo pekné","Automaticky presmerújem na sporiaci účet","Nechám na bežnom účte","Kúpim si lepší mobil"],correct:1,explanation:"Každá úspora je príležitosť. 80 € × 12 = 960 € ročne! Nastav automatický prevod."},
+  {situation:"Dostaneš daňový preplatok 340 €. Kamaráti plánujú víkend vo Viedni za 280 €.",amount:"Preplatok: 340 €",question:"Čo spravíš?",answers:["Celých 340 € miniem","170 € odložím, 170 € na výlet","Celých 340 € odložím","Výlet odložím, všetko investujem"],correct:1,explanation:"Zlatá stredná cesta – časť si užij, časť odlož. Preplatok je bonus, nie dôvod míňať viac."},
+  {situation:"Obchod ponúka televízor za 899 € alebo na 24 splátok po 42 €.",amount:"TV: 899 € alebo 24 × 42 €",question:"Čo je finančne výhodnejšie?",answers:["Splátky – zaplatím menej naraz","Hotovosť – celkovo zaplatím menej (899 € vs 1 008 €)","Je to rovnaké","Splátky s odloženou platbou"],correct:1,explanation:"24 × 42 € = 1 008 €. Hotovosť = 899 €. Na splátkach preplatíš 109 €. Ak máš peniaze, plať hotovosťou."},
+  {situation:"Prenajímateľ zdvíha nájom o 80 €/mes. Lacnejší byt je o 60 €/mes lacnejší, sťahovanie stojí 500 €.",amount:"Rozdiel: 80 €/mes | Sťahovanie: 500 €",question:"Kedy sa sťahovanie oplatí?",answers:["Nikdy – sťahovanie je stres","Po 7 mesiacoch – oplatí sa","Hneď","Záleží len od vzdialenosti"],correct:1,explanation:"500 € ÷ 80 € = 6,25 mesiaca. Po 7 mesiacoch si v zisku. Finančné rozhodnutia sa dajú prepočítať!"},
+  {situation:"Priateľ ti požičiava 200 € bez úroku neformálne.",amount:"200 € bez zmluvy",question:"Čo by si mal urobiť?",answers:["Vziať a vrátiť keď budem mať","Potvrdiť správou sumu a termín vrátenia","Odmietnuť","Vziať a zabudnúť"],correct:1,explanation:"Aj medzi priateľmi treba mať jasno. Správa ako potvrdenie chráni vzťah aj financie."},
+  {situation:"Reklama: 'Zarob 500 € denne z domu! Bez skúseností.'",amount:"Sľub: 500 € / deň",question:"Čo je toto?",answers:["Legitímna príležitosť","Podvod – nikto nezarobí 500 €/deň bez skúseností","Affiliate marketing","Legálny side hustle"],correct:1,explanation:"500 € denne = 180 000 € ročne bez skúseností? To neexistuje. Takéto reklamy sú vždy podvody."},
+  {situation:"Máš 25 rokov a práve si dostal prvú riadnu prácu. Kolega hovorí že do II. piliera sa neoplatí vstúpiť.",amount:"Rozhodnutie: II. pilier áno/nie",question:"Čo urobíš?",answers:["Nepôjdem – kolega vie najlepšie","Vstúpim – peniaze ostanú moje a zdedia sa","Počkám do 40 rokov","Spýtam sa poisťovacieho agenta"],correct:1,explanation:"II. pilier: 5,5 % z mzdy ide na tvoj osobný účet. Peniaze sú tvoje, zdedia sa. Pri 25 rokoch máš 40 rokov na rast!"},
+  {situation:"V supermarkete: jogurt značky 0,89 € vs vlastná značka 0,45 €. Zloženie takmer identické.",amount:"Rozdiel: 0,44 € / kus",question:"Čo kúpiš?",answers:["Značkový – je určite lepší","Vlastnú značku – ušetrím bez straty kvality","Oboje – porovnám","Najdrahší – kvalita sa platí"],correct:1,explanation:"Vlastné značky sú často z rovnakých tovární. 0,44 € × 30/mesiac = 13 € ušetrených = 156 € ročne!"}
 ];
  
 const MAX_HEARTS=5;
-function loadState(){const s=localStorage.getItem('fg_state');if(s){const parsed=JSON.parse(s);if(parsed.hearts===undefined||parsed.hearts===null)parsed.hearts=MAX_HEARTS;return parsed;}return{xp:0,streak:0,hearts:MAX_HEARTS,lastActiveDate:null,lastRLDate:null,rlIndex:0,completedLessons:[],completedUnits:[]};}
+const HEART_REGEN_MS=10*60*1000;
+function loadState(){const s=localStorage.getItem('fg_state');if(s){const parsed=JSON.parse(s);if(parsed.hearts===undefined||parsed.hearts===null)parsed.hearts=MAX_HEARTS;if(!parsed.lastHeartRegenTime)parsed.lastHeartRegenTime=Date.now();return parsed;}return{xp:0,streak:0,hearts:MAX_HEARTS,lastActiveDate:null,rlIndex:0,completedLessons:[],completedUnits:[],lastHeartRegenTime:Date.now()};}
 function saveState(s){localStorage.setItem('fg_state',JSON.stringify(s));}
 function updateStreak(state){const today=new Date().toDateString();const yesterday=new Date(Date.now()-86400000).toDateString();if(state.lastActiveDate===today)return state;state.streak=(state.lastActiveDate===yesterday)?state.streak+1:1;state.lastActiveDate=today;saveState(state);return state;}
 function isLessonDone(s,id){return s.completedLessons.includes(id);}
@@ -438,32 +488,95 @@ function isLessonUnlocked(s,uid,idx){if(!isUnitUnlocked(s,uid))return false;if(i
 function completeLesson(s,id,xp){if(!s.completedLessons.includes(id))s.completedLessons.push(id);s.xp+=xp;if(s.hearts<MAX_HEARTS)s.hearts++;UNITS.forEach(u=>{if(u.lessons.every(l=>s.completedLessons.includes(l.id))&&!s.completedUnits.includes(u.id))s.completedUnits.push(u.id);});s.lastActiveDate=new Date().toDateString();saveState(s);return s;}
 function getUnitProgress(s,unit){const done=unit.lessons.filter(l=>isLessonDone(s,l.id)).length;return{done,total:unit.lessons.length};}
  
-// ── SOUND EFFECTS ──────────────────────────────────────────────────────────
-const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-function playSound(type){
-  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-  o.connect(g);g.connect(audioCtx.destination);
-  if(type==='correct'){o.frequency.setValueAtTime(523,audioCtx.currentTime);o.frequency.setValueAtTime(659,audioCtx.currentTime+0.1);o.frequency.setValueAtTime(784,audioCtx.currentTime+0.2);g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.5);o.start();o.stop(audioCtx.currentTime+0.5);}
-  else{o.frequency.setValueAtTime(300,audioCtx.currentTime);o.frequency.setValueAtTime(200,audioCtx.currentTime+0.15);g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.4);o.start();o.stop(audioCtx.currentTime+0.4);}
+// ── HEART REGEN ────────────────────────────────────────────────────────────
+function checkHeartRegen(){
+  if(appState.hearts>=MAX_HEARTS){appState.lastHeartRegenTime=Date.now();saveState(appState);return;}
+  const now=Date.now();
+  const elapsed=now-(appState.lastHeartRegenTime||now);
+  const regenCount=Math.floor(elapsed/HEART_REGEN_MS);
+  if(regenCount>0){
+    appState.hearts=Math.min(MAX_HEARTS,appState.hearts+regenCount);
+    appState.lastHeartRegenTime=now-(elapsed%HEART_REGEN_MS);
+    saveState(appState);updateTopbar();
+  }
 }
- 
+setInterval(checkHeartRegen,30000);
+
+// ── SOUND EFFECTS ──────────────────────────────────────────────────────────
+let audioCtx;
+function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+function playSound(type){
+  try{
+    const ctx=getAudioCtx();
+    const play=(freqs,dur,vol=0.3)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      freqs.forEach(([f,t])=>o.frequency.setValueAtTime(f,ctx.currentTime+t));
+      g.gain.setValueAtTime(vol,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+      o.start();o.stop(ctx.currentTime+dur);
+    };
+    if(type==='correct')    play([[523,0],[659,0.1],[784,0.2]],0.5);
+    else if(type==='wrong') play([[300,0],[200,0.15]],0.4);
+    else if(type==='start') play([[440,0],[523,0.1],[659,0.2],[784,0.3]],0.6);
+    else if(type==='finish')play([[523,0],[659,0.08],[784,0.16],[1047,0.24],[784,0.4],[1047,0.55]],0.8);
+    else if(type==='noheart')play([[220,0],[180,0.1],[150,0.2]],0.5);
+    else if(type==='heartgain')play([[659,0],[784,0.1]],0.3,0.2);
+  }catch(e){}
+}
+
 // ── HEARTS ─────────────────────────────────────────────────────────────────
 function renderHearts(id){
   const el=document.getElementById(id);if(!el)return;
   const h=typeof appState!=='undefined'?appState.hearts:MAX_HEARTS;
-  let html='';for(let i=0;i<MAX_HEARTS;i++){html+='<span class="heart'+(i<h?'':' empty')+'">❤️</span>';}
-  el.innerHTML=html;
+  el.innerHTML='<span style="font-weight:800;font-size:15px;color:'+(h>0?'#ff4b4b':'#bbb')+';">'+h+' ❤️</span>';
 }
-function loseHeart(){if(appState.hearts>0)appState.hearts--;saveState(appState);renderAllHearts();}
+function loseHeart(){
+  if(appState.hearts>0)appState.hearts--;
+  saveState(appState);renderAllHearts();
+  if(appState.hearts===0){
+    playSound('noheart');
+    if(document.getElementById('screen-quiz').classList.contains('active')){
+      showNoHeartsModal(true);
+    }
+  }
+}
 function renderAllHearts(){renderHearts('topbar-hearts');renderHearts('quiz-hearts');renderHearts('rl-hearts');}
- 
+
+function showNoHeartsModal(midQuiz=false){
+  document.getElementById('hm')?.remove();
+  const nextRegenMs=HEART_REGEN_MS-((Date.now()-(appState.lastHeartRegenTime||Date.now()))%HEART_REGEN_MS);
+  const mins=Math.ceil(nextRegenMs/60000);
+  const m=document.createElement('div');
+  m.className='modal-overlay';m.id='hm';
+  const box=document.createElement('div');box.className='modal-box';
+  box.innerHTML=
+    '<div style="font-size:56px;margin-bottom:12px;">💔</div>'+
+    '<h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">Nemáš srdcia!</h2>'+
+    (midQuiz?'<p style="font-size:13px;background:#fff3cd;border:2px solid #ffc107;border-radius:10px;padding:10px;margin-bottom:16px;font-weight:700;color:#856404;">⚠️ Lekcia sa ukončila – minuli sa ti srdcia uprostred kvízu.</p>':'')+
+    '<p style="font-size:14px;color:#777;margin-bottom:8px;line-height:1.6;">Ďalšie srdce dostaneš za <strong>~'+mins+' min</strong>.<br>Alebo si ho zaraz zarob!</p>'+
+    '<div style="font-size:13px;color:#aaa;margin-bottom:20px;">Srdcia sa dopĺňajú: 1 ❤️ každých 10 minút</div>';
+  const btn1=document.createElement('button');
+  btn1.className='modal-btn-primary';
+  btn1.textContent='❤️ Získať srdce teraz';
+  btn1.onclick=()=>{m.remove();goTo('reallife');};
+  const btn2=document.createElement('button');
+  btn2.className='modal-btn-secondary';
+  btn2.textContent='Zavrieť';
+  btn2.style.marginTop='8px';
+  btn2.onclick=()=>{m.remove();if(midQuiz)goTo('learn');};
+  box.appendChild(btn1);box.appendChild(btn2);
+  m.appendChild(box);document.body.appendChild(m);
+  if(midQuiz)goTo('learn');
+}
+
 // ── STREAK LABEL ───────────────────────────────────────────────────────────
 function streakLabel(n){return n===1?'deň':n>=2&&n<=4?'dni':'dní';}
 function updateStreakLabels(){
   document.querySelectorAll('.js-streak').forEach(el=>el.textContent=appState.streak);
   document.querySelectorAll('.js-streak-label').forEach(el=>el.textContent=streakLabel(appState.streak));
 }
- 
+
 // ── LEVEL ──────────────────────────────────────────────────────────────────
 function getLevel(xp){
   if(xp<50)  return{label:'Začiatočník',icon:'🌱'};
@@ -473,23 +586,19 @@ function getLevel(xp){
   if(xp<800) return{label:'Expert',icon:'🏆'};
   return{label:'Finančný guru',icon:'💎'};
 }
- 
+
 let quizLesson=null,quizQ=0,quizCorrect=0,quizXP=0,quizAnswered=false;
 const LETTERS=['A','B','C','D'];
- 
+
 function startLesson(uid,idx){
   const unit=UNITS.find(u=>u.id===uid);
   if(!isLessonUnlocked(appState,uid,idx))return;
-  if(appState.hearts<=0){
-    const m=document.createElement('div');m.className='modal-overlay';m.id='hm';
-    m.innerHTML='<div class="modal-box"><div style="font-size:56px;margin-bottom:12px;">💔</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">Nemáš srdcia!</h2><div style="display:flex;justify-content:center;gap:4px;margin:12px 0;font-size:24px;">💔💔💔💔💔</div><p style="font-size:14px;color:#777;margin-bottom:20px;line-height:1.6;">Zarob si srdce v sekcii <strong>❤️ Získaj srdce</strong>.</p><button class="modal-btn-primary" onclick="document.getElementById(\'hm\').remove();goTo(\'reallife\')">❤️ Získať srdce</button><button class="modal-btn-secondary" onclick="document.getElementById(\'hm\').remove()" style="margin-top:8px;">Zavrieť</button></div>';
-    document.body.appendChild(m);
-    return;
-  }
+  if(appState.hearts<=0){showNoHeartsModal(false);return;}
+  playSound('start');
   quizLesson=unit.lessons[idx];quizQ=0;quizCorrect=0;quizXP=0;quizAnswered=false;
   goTo('quiz');renderQuestion();
 }
- 
+
 function renderQuestion(){
   const q=quizLesson.questions[quizQ];const total=quizLesson.questions.length;
   document.getElementById('qprog').style.width=Math.round((quizQ/total)*100)+'%';
@@ -501,7 +610,7 @@ function renderQuestion(){
   q.answers.forEach((a,i)=>{const btn=document.createElement('button');btn.className='ans-btn';btn.innerHTML='<span class="ans-letter">'+LETTERS[i]+'</span><span>'+a+'</span>';btn.onclick=()=>selectAnswer(i);div.appendChild(btn);});
   renderHearts('quiz-hearts');
 }
- 
+
 function selectAnswer(idx){
   if(quizAnswered)return;quizAnswered=true;
   const q=quizLesson.questions[quizQ];
@@ -516,7 +625,7 @@ function selectAnswer(idx){
   fb.innerHTML=(ok?'✅ <strong>Správne!</strong> ':'❌ <strong>Nesprávne.</strong> ')+q.explanation;
   document.getElementById('q-next').style.display='block';
 }
- 
+
 function nextQ(){quizQ++;if(quizQ>=quizLesson.questions.length)finishLesson();else renderQuestion();}
 function replayLesson(){quizQ=0;quizCorrect=0;quizXP=0;quizAnswered=false;goTo('quiz');renderQuestion();}
 function finishLesson(){
@@ -528,7 +637,7 @@ function finishLesson(){
   document.getElementById('d-streak').textContent='🔥 '+appState.streak;
   goTo('done');
 }
- 
+
 // ── REAL LIFE – bez denného limitu ────────────────────────────────────────
 function renderRealLife(){
   const container=document.getElementById('rl-content');
@@ -558,30 +667,119 @@ function renderRealLife(){
       if(ok&&appState.hearts<MAX_HEARTS)appState.hearts++;
       appState.rlIndex=(appState.rlIndex||0)+1;
       appState=updateStreak(appState);saveState(appState);updateTopbar();renderAllHearts();
-      playSound(ok?'correct':'wrong');
-      document.getElementById('rl-next').style.display='block';
+      playSound(ok?'heartgain':'wrong');
+      if(ok){
+        setTimeout(()=>goTo('learn'),1800);
+      } else {
+        document.getElementById('rl-next').style.display='block';
+      }
     };
     answersDiv.appendChild(btn);
   });
 }
- 
+
 function goTo(screen){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+screen).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const el=document.getElementById('nav-'+screen);if(el)el.classList.add('active');
+  // mobile nav
+  document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.remove('active'));
+  const mel=document.getElementById('mnav-'+screen);if(mel)mel.classList.add('active');
   if(screen==='learn')renderLearnPath();
   if(screen==='reallife')renderRealLife();
   if(screen==='leaderboard')renderLeaderboard();
   if(screen==='profile')renderProfile();
+  if(screen==='diploma')renderDiploma();
+  kbFocusIdx=-1;
 }
- 
+
+function renderDiploma(){
+  const totalLessons=UNITS.reduce((s,u)=>s+u.lessons.length,0);
+  const done=appState.completedLessons.length;
+  const remaining=totalLessons-done;
+  const pct=Math.round((done/totalLessons)*100);
+  const container=document.getElementById('diploma-content');
+  if(done>=totalLessons){
+    const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Host"}');
+    container.innerHTML=`
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="font-size:80px;margin-bottom:16px;">🎓</div>
+        <h1 style="font-size:28px;font-weight:800;color:#1c1c1c;margin-bottom:8px;">Gratulujeme!</h1>
+        <p style="color:#aaa;font-size:15px;margin-bottom:32px;">Dokončil si všetky lekcie FinGram</p>
+        <div style="background:linear-gradient(135deg,#f6fff0,#e8f5e9);border:3px solid #58cc02;border-radius:24px;padding:48px 40px;max-width:500px;margin:0 auto 32px;">
+          <div style="font-size:13px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;">Certifikát finančnej gramotnosti</div>
+          <div style="font-size:32px;font-weight:800;color:#1c1c1c;margin-bottom:8px;">${user.name}</div>
+          <div style="font-size:14px;color:#58cc02;font-weight:700;margin-bottom:24px;">úspešne absolvoval/a kurz FinGram</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px;">
+            <div><div style="font-size:22px;font-weight:800;">${totalLessons}</div><div style="font-size:11px;color:#aaa;">lekcií</div></div>
+            <div><div style="font-size:22px;font-weight:800;">${appState.xp}</div><div style="font-size:11px;color:#aaa;">XP</div></div>
+            <div><div style="font-size:22px;font-weight:800;">🔥${appState.streak}</div><div style="font-size:11px;color:#aaa;">streak</div></div>
+          </div>
+        </div>
+        <button class="btn-green" onclick="window.print()">🖨️ Vytlačiť diplom</button>
+      </div>`;
+  } else {
+    const barColor=pct>=75?'#58cc02':pct>=40?'#ffd900':'#1cb0f6';
+    container.innerHTML=`
+      <div style="text-align:center;padding:48px 20px;">
+        <div style="font-size:72px;margin-bottom:20px;">🎓</div>
+        <h1 class="page-title" style="text-align:center;">Diplom</h1>
+        <p class="page-sub" style="text-align:center;">Dokonči všetky lekcie a získaš certifikát finančnej gramotnosti</p>
+        <div style="background:#f7f7f7;border-radius:20px;padding:32px;max-width:460px;margin:0 auto;">
+          <div style="font-size:15px;font-weight:700;color:#555;margin-bottom:16px;">Tvoj postup</div>
+          <div style="font-size:48px;font-weight:800;color:#1c1c1c;margin-bottom:4px;">${pct}%</div>
+          <div style="font-size:13px;color:#aaa;margin-bottom:20px;">${done} z ${totalLessons} lekcií dokončených</div>
+          <div style="background:#e5e5e5;border-radius:99px;height:20px;overflow:hidden;margin-bottom:20px;">
+            <div style="height:100%;border-radius:99px;background:${barColor};width:${pct}%;transition:width 0.6s ease;"></div>
+          </div>
+          <div style="background:#fff;border-radius:14px;padding:16px 20px;font-size:14px;font-weight:700;color:#555;">
+            Zostáva dokončiť ešte <strong style="color:#1c1c1c;">${remaining} ${remaining===1?'lekciu':remaining<5?'lekcie':'lekcií'}</strong> 💪
+          </div>
+        </div>
+        <button class="btn-green" style="max-width:300px;margin:24px auto 0;" onclick="goTo('learn')">📚 Pokračovať v učení</button>
+      </div>`;
+  }
+}
+
+// ── KLÁVESNICOVÉ OVLÁDANIE ─────────────────────────────────────────────────
+let kbFocusIdx=-1;
+document.addEventListener('keydown',e=>{
+  const screen=document.querySelector('.screen.active')?.id;
+
+  // QUIZ ovládanie
+  if(screen==='screen-quiz'){
+    const btns=[...document.querySelectorAll('#q-answers .ans-btn')].filter(b=>!b.disabled);
+    const nextBtn=document.getElementById('q-next');
+
+    if(e.key==='ArrowDown'||e.key==='Tab'&&!e.shiftKey){
+      e.preventDefault();
+      kbFocusIdx=Math.min(kbFocusIdx+1,btns.length-1);
+      btns.forEach((b,i)=>b.classList.toggle('kb-focus',i===kbFocusIdx));
+    } else if(e.key==='ArrowUp'||e.key==='Tab'&&e.shiftKey){
+      e.preventDefault();
+      kbFocusIdx=Math.max(kbFocusIdx-1,0);
+      btns.forEach((b,i)=>b.classList.toggle('kb-focus',i===kbFocusIdx));
+    } else if(e.key>='1'&&e.key<='4'){
+      const i=parseInt(e.key)-1;
+      if(i<btns.length&&!quizAnswered)selectAnswer(i);
+    } else if(e.key==='a'||e.key==='A'){if(!quizAnswered)selectAnswer(0);}
+      else if(e.key==='b'||e.key==='B'){if(!quizAnswered)selectAnswer(1);}
+      else if(e.key==='c'||e.key==='C'){if(!quizAnswered)selectAnswer(2);}
+      else if(e.key==='d'||e.key==='D'){if(!quizAnswered)selectAnswer(3);}
+    else if(e.key==='Enter'){
+      if(kbFocusIdx>=0&&btns[kbFocusIdx]&&!quizAnswered){selectAnswer(kbFocusIdx);}
+      else if(nextBtn&&nextBtn.style.display!=='none'){nextQ();}
+    } else if(e.key==='Escape'){goTo('learn');}
+  }
+});
+
 function updateTopbar(){
   updateStreakLabels();
   document.querySelectorAll('.js-xp').forEach(el=>el.textContent=appState.xp);
   renderAllHearts();
 }
- 
+
 function renderLearnPath(){
   const container=document.getElementById('learn-path');container.innerHTML='';
   const offsets=[0,120,-120,80,-80,100,-100];
@@ -628,7 +826,7 @@ function renderLearnPath(){
     const gap=document.createElement('div');gap.style.height='12px';container.appendChild(gap);
   });
 }
- 
+
 function renderProfile(){
   const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Host"}');
   const initials=user.name.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
@@ -649,7 +847,7 @@ function renderProfile(){
   const days=['Po','Ut','St','Šv','Pi','So','Ne'];const today=new Date();
   for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(today.getDate()-i);const hit=i<appState.streak;const dd=document.createElement('div');dd.className='sday';dd.innerHTML='<div class="sday-circle '+(hit?'hit':'miss')+'">'+(hit?'✓':'')+'</div><div class="sday-label">'+days[d.getDay()===0?6:d.getDay()-1]+'</div>';calDiv.appendChild(dd);}
 }
- 
+
 function renderLeaderboard(){
   const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Host"}');
   const myName=user.name;
@@ -683,7 +881,7 @@ function renderLeaderboard(){
     container.appendChild(div);
   });
 }
- 
+
 let appState=loadState();
 appState=updateStreak(appState);
 const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Host","email":"guest"}');
