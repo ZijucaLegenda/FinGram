@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinGram – Prihlásenie</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="style.css">
   <style>
     body { background: #f0f4f8; }
@@ -191,54 +192,81 @@
 </div>
  
 <script>
-  function switchTab(t) {
-    ['login','register'].forEach(x => {
-      document.getElementById('tab-'+x).classList.toggle('active', x===t);
-      document.getElementById('form-'+x).style.display = x===t ? 'block' : 'none';
+  const SUPABASE_URL='https://wjcsikrzvctorzejbjbw.supabase.co';
+  const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqY3Npa3J6dmN0b3J6ZWpiamJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzQ1OTIsImV4cCI6MjA5NTY1MDU5Mn0.4mTJeSN7sR6qEaFFi8b_PTnyEyE_pRsHvrooRcO8gjU';
+  const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+  // Ak je už prihlásený, presmeruj
+  sb.auth.getSession().then(({data:{session}})=>{
+    if(session)window.location.href='app.html';
+  });
+
+  function switchTab(t){
+    ['login','register'].forEach(x=>{
+      document.getElementById('tab-'+x).classList.toggle('active',x===t);
+      document.getElementById('form-'+x).style.display=x===t?'block':'none';
     });
-    document.getElementById('err').style.display = 'none';
-    document.getElementById('form-title').textContent = t==='login' ? 'Vitaj späť!' : 'Vytvor si účet';
-    document.getElementById('form-sub').textContent   = t==='login'
-      ? 'Pokračuj vo svojej finančnej ceste'
-      : 'Je to zadarmo a trvá 30 sekúnd';
+    document.getElementById('err').style.display='none';
+    document.getElementById('form-title').textContent=t==='login'?'Vitaj späť!':'Vytvor si účet';
+    document.getElementById('form-sub').textContent=t==='login'
+      ?'Pokračuj vo svojej finančnej ceste'
+      :'Je to zadarmo a trvá 30 sekúnd';
   }
- 
-  function err(msg) {
-    const el = document.getElementById('err');
-    el.textContent = msg; el.style.display = 'block';
+
+  function showErr(msg){
+    const el=document.getElementById('err');
+    el.textContent=msg;el.style.display='block';
   }
- 
-  function login(name, email) {
-    localStorage.setItem('fg_user', JSON.stringify({ name, email }));
-    window.location.href = 'app.html';
+
+  function showLoading(btn,text){btn.disabled=true;btn.textContent=text;}
+  function hideLoading(btn,text){btn.disabled=false;btn.textContent=text;}
+
+  async function handleLogin(){
+    const email=document.getElementById('l-email').value.trim();
+    const pass=document.getElementById('l-pass').value;
+    if(!email||!pass){showErr('Vyplň email aj heslo.');return;}
+    const btn=document.querySelector('#form-login .btn-main');
+    showLoading(btn,'Prihlasujem...');
+    // Demo účet
+    if(email==='demo@fingram.sk'&&pass==='demo123'){
+      localStorage.setItem('fg_user',JSON.stringify({name:'Demo Používateľ',email,id:null}));
+      window.location.href='app.html';return;
+    }
+    const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+    if(error){showErr('Nesprávny email alebo heslo.');hideLoading(btn,'Prihlásiť sa →');return;}
+    // Ulož meno
+    const {data:usr}=await sb.from('users').select('name').eq('id',data.user.id).single();
+    localStorage.setItem('fg_user',JSON.stringify({name:usr?.name||email.split('@')[0],email,id:data.user.id}));
+    window.location.href='app.html';
   }
- 
-  function handleDemo() {
-    login('Hosť', 'guest');
+
+  async function handleRegister(){
+    const name=document.getElementById('r-name').value.trim();
+    const email=document.getElementById('r-email').value.trim();
+    const pass=document.getElementById('r-pass').value;
+    if(!name||!email||!pass){showErr('Vyplň prosím všetky polia.');return;}
+    if(pass.length<6){showErr('Heslo musí mať aspoň 6 znakov.');return;}
+    if(!email.includes('@')){showErr('Zadaj platný email.');return;}
+    const btn=document.querySelector('#form-register .btn-main');
+    showLoading(btn,'Registrujem...');
+    const {data,error}=await sb.auth.signUp({email,password:pass});
+    if(error){showErr('Chyba: '+error.message);hideLoading(btn,'Vytvoriť účet →');return;}
+    // Ulož meno do users tabuľky
+    await sb.from('users').insert({id:data.user.id,name,email,password:'hashed'});
+    // Vytvor prázdne stats
+    await sb.from('user_stats').insert({user_id:data.user.id,xp:0,hearts:5,streak:0});
+    localStorage.setItem('fg_user',JSON.stringify({name,email,id:data.user.id}));
+    window.location.href='app.html';
   }
- 
-  function handleLogin() {
-    const email = document.getElementById('l-email').value.trim();
-    const pass  = document.getElementById('l-pass').value;
-    if (!email || !pass)                                     { err('Vyplň email aj heslo.'); return; }
-    if (email==='demo@fingram.sk' && pass==='demo123')       { login('Demo Používateľ', email); return; }
-    if (email.includes('@') && pass.length >= 6)             { login(email.split('@')[0], email); return; }
-    err('Nesprávny email alebo heslo. Skús: demo@fingram.sk / demo123');
+
+  async function handleDemo(){
+    localStorage.setItem('fg_user',JSON.stringify({name:'Hosť',email:'guest',id:null}));
+    window.location.href='app.html';
   }
- 
-  function handleRegister() {
-    const name  = document.getElementById('r-name').value.trim();
-    const email = document.getElementById('r-email').value.trim();
-    const pass  = document.getElementById('r-pass').value;
-    if (!name || !email || !pass) { err('Vyplň prosím všetky polia.'); return; }
-    if (pass.length < 6)          { err('Heslo musí mať aspoň 6 znakov.'); return; }
-    if (!email.includes('@'))     { err('Zadaj platný email.'); return; }
-    login(name, email);
-  }
- 
-  document.addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
-    document.getElementById('form-login').style.display !== 'none' ? handleLogin() : handleRegister();
+
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Enter')return;
+    document.getElementById('form-login').style.display!=='none'?handleLogin():handleRegister();
   });
 </script>
  
