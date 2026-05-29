@@ -110,12 +110,12 @@
     </div>
 
     <div id="screen-reallife" class="screen">
+      <div class="topbar">
+        <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
+        <div class="pill pill-xp">⚡ <span class="js-xp">0</span> XP</div>
+        <div class="hearts" id="rl-hearts"></div>
+      </div>
       <div class="rl-wrap">
-        <div class="topbar">
-          <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
-          <div class="pill pill-xp">⚡ <span class="js-xp">0</span> XP</div>
-          <div class="hearts" id="rl-hearts"></div>
-        </div>
         <div id="rl-content"></div>
       </div>
     </div>
@@ -186,7 +186,7 @@
         <div class="pcard"><h3>❤️ Získaj srdce</h3><p style="font-size:14px;color:#555;line-height:1.7;">V sekcii <strong>Získaj srdce</strong> nájdeš reálne životné finančné situácie. Za správnu odpoveď dostaneš <strong>+1 srdce</strong>. Môžeš hrať koľkokrát chceš – situácie sa striedajú (20 rôznych scenárov).</p></div>
         <div class="pcard"><h3>🎓 Diplom</h3><p style="font-size:14px;color:#555;line-height:1.7;">Po dokončení <strong>všetkých 25 lekcií</strong> získaš certifikát finančnej gramotnosti ktorý si môžeš vytlačiť.</p></div>
         <div class="pcard"><h3>⌨️ Klávesnicové skratky – kvíz</h3><p style="font-size:14px;color:#555;line-height:1.8;"><strong>1–4</strong> alebo <strong>A–D</strong> – vyber odpoveď<br><strong>↑ ↓</strong> alebo <strong>Tab</strong> – pohyb medzi odpoveďami<br><strong>Enter</strong> – potvrď odpoveď / pokračuj ďalej<br><strong>Esc</strong> – zatvoriť kvíz a vrátiť sa na mapu</p></div>
-        <div class="pcard"><h3>⌨️ Klávesnicové skratky – navigácia</h3><p style="font-size:14px;color:#555;line-height:1.8;"><strong>Alt + 1</strong> – Učiť sa<br><strong>Alt + 2</strong> – Získaj srdce<br><strong>Alt + 3</strong> – Rebríček<br><strong>Alt + 4</strong> – Diplom<br><strong>Alt + 5</strong> – Pravidlá<br><strong>Alt + 6</strong> – Profil</p></div>
+        <div class="pcard"><h3>⌨️ Klávesnicové skratky – navigácia</h3><p style="font-size:14px;color:#555;line-height:1.8;"><strong>Alt + Shift + 1</strong> – Učiť sa<br><strong>Alt + Shift + 2</strong> – Získaj srdce<br><strong>Alt + Shift + 3</strong> – Rebríček<br><strong>Alt + Shift + 4</strong> – Diplom<br><strong>Alt + Shift + 5</strong> – Pravidlá<br><strong>Alt + Shift + 6</strong> – Profil</p></div>
       </div>
     </div>
 
@@ -773,12 +773,11 @@ document.addEventListener('keydown',e=>{
     } else if(e.key==='Escape'){goTo('learn');}
   }
 
-  // Alt+1–5 navigácia (funguje vždy)
-  if(e.altKey&&e.key>='1'&&e.key<='6'){
-    e.preventDefault();
-    const screens=['learn','reallife','leaderboard','diploma','rules','profile'];
-    const target=screens[parseInt(e.key)-1];
-    if(target)goTo(target);
+  // Alt+Shift+1–6 navigácia (e.code funguje na Mac aj Windows)
+  if(e.altKey&&e.shiftKey){
+    const codeMap={'Digit1':'learn','Digit2':'reallife','Digit3':'leaderboard','Digit4':'diploma','Digit5':'rules','Digit6':'profile'};
+    const target=codeMap[e.code];
+    if(target){e.preventDefault();goTo(target);}
   }
 });
 
