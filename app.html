@@ -121,11 +121,11 @@
     </div>
 
     <div id="screen-leaderboard" class="screen">
+      <div class="topbar">
+        <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
+        <div class="pill pill-xp">⚡ <span class="js-xp">0</span> XP</div>
+      </div>
       <div class="lb-wrap">
-        <div class="topbar">
-          <div class="pill pill-fire">🔥 <span class="js-streak">0</span> <span class="js-streak-label">dní</span></div>
-          <div class="pill pill-xp">⚡ <span class="js-xp">0</span> XP</div>
-        </div>
         <h1 class="page-title">Rebríček</h1>
         <p class="page-sub">Najlepší hráči FinGram</p>
         <div class="lb-notice">🔗 Rebríček bude živý po spustení backendu. Zatiaľ ukážka.</div>
@@ -185,7 +185,8 @@
         <div class="pcard"><h3>🔒 Odomykanie lekcií</h3><p style="font-size:14px;color:#555;line-height:1.7;">Lekcie sa odomykajú <strong>postupne</strong> – musíš dokončiť predchádzajúcu lekciu aby si mohol začať ďalšiu. Jednotky sa odomykajú po dokončení všetkých lekcií predchádzajúcej jednotky.</p></div>
         <div class="pcard"><h3>❤️ Získaj srdce</h3><p style="font-size:14px;color:#555;line-height:1.7;">V sekcii <strong>Získaj srdce</strong> nájdeš reálne životné finančné situácie. Za správnu odpoveď dostaneš <strong>+1 srdce</strong>. Môžeš hrať koľkokrát chceš – situácie sa striedajú (20 rôznych scenárov).</p></div>
         <div class="pcard"><h3>🎓 Diplom</h3><p style="font-size:14px;color:#555;line-height:1.7;">Po dokončení <strong>všetkých 25 lekcií</strong> získaš certifikát finančnej gramotnosti ktorý si môžeš vytlačiť.</p></div>
-        <div class="pcard"><h3>⌨️ Klávesnicové skratky</h3><p style="font-size:14px;color:#555;line-height:1.7;"><strong>1–4</strong> alebo <strong>A–D</strong> – vyber odpoveď &nbsp;|&nbsp; <strong>↑↓ / Tab</strong> – pohyb medzi odpoveďami &nbsp;|&nbsp; <strong>Enter</strong> – potvrď / pokračuj &nbsp;|&nbsp; <strong>Esc</strong> – zatvoriť kvíz</p></div>
+        <div class="pcard"><h3>⌨️ Klávesnicové skratky – kvíz</h3><p style="font-size:14px;color:#555;line-height:1.8;"><strong>1–4</strong> alebo <strong>A–D</strong> – vyber odpoveď<br><strong>↑ ↓</strong> alebo <strong>Tab</strong> – pohyb medzi odpoveďami<br><strong>Enter</strong> – potvrď odpoveď / pokračuj ďalej<br><strong>Esc</strong> – zatvoriť kvíz a vrátiť sa na mapu</p></div>
+        <div class="pcard"><h3>⌨️ Klávesnicové skratky – navigácia</h3><p style="font-size:14px;color:#555;line-height:1.8;"><strong>Alt + 1</strong> – Učiť sa<br><strong>Alt + 2</strong> – Získaj srdce<br><strong>Alt + 3</strong> – Rebríček<br><strong>Alt + 4</strong> – Diplom<br><strong>Alt + 5</strong> – Pravidlá<br><strong>Alt + 6</strong> – Profil</p></div>
       </div>
     </div>
 
@@ -770,6 +771,14 @@ document.addEventListener('keydown',e=>{
       if(kbFocusIdx>=0&&btns[kbFocusIdx]&&!quizAnswered){selectAnswer(kbFocusIdx);}
       else if(nextBtn&&nextBtn.style.display!=='none'){nextQ();}
     } else if(e.key==='Escape'){goTo('learn');}
+  }
+
+  // Alt+1–5 navigácia (funguje vždy)
+  if(e.altKey&&e.key>='1'&&e.key<='6'){
+    e.preventDefault();
+    const screens=['learn','reallife','leaderboard','diploma','rules','profile'];
+    const target=screens[parseInt(e.key)-1];
+    if(target)goTo(target);
   }
 });
 
