@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinGram – Učiť sa</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link rel="stylesheet" href="style.css">
   <style>
     body{background:linear-gradient(160deg,#f0f4f8 0%,#e8f5e9 100%);min-height:100vh;}
@@ -710,23 +711,37 @@ function renderDiploma(){
   const pct=Math.round((done/totalLessons)*100);
   const container=document.getElementById('diploma-content');
   if(done>=totalLessons){
-    const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Host"}');
+    const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť"}');
+    const dateStr=new Date().toLocaleDateString('sk-SK',{day:'numeric',month:'long',year:'numeric'});
     container.innerHTML=`
       <div style="text-align:center;padding:40px 20px;">
-        <div style="font-size:80px;margin-bottom:16px;">🎓</div>
+        <div style="font-size:72px;margin-bottom:16px;">🎓</div>
         <h1 style="font-size:28px;font-weight:800;color:#1c1c1c;margin-bottom:8px;">Gratulujeme!</h1>
         <p style="color:#aaa;font-size:15px;margin-bottom:32px;">Dokončil si všetky lekcie FinGram</p>
-        <div style="background:linear-gradient(135deg,#f6fff0,#e8f5e9);border:3px solid #58cc02;border-radius:24px;padding:48px 40px;max-width:500px;margin:0 auto 32px;">
-          <div style="font-size:13px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;">Certifikát finančnej gramotnosti</div>
-          <div style="font-size:32px;font-weight:800;color:#1c1c1c;margin-bottom:8px;">${user.name}</div>
-          <div style="font-size:14px;color:#58cc02;font-weight:700;margin-bottom:24px;">úspešne absolvoval/a kurz FinGram</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px;">
-            <div><div style="font-size:22px;font-weight:800;">${totalLessons}</div><div style="font-size:11px;color:#aaa;">lekcií</div></div>
-            <div><div style="font-size:22px;font-weight:800;">${appState.xp}</div><div style="font-size:11px;color:#aaa;">XP</div></div>
-            <div><div style="font-size:22px;font-weight:800;">🔥${appState.streak}</div><div style="font-size:11px;color:#aaa;">streak</div></div>
+        <div style="background:linear-gradient(135deg,#f6fff0,#e8f5e9);border:3px solid #58cc02;border-radius:24px;padding:48px 40px;max-width:560px;margin:0 auto 32px;">
+          <div style="font-size:11px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:20px;">Certifikát finančnej gramotnosti</div>
+          <div style="font-size:13px;color:#777;margin-bottom:8px;">Toto potvrdzuje, že</div>
+          <div style="font-size:36px;font-weight:800;color:#1c1c1c;margin-bottom:8px;">${user.name}</div>
+          <div style="width:120px;height:3px;background:#58cc02;margin:0 auto 16px;border-radius:2px;"></div>
+          <div style="font-size:14px;color:#555;line-height:1.7;margin-bottom:24px;">úspešne absolvoval/a kurz <strong>FinGram – Finančná gramotnosť</strong><br>a ovláda základy osobných financií, investovania,<br>daní, dlhov a dôchodkového plánovania.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px;">
+            <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:12px;"><div style="font-size:22px;font-weight:800;">${totalLessons}</div><div style="font-size:11px;color:#aaa;margin-top:2px;">lekcií</div></div>
+            <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:12px;"><div style="font-size:22px;font-weight:800;">${appState.xp}</div><div style="font-size:11px;color:#aaa;margin-top:2px;">XP bodov</div></div>
+            <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:12px;"><div style="font-size:22px;font-weight:800;">🔥${appState.streak}</div><div style="font-size:11px;color:#aaa;margin-top:2px;">dní streak</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;padding-top:20px;border-top:2px solid rgba(88,204,2,0.2);">
+            <div style="text-align:left;">
+              <div style="font-size:18px;font-weight:800;color:#58cc02;font-style:italic;">FinGram</div>
+              <div style="font-size:11px;color:#aaa;margin-top:2px;">Lýceum C.S. Lewisa</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px;color:#aaa;">Dátum vydania</div>
+              <div style="font-size:13px;font-weight:700;color:#555;margin-top:2px;">${dateStr}</div>
+            </div>
           </div>
         </div>
-        <button class="btn-green" onclick="window.print()">🖨️ Vytlačiť diplom</button>
+        <button class="btn-green" style="max-width:300px;margin:0 auto 12px;display:block;" onclick="downloadDiplomaPDF()">⬇️ Stiahnuť diplom (PDF)</button>
+        <button class="btn-outline" style="max-width:300px;margin:0 auto;display:block;" onclick="goTo('learn')">Späť na mapu</button>
       </div>`;
   } else {
     const barColor=pct>=75?'#58cc02':pct>=40?'#ffd900':'#1cb0f6';
@@ -746,9 +761,133 @@ function renderDiploma(){
             Zostáva dokončiť ešte <strong style="color:#1c1c1c;">${remaining} ${remaining===1?'lekciu':remaining<5?'lekcie':'lekcií'}</strong> 💪
           </div>
         </div>
-        <button class="btn-green" style="max-width:300px;margin:24px auto 0;" onclick="goTo('learn')">📚 Pokračovať v učení</button>
+        <button class="btn-green" style="max-width:300px;margin:24px auto 0;display:block;" onclick="goTo('learn')">📚 Pokračovať v učení</button>
       </div>`;
   }
+}
+
+function downloadDiplomaPDF(){
+  const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť"}');
+  const totalLessons=UNITS.reduce((s,u)=>s+u.lessons.length,0);
+  const dateStr=new Date().toLocaleDateString('sk-SK',{day:'numeric',month:'long',year:'numeric'});
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const W=297,H=210;
+
+  // Pozadie
+  doc.setFillColor(246,255,240);
+  doc.rect(0,0,W,H,'F');
+
+  // Zelený rám
+  doc.setDrawColor(88,204,2);
+  doc.setLineWidth(4);
+  doc.rect(10,10,W-20,H-20,'S');
+  doc.setLineWidth(1.5);
+  doc.rect(13,13,W-26,H-26,'S');
+
+  // Rohové ozdoby
+  const corners=[[14,14],[W-14,14],[14,H-14],[W-14,H-14]];
+  doc.setFillColor(88,204,2);
+  corners.forEach(([x,y])=>{doc.circle(x,y,3,'F');});
+
+  // Logo / hlavička
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.setTextColor(88,204,2);
+  doc.text('FINGRAM',W/2,28,{align:'center'});
+
+  doc.setFontSize(8);
+  doc.setTextColor(150,150,150);
+  doc.text('Lýceum C.S. Lewisa · Finančná gramotnosť',W/2,34,{align:'center'});
+
+  // Linka
+  doc.setDrawColor(88,204,2);
+  doc.setLineWidth(0.5);
+  doc.line(60,38,W-60,38);
+
+  // Nadpis
+  doc.setFontSize(10);
+  doc.setTextColor(120,120,120);
+  doc.setFont('helvetica','normal');
+  doc.text('CERTIFIKÁT FINANČNEJ GRAMOTNOSTI',W/2,48,{align:'center'});
+
+  doc.setFontSize(9);
+  doc.text('Toto potvrdzuje, že',W/2,58,{align:'center'});
+
+  // Meno
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(32);
+  doc.setTextColor(28,28,28);
+  doc.text(user.name,W/2,76,{align:'center'});
+
+  // Zelená linka pod menom
+  const nameWidth=doc.getTextWidth(user.name);
+  doc.setDrawColor(88,204,2);
+  doc.setLineWidth(1.5);
+  doc.line(W/2-nameWidth/2,80,W/2+nameWidth/2,80);
+
+  // Popis
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  doc.setTextColor(80,80,80);
+  doc.text('úspešne absolvoval/a kurz FinGram a ovláda základy osobných financií,',W/2,92,{align:'center'});
+  doc.text('investovania, správy dlhov, daňového systému a dôchodkového plánovania.',W/2,99,{align:'center'});
+
+  // Štatistiky
+  const stats=[
+    {label:'Lekcií',value:String(totalLessons)},
+    {label:'XP bodov',value:String(appState.xp)},
+    {label:'Streak',value:String(appState.streak)+' dní'},
+  ];
+  const boxW=50,boxH=20,startX=(W-stats.length*boxW-(stats.length-1)*8)/2;
+  stats.forEach((s,i)=>{
+    const x=startX+i*(boxW+8);
+    doc.setFillColor(255,255,255);
+    doc.setDrawColor(88,204,2);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(x,108,boxW,boxH,3,3,'FD');
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(14);
+    doc.setTextColor(28,28,28);
+    doc.text(s.value,x+boxW/2,118,{align:'center'});
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7);
+    doc.setTextColor(150,150,150);
+    doc.text(s.label,x+boxW/2,124,{align:'center'});
+  });
+
+  // Spodná časť – podpis a dátum
+  doc.setDrawColor(88,204,2);
+  doc.setLineWidth(0.5);
+  doc.line(60,155,W-60,155);
+
+  // Podpis vľavo
+  doc.setFont('helvetica','bolditalic');
+  doc.setFontSize(14);
+  doc.setTextColor(88,204,2);
+  doc.text('FinGram',75,165,{align:'center'});
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.setTextColor(150,150,150);
+  doc.text('Platforma finančného vzdelávania',75,171,{align:'center'});
+
+  // Dátum vpravo
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(10);
+  doc.setTextColor(80,80,80);
+  doc.text(dateStr,W-75,165,{align:'center'});
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.setTextColor(150,150,150);
+  doc.text('Dátum vydania',W-75,171,{align:'center'});
+
+  // Unikátny kód
+  const code='FG-'+Date.now().toString(36).toUpperCase();
+  doc.setFontSize(7);
+  doc.setTextColor(200,200,200);
+  doc.text('Certifikát č. '+code,W/2,H-14,{align:'center'});
+
+  doc.save('FinGram-Diplom-'+user.name.replace(/ /g,'-')+'.pdf');
 }
 
 // ── KLÁVESNICOVÉ OVLÁDANIE ─────────────────────────────────────────────────
