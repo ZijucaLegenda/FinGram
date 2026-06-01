@@ -195,12 +195,12 @@
   const SUPABASE_URL='https://wjcsikrzvctorzejbjbw.supabase.co';
   const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqY3Npa3J6dmN0b3J6ZWpiamJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzQ1OTIsImV4cCI6MjA5NTY1MDU5Mn0.4mTJeSN7sR6qEaFFi8b_PTnyEyE_pRsHvrooRcO8gjU';
   const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-
+ 
   // Ak je už prihlásený, presmeruj
   sb.auth.getSession().then(({data:{session}})=>{
     if(session)window.location.href='app.html';
   });
-
+ 
   function switchTab(t){
     ['login','register'].forEach(x=>{
       document.getElementById('tab-'+x).classList.toggle('active',x===t);
@@ -212,15 +212,15 @@
       ?'Pokračuj vo svojej finančnej ceste'
       :'Je to zadarmo a trvá 30 sekúnd';
   }
-
+ 
   function showErr(msg){
     const el=document.getElementById('err');
     el.textContent=msg;el.style.display='block';
   }
-
+ 
   function showLoading(btn,text){btn.disabled=true;btn.textContent=text;}
   function hideLoading(btn,text){btn.disabled=false;btn.textContent=text;}
-
+ 
   async function handleLogin(){
     const email=document.getElementById('l-email').value.trim();
     const pass=document.getElementById('l-pass').value;
@@ -239,7 +239,7 @@
     localStorage.setItem('fg_user',JSON.stringify({name:usr?.name||email.split('@')[0],email,id:data.user.id}));
     window.location.href='app.html';
   }
-
+ 
   async function handleRegister(){
     const name=document.getElementById('r-name').value.trim();
     const email=document.getElementById('r-email').value.trim();
@@ -249,7 +249,11 @@
     if(!email.includes('@')){showErr('Zadaj platný email.');return;}
     const btn=document.querySelector('#form-register .btn-main');
     showLoading(btn,'Registrujem...');
-    const {data,error}=await sb.auth.signUp({email,password:pass});
+    const {data,error}=await sb.auth.signUp({
+      email,
+      password:pass,
+      options:{data:{name}}
+    });
     if(error){showErr('Chyba: '+error.message);hideLoading(btn,'Vytvoriť účet →');return;}
     // Ulož meno do users tabuľky
     await sb.from('users').insert({id:data.user.id,name,email,password:'hashed'});
@@ -258,12 +262,12 @@
     localStorage.setItem('fg_user',JSON.stringify({name,email,id:data.user.id}));
     window.location.href='app.html';
   }
-
+ 
   async function handleDemo(){
     localStorage.setItem('fg_user',JSON.stringify({name:'Hosť',email:'guest',id:null}));
     window.location.href='app.html';
   }
-
+ 
   document.addEventListener('keydown',e=>{
     if(e.key!=='Enter')return;
     document.getElementById('form-login').style.display!=='none'?handleLogin():handleRegister();
