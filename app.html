@@ -920,7 +920,15 @@ async function initApp(){
     if(stats){
       appState.xp=stats.xp||0;
       appState.hearts=stats.hearts??5;
-      appState.streak=stats.streak||0;
+      // Streak - použi vyšší z DB alebo lokálny
+      const today=new Date().toDateString();
+      const dbStreak=stats.streak||0;
+      if(stats.last_active_date===today){
+        appState.streak=Math.max(dbStreak,appState.streak);
+      } else {
+        appState.streak=dbStreak;
+      }
+      appState.lastActiveDate=stats.last_active_date;
       appState.lastHeartRegenTime=stats.last_heart_regen?new Date(stats.last_heart_regen).getTime():Date.now();
     }
     // Načítaj postup lekcií – string ID
@@ -938,13 +946,14 @@ async function initApp(){
 // ── ULOŽENIE STATS DO SUPABASE ─────────────────────────────
 async function syncStatsToSupabase(){
   const user=JSON.parse(localStorage.getItem('fg_user')||'{}');
-  if(!user.id)return; // demo/hosť – len localStorage
+  if(!user.id)return;
+  const today=new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   await sb.from('user_stats').upsert({
     user_id:user.id,
     xp:appState.xp,
     hearts:appState.hearts,
     streak:appState.streak,
-    last_active_date:appState.lastActiveDate,
+    last_active_date:today,
     last_heart_regen:new Date(appState.lastHeartRegenTime||Date.now()).toISOString()
   },{onConflict:'user_id'});
 }
