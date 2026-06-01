@@ -913,7 +913,7 @@ async function initApp(){
   if(session){
     // Načítaj meno z DB
     const {data:usr}=await sb.from('users').select('name,email').eq('id',session.user.id).single();
-    const name=usr?.name||session.user.email;
+    const name=usr?.name||session.user.user_metadata?.name||session.user.email.split('@')[0];
     localStorage.setItem('fg_user',JSON.stringify({name,email:session.user.email,id:session.user.id}));
     // Načítaj stats z DB
     const {data:stats}=await sb.from('user_stats').select('*').eq('user_id',session.user.id).single();
@@ -923,9 +923,9 @@ async function initApp(){
       appState.streak=stats.streak||0;
       appState.lastHeartRegenTime=stats.last_heart_regen?new Date(stats.last_heart_regen).getTime():Date.now();
     }
-    // Načítaj postup lekcií
+    // Načítaj postup lekcií – string ID
     const {data:progress}=await sb.from('user_progress').select('lesson_id').eq('user_id',session.user.id);
-    if(progress)appState.completedLessons=progress.map(p=>p.lesson_id.toString());
+    if(progress)appState.completedLessons=progress.map(p=>p.lesson_id);
     saveState(appState);
   }
   const user=JSON.parse(localStorage.getItem('fg_user')||'{"name":"Hosť","email":"guest"}');
@@ -955,7 +955,7 @@ async function syncProgressToSupabase(lessonId,xpEarned){
   if(!user.id)return;
   await sb.from('user_progress').upsert({
     user_id:user.id,
-    lesson_id:parseInt(lessonId),
+    lesson_id:String(lessonId),
     xp_earned:xpEarned,
     completed_at:new Date().toISOString()
   },{onConflict:'user_id,lesson_id'});
